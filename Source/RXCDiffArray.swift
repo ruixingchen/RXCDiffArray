@@ -7,96 +7,44 @@
 //
 
 import Foundation
-#if canImport(DeepDiff)
-import DeepDiff
+#if canImport(DifferenceKit)
+import DifferenceKit
 #endif
 
-public struct RDAInsert<T> {
-    public let item: T
-    public let index: Int
-}
+//对一维结构, 数据的操作默认是Section操作
 
-public struct RDADelete<T> {
-    public let item: T
-    public let index: Int
-}
-
-public struct RDAReplace<T> {
-    public let oldItem: T
-    public let newItem: T
-    public let index: Int
-}
-
-public struct RDAMove<T> {
-    public let item: T
-    public let fromIndex: Int
-    public let toIndex: Int
-}
-
-public enum RDAChange<T> {
-    case insert(RDAInsert<T>)
-    case delete(RDADelete<T>)
-    case replace(RDAReplace<T>)
-    case move(RDAMove<T>)
-
-    public var insert: RDAInsert<T>? {
-        if case .insert(let insert) = self {
-            return insert
-        }
-
-        return nil
-    }
-
-    public var delete: RDADelete<T>? {
-        if case .delete(let delete) = self {
-            return delete
-        }
-
-        return nil
-    }
-
-    public var replace: RDAReplace<T>? {
-        if case .replace(let replace) = self {
-            return replace
-        }
-
-        return nil
-    }
-
-    public var move: RDAMove<T>? {
-        if case .move(let move) = self {
-            return move
-        }
-
-        return nil
-    }
-}
-
-///an array that can return changes, idea from DeepDiff:
-/// https://github.com/onmyway133/DeepDiff
-public class RXCDiffArray<Element>: Sequence {
+///an array that can return changes, idea from DeepDiff: https://github.com/onmyway133/DeepDiff and DifferenceKit: https://github.com/ra1028/DifferenceKit
+public class RXCDiffArray<Element>: Collection {
 
     public typealias Iterator = RXCDiffArray.RXCIterator<Element>
 
-    #if (debug || DEBUG)
+    public var startIndex: Int {return 0}
+
+    public var endIndex: Int {return self.contentArray.count-1}
+
+    public func index(after i: Int) -> Int {
+        return i + 1
+    }
+
     public let contentArray:NSMutableArray
-    #else
-    private let contentArray:NSMutableArray
-    #endif
 
     public var threadSafe:Bool = true
 
-    public init(capacity:Int=0) {
+    ///是否是线性的一维结构, 用于某些时候我们希望将整个数组作为一维结构来处理(即使数组是二维类型)
+    public let linear:Bool
+
+    public init(capacity:Int=0, linear:Bool) {
+        self.linear = linear
         self.contentArray = NSMutableArray.init(capacity: capacity)
     }
 
     public convenience init(objects:Element...) {
-        self.init(capacity: objects.count)
+        self.init(capacity: objects.count, linear: false)
         self.add(contentsOf: objects)
     }
 
     public convenience init(objects:[Element]) {
-        self.init(capacity: objects.count)
+        self.init(capacity: objects.count, linear: false)
         self.add(contentsOf: objects)
     }
 
@@ -208,22 +156,22 @@ public class RXCDiffArray<Element>: Sequence {
     //MARK: - C
 
     @discardableResult
-    public func add(_ anObject: Element)->[RDAChange<Element>] {
+    public func add(_ anObject: Element)->RDAChangeSet<Element> {
         return self.add(contentsOf: [anObject])
     }
 
     @discardableResult
-    public func add(contentsOf objects: [Element])->[RDAChange<Element>] {
+    public func add(contentsOf objects: [Element])->RDAChangeSet<Element> {
         return self.insert(contentOf: objects, at: self.count)
     }
 
     @discardableResult
-    public func insert(_ anObject:Element, at index:Int)->[RDAChange<Element>] {
+    public func insert(_ anObject:Element, at index:Int)->RDAChangeSet<Element> {
         return self.insert(contentOf: [anObject], at: index)
     }
 
     @discardableResult
-    public func insert(contentOf objects:[Element], at index:Int)->[RDAChange<Element>] {
+    public func insert(contentOf objects:[Element], at index:Int)->RDAChangeSet<Element> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
@@ -232,17 +180,19 @@ public class RXCDiffArray<Element>: Sequence {
         let indexSet:IndexSet = IndexSet(integersIn: range)
         self.contentArray.insert(objects, at: indexSet)
 
-        let changes:[RDAChange<Element>] = range.map({
-            let insert = RDAInsert(item: objects[$0-range.startIndex], index: $0)
-            return RDAChange.insert(insert)
+        let changes:[RDAChangeSet<Element>.Change] = range.map({
+            let insert = RDAChangeSet<Element>.ElementInsert(item: objects[$0-range.startIndex], section: 0, index: $0)
+            return RDAChangeSet<Element>.Change.elementInsert(insert)
         })
-        return changes
+        return RDAChangeSet(changes: changes)
     }
+
+    /*
 
     //MARK: - U
 
     @discardableResult
-    public func replace(at index: Int, with anObject: Element)->[RDAChange<Element>] {
+    public func replace(at index: Int, with anObject: Element)->RDAChangeSet<Element> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
@@ -256,7 +206,7 @@ public class RXCDiffArray<Element>: Sequence {
 
     ///re-set the object so we have a chance to send change, drive the UI to refresh
     @discardableResult
-    public func reload(at index:Int)->[RDAChange<Element>] {
+    public func reload(at index:Int)->RDAChangeSet<Element> {
         let element = self[index]
         return self.replace(at: index, with: element)
     }
@@ -357,6 +307,7 @@ public class RXCDiffArray<Element>: Sequence {
         if self.isEmpty {return []}
         return self.remove(at: self.count-1)
     }
+    */
 
     //MARK: - subscript
 
@@ -397,7 +348,7 @@ public extension RXCDiffArray {
 
     struct RXCIterator<Element>: IteratorProtocol {
 
-        private let array:RXCDiffArray<Element>
+        private let array:RXCDiffArray<Element,Element>
         private var index:Int = 0
 
         public init(_ array:RXCDiffArray<Element>){
@@ -444,3 +395,11 @@ extension RXCDiffArray where Element: DiffAware {
 
 }
 #endif
+
+extension RXCDiffArray where Element: RDASectionProtocol {
+
+    func add() {
+        let a = self.safeGet(at: 0)?.rda_sectionIdentifier
+    }
+
+}

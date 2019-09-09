@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80285FD22325FE5D00EA7328 /* RDAChangeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD12325FE5D00EA7328 /* RDAChangeSet.swift */; };
+		80285FD42325FEBB00EA7328 /* RDASectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD32325FEBB00EA7328 /* RDASectionProtocol.swift */; };
 		80FBC58523225DB3007CC0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58423225DB3007CC0E0 /* AppDelegate.swift */; };
 		80FBC58723225DB3007CC0E0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58623225DB3007CC0E0 /* SceneDelegate.swift */; };
 		80FBC58923225DB3007CC0E0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58823225DB3007CC0E0 /* ViewController.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		80285FD12325FE5D00EA7328 /* RDAChangeSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDAChangeSet.swift; sourceTree = "<group>"; };
+		80285FD32325FEBB00EA7328 /* RDASectionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDASectionProtocol.swift; sourceTree = "<group>"; };
 		80FBC58123225DB3007CC0E0 /* RXCDiffArrayExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RXCDiffArrayExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80FBC58423225DB3007CC0E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		80FBC58623225DB3007CC0E0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +78,8 @@
 			isa = PBXGroup;
 			children = (
 				80FBC59923225DDD007CC0E0 /* RXCDiffArray.swift */,
+				80285FD12325FE5D00EA7328 /* RDAChangeSet.swift */,
+				80285FD32325FEBB00EA7328 /* RDASectionProtocol.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -150,10 +156,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80285FD22325FE5D00EA7328 /* RDAChangeSet.swift in Sources */,
 				80FBC59A23225DDD007CC0E0 /* RXCDiffArray.swift in Sources */,
 				80FBC58923225DB3007CC0E0 /* ViewController.swift in Sources */,
 				80FBC58523225DB3007CC0E0 /* AppDelegate.swift in Sources */,
 				80FBC58723225DB3007CC0E0 /* SceneDelegate.swift in Sources */,
+				80285FD42325FEBB00EA7328 /* RDASectionProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
