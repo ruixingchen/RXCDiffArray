@@ -9,13 +9,17 @@ import Foundation
 
 public struct RDAChangeSet<T> {
 
+    static func empty()->RDAChangeSet {
+        return RDAChangeSet(changes: [])
+    }
+
     public enum Change {
         case sectionInsert(SectionInsert)
-        case sectionDdelete(SectionDelete)
+        case sectionDelete(SectionDelete)
         case sectionUpdate(SectionUpdate)
         case sectionMove(SectionMove)
         case elementInsert(ElementInsert)
-        case elementDdelete(ElementDelete)
+        case elementDelete(ElementDelete)
         case elementUpdate(ElementUpdate)
         case elementMove(ElementMove)
     }
@@ -44,32 +48,34 @@ public struct RDAChangeSet<T> {
 
     public struct ElementInsert {
         public let item: T
-        public let section:Int
         public let index: Int
+        public let section:Int
     }
 
     public struct ElementDelete {
         public let item: T
-        public let section:Int
         public let index: Int
+        public let section:Int
     }
 
     public struct ElementUpdate {
         public let oldItem: T
         public let newItem: T
-        public let section:Int
         public let index: Int
+        public let section:Int
     }
 
     ///支持跨Section移动元素
     public struct ElementMove {
         public let item: T
-        public let fromSection:Int
         public let fromIndex: Int
-        public let toSection:Int
+        public let fromSection:Int
         public let toIndex: Int
+        public let toSection:Int
     }
 
     let changes:[Change]
+
+    var isEmpty:Bool {return self.changes.isEmpty}
 
 }

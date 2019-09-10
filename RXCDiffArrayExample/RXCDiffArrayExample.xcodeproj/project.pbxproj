@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80136FA623277DC900BF72F9 /* DifferenceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80136FA323277DC300BF72F9 /* DifferenceKit.framework */; };
+		80136FA723277DC900BF72F9 /* DifferenceKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 80136FA323277DC300BF72F9 /* DifferenceKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		80136FAA232799CB00BF72F9 /* RDAEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80136FA9232799CB00BF72F9 /* RDAEquatable.swift */; };
+		80136FAC23279A9100BF72F9 /* RDAElementProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80136FAB23279A9100BF72F9 /* RDAElementProtocol.swift */; };
 		80285FD22325FE5D00EA7328 /* RDAChangeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD12325FE5D00EA7328 /* RDAChangeSet.swift */; };
-		80285FD42325FEBB00EA7328 /* RDASectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD32325FEBB00EA7328 /* RDASectionProtocol.swift */; };
+		80285FD42325FEBB00EA7328 /* RDASectionElementProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD32325FEBB00EA7328 /* RDASectionElementProtocol.swift */; };
 		80FBC58523225DB3007CC0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58423225DB3007CC0E0 /* AppDelegate.swift */; };
 		80FBC58723225DB3007CC0E0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58623225DB3007CC0E0 /* SceneDelegate.swift */; };
 		80FBC58923225DB3007CC0E0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58823225DB3007CC0E0 /* ViewController.swift */; };
@@ -18,9 +22,43 @@
 		80FBC59A23225DDD007CC0E0 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC59923225DDD007CC0E0 /* RXCDiffArray.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		80136FA223277DC300BF72F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6B2DF86E210E2C12004D2D40;
+			remoteInfo = DifferenceKit;
+		};
+		80136FA423277DC300BF72F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6B2DF877210E2C12004D2D40;
+			remoteInfo = Tests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		80136F9C23277C2600BF72F9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				80136FA723277DC900BF72F9 /* DifferenceKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DifferenceKit.xcodeproj; path = DifferenceKit/DifferenceKit.xcodeproj; sourceTree = "<group>"; };
+		80136FA9232799CB00BF72F9 /* RDAEquatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDAEquatable.swift; sourceTree = "<group>"; };
+		80136FAB23279A9100BF72F9 /* RDAElementProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDAElementProtocol.swift; sourceTree = "<group>"; };
 		80285FD12325FE5D00EA7328 /* RDAChangeSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDAChangeSet.swift; sourceTree = "<group>"; };
-		80285FD32325FEBB00EA7328 /* RDASectionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDASectionProtocol.swift; sourceTree = "<group>"; };
+		80285FD32325FEBB00EA7328 /* RDASectionElementProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDASectionElementProtocol.swift; sourceTree = "<group>"; };
 		80FBC58123225DB3007CC0E0 /* RXCDiffArrayExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RXCDiffArrayExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80FBC58423225DB3007CC0E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		80FBC58623225DB3007CC0E0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -37,18 +75,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80136FA623277DC900BF72F9 /* DifferenceKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		80136F9723277C2500BF72F9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		80136F9E23277DC300BF72F9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				80136FA323277DC300BF72F9 /* DifferenceKit.framework */,
+				80136FA523277DC300BF72F9 /* Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		80FBC57823225DB3007CC0E0 = {
 			isa = PBXGroup;
 			children = (
+				80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */,
 				80FBC59823225DCB007CC0E0 /* Source */,
 				80FBC58323225DB3007CC0E0 /* RXCDiffArrayExample */,
 				80FBC58223225DB3007CC0E0 /* Products */,
+				80136F9723277C2500BF72F9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,7 +136,9 @@
 			children = (
 				80FBC59923225DDD007CC0E0 /* RXCDiffArray.swift */,
 				80285FD12325FE5D00EA7328 /* RDAChangeSet.swift */,
-				80285FD32325FEBB00EA7328 /* RDASectionProtocol.swift */,
+				80136FA9232799CB00BF72F9 /* RDAEquatable.swift */,
+				80136FAB23279A9100BF72F9 /* RDAElementProtocol.swift */,
+				80285FD32325FEBB00EA7328 /* RDASectionElementProtocol.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -95,6 +154,7 @@
 				80FBC57D23225DB3007CC0E0 /* Sources */,
 				80FBC57E23225DB3007CC0E0 /* Frameworks */,
 				80FBC57F23225DB3007CC0E0 /* Resources */,
+				80136F9C23277C2600BF72F9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -131,12 +191,35 @@
 			mainGroup = 80FBC57823225DB3007CC0E0;
 			productRefGroup = 80FBC58223225DB3007CC0E0 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 80136F9E23277DC300BF72F9 /* Products */;
+					ProjectRef = 80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				80FBC58023225DB3007CC0E0 /* RXCDiffArrayExample */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		80136FA323277DC300BF72F9 /* DifferenceKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DifferenceKit.framework;
+			remoteRef = 80136FA223277DC300BF72F9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		80136FA523277DC300BF72F9 /* Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Tests.xctest;
+			remoteRef = 80136FA423277DC300BF72F9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		80FBC57F23225DB3007CC0E0 /* Resources */ = {
@@ -161,7 +244,9 @@
 				80FBC58923225DB3007CC0E0 /* ViewController.swift in Sources */,
 				80FBC58523225DB3007CC0E0 /* AppDelegate.swift in Sources */,
 				80FBC58723225DB3007CC0E0 /* SceneDelegate.swift in Sources */,
-				80285FD42325FEBB00EA7328 /* RDASectionProtocol.swift in Sources */,
+				80285FD42325FEBB00EA7328 /* RDASectionElementProtocol.swift in Sources */,
+				80136FAC23279A9100BF72F9 /* RDAElementProtocol.swift in Sources */,
+				80136FAA232799CB00BF72F9 /* RDAEquatable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

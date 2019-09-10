@@ -24,7 +24,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableView.reloadData()
 
         let changes = self.dataList.add(contentsOf: [0,1,2,3])
-        self.dataListChanged(changes: changes)
+        //self.dataListChanged(changes: changes)
 
         let addButton = UIBarButtonItem(title: "add", style: .plain, target: self, action: #selector(addRandomly))
         let insertButton = UIBarButtonItem(title: "insert", style: .plain, target: self, action: #selector(insertRandomly))
@@ -61,31 +61,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @objc func deleteRandomly() {
         guard !self.dataList.isEmpty else {return}
         let index = Int.random(in: 0..<self.dataList.count)
-        let changes = self.dataList.remove(at: index)
-        self.dataListChanged(changes: changes)
+//        let changes = self.dataList.remove(at: index)
+//        self.dataListChanged(changes: changes)
     }
 
     @objc func replaceRandomly() {
         let index = Int.random(in: 0..<self.dataList.count)
         let add = Int.random(in: 0..<9)
-        let changes = self.dataList.replace(at: index, with: add)
-        self.dataListChanged(changes: changes)
+//        let changes = self.dataList.replace(at: index, with: add)
+//        self.dataListChanged(changes: changes)
     }
 
     @objc func moveRandomly() {
         let from = Int.random(in: 0..<self.dataList.count)
         let to = Int.random(in: 0..<self.dataList.count)
         print("move \(from) to \(to)")
-        let changes = self.dataList.move(from: from, to: to)
-        self.dataListChanged(changes: changes)
+//        let changes = self.dataList.move(from: from, to: to)
+//        self.dataListChanged(changes: changes)
     }
 
     @objc func exchangeRandomly() {
         let from = Int.random(in: 0..<self.dataList.count)
         let to = Int.random(in: 0..<self.dataList.count)
         print("交换\(from) with \(to)")
-        let changes = self.dataList.exchange(index1: from, index2: to)
-        self.dataListChanged(changes: changes)
+//        let changes = self.dataList.exchange(index1: from, index2: to)
+//        self.dataListChanged(changes: changes)
     }
 
     @objc func reload() {
@@ -102,8 +102,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let from = 0
         let to = 2
         print("move \(from) to \(to)")
-        let changes = self.dataList.move(from: from, to: to)
-        self.dataListChanged(changes: changes)
+//        let changes = self.dataList
+//        self.dataListChanged(changes: changes)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -127,23 +127,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.reloadData()
     }
 
-    func dataListChanged(changes:[RDAChange<Int>]) {
-        self.tableView.performBatchUpdates({
-            for i in changes {
-                switch i {
-                case .move(let move):
-                    self.tableView.moveRow(at: IndexPath(row: move.fromIndex, section: 0), to: IndexPath(row: move.toIndex, section: 0))
-                case .insert(let insert):
-                    self.tableView.insertRows(at: [IndexPath(row: insert.index, section: 0)], with: .automatic)
-                case .delete(let delete):
-                    self.tableView.deleteRows(at: [IndexPath(row: delete.index, section: 0)], with: .automatic)
-                case .replace(let replace):
-                    self.tableView.reloadRows(at: [IndexPath(row: replace.index, section: 0)], with: .automatic)
-                }
-            }
-        }) { (_) in
-            print("更新结束")
-        }
+    func dataListChanged(changes:RDAChangeSet<Int>) {
+//        self.tableView.performBatchUpdates({
+//            for i in changes {
+//                switch i {
+//                case .move(let move):
+//                    self.tableView.moveRow(at: IndexPath(row: move.fromIndex, section: 0), to: IndexPath(row: move.toIndex, section: 0))
+//                case .insert(let insert):
+//                    self.tableView.insertRows(at: [IndexPath(row: insert.index, section: 0)], with: .automatic)
+//                case .delete(let delete):
+//                    self.tableView.deleteRows(at: [IndexPath(row: delete.index, section: 0)], with: .automatic)
+//                case .replace(let replace):
+//                    self.tableView.reloadRows(at: [IndexPath(row: replace.index, section: 0)], with: .automatic)
+//                }
+//            }
+//        }) { (_) in
+//            print("更新结束")
+//        }
 
     }
 
