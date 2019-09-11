@@ -14,39 +14,36 @@ import DifferenceKit
 //对一维结构, 数据的操作默认是在Section 0 中进行的
 
 ///an array that can return changes, idea from DeepDiff: https://github.com/onmyway133/DeepDiff and DifferenceKit: https://github.com/ra1028/DifferenceKit
-public class RXCDiffArray<Element>: Collection {
+public class RXCDiffArray<RDAElement>: Collection {
 
     public struct Key {
         ///用于伪装Section
         public static var fakeSection:String {return "fakeSection"}
     }
 
-    public typealias Iterator = RXCDiffArray.RXCIterator<Element>
+    public typealias Element = RDAElement
+    public typealias Index = Int
 
-    public var startIndex: Int {return 0}
+    public var startIndex: Int {return self.contentArray.startIndex}
 
-    public var endIndex: Int {return self.contentArray.count-1}
+    public var endIndex: Int {return self.contentArray.endIndex}
 
     public func index(after i: Int) -> Int {
-        return i + 1
+        return self.contentArray.index(after: i)
     }
 
-    //TODO: 是否可以考虑采用ContiguousArray? 或者采用可选的初始化类型
+    //TODO: 是否可以考虑采用ContiguousArray? 或者采用范型来自由选择合适的集合类型
     ///实际存储数据的数组
-    public var contentArray:[Element] = []
+    public var contentArray:[RDAElement] = []
 
     public var threadSafe:Bool = true
 
-    required public init() {
-
-    }
-
-    public convenience init(objects:Element...) {
+    public convenience init(objects:RDAElement...) {
         self.init()
         self.contentArray.append(contentsOf: objects)
     }
 
-    public convenience init(objects:[Element]) {
+    public convenience init(objects:[RDAElement]) {
         self.init()
         self.contentArray.append(contentsOf: objects)
     }
@@ -67,11 +64,7 @@ public class RXCDiffArray<Element>: Collection {
 
     //MARK:- 一维 R
 
-    public var count:Int {return self.contentArray.count}
-
-    public var isEmpty:Bool {return self.contentArray.isEmpty}
-
-    public func safeGet(at index:Int) -> Element? {
+    public func safeGet(at index:Int) -> RDAElement? {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
@@ -82,69 +75,75 @@ public class RXCDiffArray<Element>: Collection {
 
         return self[index]
     }
+/*
+    public var count:Int {return self.contentArray.count}
 
-    public var first:Element? {
+    public var isEmpty:Bool {return self.contentArray.isEmpty}
+
+
+
+    public var first:RDAElement? {
         return self.contentArray.first
     }
 
-    public var last:Element? {
+    public var last:RDAElement? {
         return self.contentArray.last
     }
 
-    public func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
+    public func first(where predicate: (RDAElement) throws -> Bool) rethrows -> RDAElement? {
         do {return try self.contentArray.first(where: predicate)}catch {throw error}
     }
 
-    public func last(where predicate: (Element) throws -> Bool) rethrows -> Element? {
+    public func last(where predicate: (RDAElement) throws -> Bool) rethrows -> RDAElement? {
         do {return try self.contentArray.last(where: predicate)}catch {throw error}
     }
 
-    public func firstIndex(where predicate: (Element) throws -> Bool) rethrows -> Int? {
+    public func firstIndex(where predicate: (RDAElement) throws -> Bool) rethrows -> Int? {
         do {return try self.contentArray.firstIndex(where: predicate)}catch {throw error}
     }
 
-    public func lastIndex(where predicate: (Element) throws -> Bool) rethrows -> Int? {
+    public func lastIndex(where predicate: (RDAElement) throws -> Bool) rethrows -> Int? {
         do {return try self.contentArray.lastIndex(where: predicate)}catch {throw error}
     }
+     */
 
     //MARK: - C
 
     @discardableResult
-    public func add(_ anObject: Element, userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
+    public func add(_ anObject: RDAElement, userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
         self.insert(contentOf: [anObject], at: self.count, userInfo: userInfo)
     }
 
     @discardableResult
-    public func add(contentsOf objects: [Element], userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
+    public func add<C:Collection>(contentsOf objects: C, userInfo:[AnyHashable:Any]?=nil) ->RDADifference<RDAElement> where C.Element == RDAElement {
         return self.insert(contentOf: objects, at: self.count, userInfo: userInfo)
     }
 
     @discardableResult
-    public func insert(_ anObject:Element, at index:Int, userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
+    public func insert(_ anObject:RDAElement, at index:Int, userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
         return self.insert(contentOf: [anObject], at: index, userInfo: userInfo)
     }
 
     @discardableResult
-    public func insert(contentOf objects:[Element], at index:Int, userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
+    public func insert<C:Collection>(contentOf objects:C, at index:Int, userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> where C.Element == RDAElement {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
-        let range:Range<Int> = index..<index+objects.count
+        let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
+        let changes:[RDADifference<RDAElement>.Change] = objects.enumerated().map { (i) -> RDADifference<RDAElement>.Change in
+            return RDADifference.Change.elementInsert(offset: i.offset+index, section: __section, element: i.element)
+        }
+
         self.contentArray.insert(contentsOf: objects, at: index)
 
-        let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
-        let changes:[RDAChangeSet<Element>.Change] = range.map({
-            let insert = RDAChangeSet<Element>.ElementInsert(item: objects[$0-range.startIndex], index: $0, section: __section)
-            return RDAChangeSet<Element>.Change.elementInsert(insert)
-        })
-        return RDAChangeSet(changes: changes)
+        return RDADifference(changes: changes)
     }
 
     //MARK: - U
 
     @discardableResult
-    public func replace(at index: Int, with anObject: Element,userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
+    public func replace(at index: Int, with anObject: RDAElement,userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
@@ -153,125 +152,121 @@ public class RXCDiffArray<Element>: Collection {
         self.contentArray[index] = anObject
 
         let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
-        let change = RDAChangeSet<Element>.Change.elementUpdate(RDAChangeSet<Element>.ElementUpdate(oldItem: old, newItem: anObject, index: index, section: __section))
-        return RDAChangeSet(changes: [change])
+        let change:RDADifference<RDAElement>.Change = RDADifference.Change.elementUpdate(offset: index, section: __section, oldElement: old, newElement: anObject)
+        return RDADifference(changes: [change])
     }
 
     ///re-set the object so we have a chance to send change, drive the UI to refresh, only send change, nothing else will happen
     @discardableResult
-    public func reload(at index:Int,userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
+    public func reload(at index:Int,userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
         let element = self[index]
         let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
-        let change = RDAChangeSet.Change.elementUpdate(RDAChangeSet.ElementUpdate(oldItem: element, newItem: element, index: index, section: __section))
-        return RDAChangeSet(changes: [change])
+        let change:RDADifference<RDAElement>.Change = RDADifference.Change.elementUpdate(offset: index, section: __section, oldElement: element, newElement: element)
+        return RDADifference(changes: [change])
     }
 
     @discardableResult
-    public func move(from fromIndex:Int, to toIndex:Int, userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
-        guard fromIndex != toIndex else {return RDAChangeSet.empty()}
+    public func move(from fromIndex:Int, to toIndex:Int, userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
+        guard fromIndex != toIndex else {return RDADifference.empty()}
 
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
-        let fromValue = self.contentArray[fromIndex]
+        let element = self.contentArray[fromIndex]
         self.contentArray.remove(at: fromIndex)
-        self.contentArray.insert(fromValue, at: toIndex)
+        self.contentArray.insert(element, at: toIndex)
 
         let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
-        let change = RDAChangeSet.ElementMove(item: fromValue, fromIndex: fromIndex, fromSection: __section, toIndex: toIndex, toSection: __section)
-        let changeEnum = RDAChangeSet.Change.elementMove(change)
-        return RDAChangeSet(changes: [changeEnum])
+        let change = RDADifference.Change.elementMove(fromOffset: fromIndex, fromSection: __section, toOffset: toIndex, toSection: __section, element: element)
+        return RDADifference(changes: [change])
     }
-/*
-    ///未经测试
-    @discardableResult
-    fileprivate func exchange(index1:Int, index2:Int, userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
 
-        guard index1 != index2 else {return RDAChangeSet.empty()}
+    #warning("not tested")
+    @discardableResult
+    fileprivate func exchange(index1:Int, index2:Int, userInfo:[AnyHashable:Any]?=nil)->RDADifference<Element> {
+
+        guard index1 != index2 else {return RDADifference.empty()}
 
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
-        let value1 = self[index1]
-        let value2 = self[index2]
+        let element1 = self[index1]
+        let element2 = self[index2]
 
-        self.replace(at: index1, with: value2)
-        self.replace(at: index2, with: value1)
+        self.replace(at: index1, with: element2)
+        self.replace(at: index2, with: element2)
 
-        let move1 = RDAChangeSet.ElementMove(item: value1, fromIndex: index1, fromSection: 0, toIndex: index2, toSection: 0)
-        let move2 = RDAChangeSet.ElementMove(item: value2, fromIndex: index2, fromSection: 0, toIndex: index1, toSection: 0)
-        let change1 = RDAChangeSet.Change.elementMove(move1)
-        let change2 = RDAChangeSet.Change.elementMove(move2)
-        return RDAChangeSet(changes: [change1, change2])
+        let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
+        let move1 = RDADifference.Change.elementMove(fromOffset: index1, fromSection: __section, toOffset: index2, toSection: __section, element: element1)
+        let move2 = RDADifference.Change.elementMove(fromOffset: index2, fromSection: __section, toOffset: index1, toSection: __section, element: element2)
+        return RDADifference(changes: [move1, move2])
     }
- */
 
     //MARK: - D
 
     @discardableResult
-    public func remove(at index: Int, userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
+    public func remove(at index: Int, userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
-        let removed = self.contentArray[index]
+        let removedElement = self.contentArray[index]
         self.contentArray.remove(at: index)
 
         let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
-        let change = RDAChangeSet.ElementDelete(item: removed, index: index, section: __section)
-        let changeEnum = RDAChangeSet.Change.elementDelete(change)
-        return RDAChangeSet(changes: [changeEnum])
+        let change = RDADifference.Change.elementRemove(offset: index, section: __section, element: removedElement)
+        return RDADifference(changes: [change])
     }
 
     @discardableResult
-    public func removeAll(where predicate: (Element) -> Bool, userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
+    public func removeAll(where predicate: (RDAElement) -> Bool, userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
         let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
-        var changes:[RDAChangeSet<Element>.Change] = [RDAChangeSet<Element>.Change]()
+        var changes:[RDADifference<RDAElement>.Change] = [RDADifference<RDAElement>.Change]()
 
         for i in self.contentArray.enumerated() {
             if predicate(i.element) {
-                let change = RDAChangeSet.ElementDelete(item: i.element, index: i.offset, section: __section)
-                changes.append(RDAChangeSet.Change.elementDelete(change))
+                let change = RDADifference.Change.elementRemove(offset: i.offset, section: __section, element: i.element)
+                changes.append(change)
             }
         }
         //删除本地数据
         for i in changes.reversed() {
             switch i {
-            case .elementDelete(let delete):
-                self.contentArray.remove(at: delete.index)
+            case .elementRemove(offset: let offset, section: _, element: _):
+                self.contentArray.remove(at: offset)
             default:
                 break
             }
         }
 
-        return RDAChangeSet(changes: changes)
+        return RDADifference(changes: changes)
     }
 
     @discardableResult
-    public func removeAll(userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
+    public func removeAll(userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
         let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
-        let changes = self.contentArray.enumerated().map { (offset:Int, element:Element) -> RDAChangeSet<Element>.Change in
-            let change = RDAChangeSet.ElementDelete(item: element, index: offset, section: __section)
-            return RDAChangeSet.Change.elementDelete(change)
+        let changes:[RDADifference<RDAElement>.Change] = self.contentArray.enumerated().map {
+            let change = RDADifference.Change.elementRemove(offset: $0.offset, section: __section, element: $0.element)
+            return change
         }
         self.contentArray.removeAll()
-        return RDAChangeSet(changes: changes)
+        return RDADifference(changes: changes)
     }
 
     ///删除前面几个元素, 这里的k可以大于元素数量而不会崩溃
     @discardableResult
-    public func removeFirst(k:Int=1, userInfo:[AnyHashable:Any]?=nil)->RDAChangeSet<Element> {
-        if self.contentArray.isEmpty {return RDAChangeSet.empty()}
+    public func removeFirst(k:Int=1, userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
+        if self.contentArray.isEmpty {return RDADifference.empty()}
 
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
@@ -279,89 +274,68 @@ public class RXCDiffArray<Element>: Collection {
 
         let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
         let range = 0..<(k > self.contentArray.count ? self.contentArray.count : k)
-        let changes:[RDAChangeSet<Element>.Change] = range.map { (offset) -> RDAChangeSet<Element>.Change in
+        let changes:[RDADifference<RDAElement>.Change] = range.map { (offset) -> RDADifference<RDAElement>.Change in
             let element = self.contentArray[offset]
-            let change = RDAChangeSet.ElementDelete(item: element, index: offset, section: __section)
-            return RDAChangeSet.Change.elementDelete(change)
+            let change = RDADifference.Change.elementRemove(offset: offset, section: __section, element: element)
+            return change
         }
         self.contentArray.removeSubrange(range)
-        return RDAChangeSet(changes: changes)
+        return RDADifference(changes: changes)
     }
 
     @discardableResult
-    public func removeLast(k:Int=1)->RDAChangeSet<Element> {
-        if self.contentArray.isEmpty {return RDAChangeSet.empty()}
+    public func removeLast(k:Int=1, userInfo:[AnyHashable:Any]?=nil)->RDADifference<RDAElement> {
+        if self.contentArray.isEmpty {return RDADifference.empty()}
         let end = self.contentArray.count
         var start:Int = end - k
         if start < 0 {start = 0}
+        if start == end {return RDADifference.empty()}
         let range = start..<end
 
+        let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
+        let changes:[RDADifference<RDAElement>.Change] = range.map({
+            let change = RDADifference<RDAElement>.ElementDelete(item: self.contentArray[$0], index: $0, section: __section)
+            return RDADifference.Change.elementDelete(change)
+        })
 
+        self.contentArray.removeSubrange(range)
+
+        return RDADifference(changes: changes)
     }
 
     //MARK: - subscript
 
-    public subscript(index:Int) -> Element {
+    public subscript(index:Int) -> RDAElement {
         get {
-            return self.contentArray[index] as! Element
+            return self.contentArray[index]
         }
     }
 
-    public subscript(bounds:Range<Int>) -> [Element] {
+    public subscript(bounds:Range<Int>) -> [RDAElement] {
         get {
-            var arr:[Element] = []
-            for i in bounds {
-                arr.append(self[i])
-            }
-            return arr
+            return Array(self.contentArray[bounds])
         }
     }
 
-    public subscript(bounds:ClosedRange<Int>)->[Element] {
+    public subscript(bounds:ClosedRange<Int>)->[RDAElement] {
         get {
-            var arr:[Element] = []
-            for i in bounds {
-                arr.append(self[i])
-            }
-            return arr
+            return Array(self.contentArray[bounds])
         }
     }
 
     //MARK: - Sequence
 
-    public func makeIterator() -> RXCDiffArray.RXCIterator<Element> {
-        return RXCDiffArray.RXCIterator<Element>(self)
+    public func makeIterator() -> RXCDiffArray.RXCIterator<RDAElement> {
+        return RXCDiffArray.RXCIterator<RDAElement>(self)
     }
 
-    //MARK: - RangeReplaceableCollection
-
-    
-
-}
-
-public extension RXCDiffArray {
-
-    struct RXCIterator<Element>: IteratorProtocol {
-
-        private let array:RXCDiffArray<Element>
-        private var index:Int = 0
-
-        public init(_ array:RXCDiffArray<Element>){
-            self.array = array
-        }
-
-        public mutating func next() -> Element? {
-            let object = array.safeGet(at: index)
-            index += 1
-            return object
-        }
-    }
+    //MARK: - RangeReplaceableCollection 待实现
 
 }
 
 //MARK: - Equatable
 
-extension RXCDiffArray: Equatable where Element: Equatable {
+extension RXCDiffArray: Equatable where RDAElement: Equatable {
 
     public static func == (lhs: RXCDiffArray, rhs: RXCDiffArray) -> Bool {
         if lhs.count != rhs.count {return false}
@@ -378,7 +352,7 @@ extension RXCDiffArray: Equatable where Element: Equatable {
 //MARK: - DeepDiff
 
 #if canImport(DeepDiff)
-extension RXCDiffArray where Element: DiffAware {
+extension RXCDiffArray where RDAElement: DiffAware {
 
 //    public func batch(batchClosure:()->()) {
 //        let old:[Element] = [Element].init(self)
@@ -391,171 +365,172 @@ extension RXCDiffArray where Element: DiffAware {
 }
 #endif
 
-public extension RXCDiffArray where Element: RDASectionElementProtocol {
+public extension RXCDiffArray where RDAElement: RDASectionElementProtocol, RDAElement.RDASectionElementsCollection: RangeReplaceableCollection, RDAElement.RDASectionElementsCollection.Index == Int   {
 
-    typealias SubElement = Element.RDAElementType
+    typealias SubElement = RDAElement.RDASectionElementsCollection.Element
 
     //MARK: - 2D C
 
     @discardableResult
-    func add(_ anObject: SubElement, in section:Int)->RDAChangeSet<SubElement> {
+    func add(_ anObject: SubElement, in section:Int)->RDADifference<SubElement> {
         return self.add(contentsOf: [anObject], in: section)
     }
 
     @discardableResult
-    func add(contentsOf objects: [SubElement], in section:Int)->RDAChangeSet<SubElement> {
+    func add(contentsOf objects: [SubElement], in section:Int)->RDADifference<SubElement> {
         return self.insert(contentOf: objects, at: self.count, in: section)
     }
 
     @discardableResult
-    func insert(_ anObject:SubElement, at index:Int,in section:Int)->RDAChangeSet<SubElement> {
+    func insert(_ anObject:SubElement, at index:Int,in section:Int)->RDADifference<SubElement> {
         return self.insert(contentOf: [anObject], at: index, in: section)
     }
 
     @discardableResult
-    func insert(contentOf objects:[SubElement], at index:Int, in section:Int)->RDAChangeSet<SubElement> {
+    func insert(contentOf objects:[SubElement], at index:Int, in section:Int)->RDADifference<SubElement> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
         var sectionElement = self[section]
-        sectionElement.rda_elements.insert(contentsOf: objects, at: index)
-        self.contentArray.replaceObject(at: section, with: sectionElement)
+        var elements = sectionElement.rda_elements
+        elements.insert(contentsOf: objects, at: index)
+        sectionElement.rda_elements = elements
+        self.contentArray[section] = sectionElement
 
         let range:Range<Int> = index..<index+objects.count
-        let changes:[RDAChangeSet<SubElement>.Change] = range.map({
-            let insert = RDAChangeSet<SubElement>.ElementInsert(item: objects[$0-range.startIndex], index: index, section: section)
-            return RDAChangeSet<SubElement>.Change.elementInsert(insert)
+        let changes:[RDADifference<SubElement>.Change] = range.map({
+            let insert = RDADifference<SubElement>.ElementInsert(item: objects[$0-range.startIndex], index: index, section: section)
+            return RDADifference<SubElement>.Change.elementInsert(insert)
         })
-        return RDAChangeSet<SubElement>(changes: changes)
+        return RDADifference<SubElement>(changes: changes)
     }
 
     //MARK: - 2D U
 
     @discardableResult
-    func replace(with anObject: SubElement, at index: Int, in section:Int)->RDAChangeSet<SubElement> {
+    func replace(with anObject: SubElement, at index: Int, in section:Int)->RDADifference<SubElement> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
         var sectionElement = self[section]
-        let old = sectionElement.rda_elements[index]
-        sectionElement.rda_elements[index] = anObject
+        var elements = sectionElement.rda_elements
+        let old = elements[index]
+        elements.replaceSubrange(index..<index+1, with: [anObject])
+        sectionElement.rda_elements = elements
         self.contentArray[section] = sectionElement
 
-        let change = RDAChangeSet.Change.elementUpdate(RDAChangeSet.ElementUpdate(oldItem: old, newItem: anObject, index: index, section: section))
-        return RDAChangeSet(changes: [change])
+        let change = RDADifference.Change.elementUpdate(RDADifference.ElementUpdate(oldItem: old, newItem: anObject, index: index, section: section))
+        return RDADifference(changes: [change])
     }
 
     ///re-set the object so we have a chance to send change, drive the UI to refresh
     @discardableResult
-    func reload(at index:Int, in section:Int)->RDAChangeSet<SubElement> {
+    func reload(at index:Int, in section:Int)->RDADifference<SubElement> {
         //send changes directly
         let sectionElement = self[section]
         let element = sectionElement.rda_elements[index]
-        let change = RDAChangeSet.Change.elementUpdate(RDAChangeSet.ElementUpdate(oldItem: element, newItem: element, index: index, section: section))
-        return RDAChangeSet(changes: [change])
+        let change = RDADifference.Change.elementUpdate(RDADifference.ElementUpdate(oldItem: element, newItem: element, index: index, section: section))
+        return RDADifference(changes: [change])
     }
 
     @discardableResult
-    func move(fromIndex:Int,fromSection:Int, toIndex:Int, toSection:Int)->RDAChangeSet<SubElement> {
+    func move(fromIndex:Int,fromSection:Int, toIndex:Int, toSection:Int)->RDADifference<SubElement> {
 
-        guard fromIndex != toIndex && fromSection != toSection else {return RDAChangeSet.empty()}
+        guard fromIndex != toIndex && fromSection != toSection else {return RDADifference.empty()}
 
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
         var fromSectionElement = self[fromSection]
-        let fromElement = fromSectionElement.rda_elements[fromIndex]
+        var fromElements = fromSectionElement.rda_elements
+        let fromElement = fromElements[fromIndex]
         var toSectionElement = self[toSection]
+        var toElements = toSectionElement.rda_elements
 
-        fromSectionElement.rda_elements.remove(at: fromIndex)
-        toSectionElement.rda_elements.insert(fromElement, at: toIndex)
+        fromElements.remove(at: fromIndex)
+        toElements.insert(fromElement, at: toIndex)
+        fromSectionElement.rda_elements = fromElements
+        toSectionElement.rda_elements = toElements
         self.contentArray[fromSection] = fromSectionElement
         self.contentArray[toSection] = toSectionElement
 
-        let change = RDAChangeSet.ElementMove(item: fromElement, fromIndex: fromIndex, fromSection: fromSection, toIndex: toIndex, toSection: toSection)
-        let changeEnum = RDAChangeSet.Change.elementMove(change)
-        return RDAChangeSet(changes: [changeEnum])
+        let change = RDADifference.ElementMove(item: fromElement, fromIndex: fromIndex, fromSection: fromSection, toIndex: toIndex, toSection: toSection)
+        let changeEnum = RDADifference.Change.elementMove(change)
+        return RDADifference(changes: [changeEnum])
     }
 
     //MARK: - D
 
     @discardableResult
-    func remove(at index: Int, in section:Int)->RDAChangeSet<SubElement> {
+    func remove(at index: Int, in section:Int)->RDADifference<SubElement> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
         var sectionElement = self[section]
-        let removed = sectionElement.rda_elements[index]
-        sectionElement.rda_elements.remove(at: index)
+        var elements = sectionElement.rda_elements
+        let removed = elements[index]
+        elements.remove(at: index)
+        sectionElement.rda_elements = elements
         self.contentArray[section] = sectionElement
 
-        let change = RDAChangeSet.ElementDelete(item: removed, index: index, section: section)
-        let changeEnum = RDAChangeSet.Change.elementDelete(change)
-        return RDAChangeSet(changes: [changeEnum])
+        let change = RDADifference.ElementDelete(item: removed, index: index, section: section)
+        let changeEnum = RDADifference.Change.elementDelete(change)
+        return RDADifference(changes: [changeEnum])
     }
 
     @discardableResult
-    func removeAll(in section:Int, where predicate: (SubElement) -> Bool)->RDAChangeSet<SubElement> {
+    func removeAll(in section:Int, where predicate: (SubElement) -> Bool)->RDADifference<SubElement> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
-        var changes:[RDAChangeSet<SubElement>.Change] = [RDAChangeSet<SubElement>.Change]()
+        var changes:[RDADifference<SubElement>.Change] = [RDADifference<SubElement>.Change]()
         var sectionElement = self[section]
-        for i in sectionElement.rda_elements.enumerated() {
+        var elements = sectionElement.rda_elements
+        for i in elements.enumerated() {
             if predicate(i.element) {
-                let change = RDAChangeSet.ElementDelete(item: i.element, index: i.offset, section: section)
-                changes.append(RDAChangeSet.Change.elementDelete(change))
+                let change = RDADifference.ElementDelete(item: i.element, index: i.offset, section: section)
+                changes.append(RDADifference.Change.elementDelete(change))
             }
         }
         //删除本地数据
         for i in changes.reversed() {
             switch i {
             case .elementDelete(let delete):
-                sectionElement.rda_elements.remove(at: delete.index)
+                elements.remove(at: delete.index)
             default:
                 break
             }
         }
+        sectionElement.rda_elements = elements
         self.contentArray[section] = sectionElement
 
-        return RDAChangeSet(changes: changes)
+        return RDADifference(changes: changes)
     }
 
     @discardableResult
-    func removeAll(in section:Int)->RDAChangeSet<SubElement> {
+    func removeAll(in section:Int)->RDADifference<SubElement> {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
         var sectionElement = self[section]
+        var elements = sectionElement.rda_elements
 
-        let changes = sectionElement.rda_elements.enumerated().map {(i) -> RDAChangeSet<SubElement>.Change in
-            let change = RDAChangeSet.ElementDelete(item: i.element, index: i.offset, section: section)
-            return RDAChangeSet.Change.elementDelete(change)
+        let changes = elements.enumerated().map {(i) -> RDADifference<SubElement>.Change in
+            let change = RDADifference.ElementDelete(item: i.element, index: i.offset, section: section)
+            return RDADifference.Change.elementDelete(change)
         }
 
-        sectionElement.rda_elements.removeAll()
+        elements.removeAll()
+        sectionElement.rda_elements = elements
         self.contentArray[section] = sectionElement
 
-        return RDAChangeSet(changes: changes)
-    }
-
-    @discardableResult
-    func dropFirst(in section:Int)->RDAChangeSet<SubElement> {
-        if self.isEmpty {return RDAChangeSet.empty()}
-        return self.remove(at: 0, in: section)
-    }
-
-    @discardableResult
-    func dropLast(in section:Int)->RDAChangeSet<SubElement> {
-        if self.isEmpty {return RDAChangeSet.empty()}
-        let sectionElement = self[section]
-        return self.remove(at: sectionElement.rda_elements.count-1, in: section)
+        return RDADifference(changes: changes)
     }
 
     subscript(indexPath:IndexPath)->SubElement {
@@ -566,36 +541,94 @@ public extension RXCDiffArray where Element: RDASectionElementProtocol {
 }
 
 //MARK: - DifferenceKit
+
 #if canImport(DifferenceKit)
-public extension RXCDiffArray where Element: Differentiable {
 
-    /// 进行一维对比, 元素的变化视为 Section 的变化
-    func batch_differenceKit_linear(batch:()->Void)->RDAChangeSet<Element> {
-        let old = [Element].init(self)
+//符合一维结构
+public extension RXCDiffArray where RDAElement: Differentiable {
+
+//    func batch_differenceKit(batch:()->Void)->RDADifference<RDAElement> {
+//        let old = [RDAElement].init(self)
+//        batch()
+//        let new = [RDAElement].init(self)
+//        let dk_changeset = StagedChangeset(source: old, target: new)
+//
+//    }
+
+    func batch(batch:()->Void) {
+        //一维对比
+        let old = [RDAElement].init(self)
         batch()
-        let new = [Element].init(self)
+        let new = [RDAElement].init(self)
         let dk_changeset = StagedChangeset(source: old, target: new)
+        print(dk_changeset)
+        //转化diff结果
+        
+    }
 
-        var mappedChanges:[RDAChangeSet<Element>.Change] = []
+}
 
+//二维结构
+public extension RXCDiffArray where RDAElement: RDASectionElementProtocol, RDAElement: Differentiable, RDAElement.RDASectionElementsCollection.Element: Differentiable {
+
+    func batch(batch:()->Void) {
+        //二维对比, 先将数据转换成DiffKit的数据
+        let oldSections = self.enumerated().map { (i) -> ArraySection<RDAElement, RDAElement.RDASectionElementsCollection.Element> in
+            let section:ArraySection<RDAElement, RDAElement.RDASectionElementsCollection.Element> = ArraySection(model: i.element, elements: i.element.rda_elements)
+            return section
+        }
+
+        batch()
+
+        let newSections = self.enumerated().map { (i) -> ArraySection<RDAElement, RDAElement.RDASectionElementsCollection.Element> in
+            let section:ArraySection<RDAElement, RDAElement.RDASectionElementsCollection.Element> = ArraySection(model: i.element, elements: i.element.rda_elements)
+            return section
+        }
+        let changesets = StagedChangeset(source: oldSections, target: newSections)
+        //转换成本类的Change结构
+        for changeset in changesets {
+            for i in changeset.sectionInserted {
+
+            }
+        }
+    }
+
+    /*
+    /// 进行一维对比, 元素的变化视为 Section 的变化
+    func batch_differenceKit_linear(fakeSection:Int=0, batch:()->Void)->RDADifference<RDAElement> {
+        let old = [RDAElement].init(self)
+        batch()
+        let new = [RDAElement].init(self)
+        let dk_changeset = StagedChangeset(source: old, target: new, section: fakeSection)
+
+        var mappedChanges:[RDADifference<RDAElement>.Change] = []
         for dk_change in dk_changeset {
             for i in dk_change.elementDeleted {
-                let change = RDAChangeSet.SectionDelete(item: old[i.element], index: i.element)
-                mappedChanges.append(RDAChangeSet.Change.sectionDelete(change))
+                let change = RDADifference.SectionDelete(item: old[i.element], index: i.element)
+                mappedChanges.append(RDADifference.Change.sectionDelete(change))
             }
             for i in dk_change.elementMoved {
-                let change = RDAChangeSet.SectionMove(item: old[i.source.element], fromIndex: i.source.element, toIndex: i.target.element)
-                mappedChanges.append(RDAChangeSet.Change.sectionMove(change))
+                let change = RDADifference.SectionMove(item: old[i.source.element], fromIndex: i.source.element, toIndex: i.target.element)
+                mappedChanges.append(RDADifference.Change.sectionMove(change))
             }
             for i in dk_change.elementUpdated {
-                let change = RDAChangeSet.SectionUpdate(oldItem: old[i.element], newItem: new[i.element], index: i.element)
-                
+                let change = RDADifference.SectionUpdate(oldItem: old[i.element], newItem: new[i.element], index: i.element)
+
             }
 
 
         }
 
     }
+ */
 
 }
 #endif
+
+extension RXCDiffArray where RDAElement: RDASectionElementProtocol, RDAElement.RDASectionElementsCollection: MutableCollection {
+
+    func a() {
+
+    }
+
+}

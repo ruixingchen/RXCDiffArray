@@ -11,7 +11,7 @@
 		80136FA723277DC900BF72F9 /* DifferenceKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 80136FA323277DC300BF72F9 /* DifferenceKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		80136FAA232799CB00BF72F9 /* RDAEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80136FA9232799CB00BF72F9 /* RDAEquatable.swift */; };
 		80136FAC23279A9100BF72F9 /* RDAElementProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80136FAB23279A9100BF72F9 /* RDAElementProtocol.swift */; };
-		80285FD22325FE5D00EA7328 /* RDAChangeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD12325FE5D00EA7328 /* RDAChangeSet.swift */; };
+		80285FD22325FE5D00EA7328 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD12325FE5D00EA7328 /* RDADifference.swift */; };
 		80285FD42325FEBB00EA7328 /* RDASectionElementProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD32325FEBB00EA7328 /* RDASectionElementProtocol.swift */; };
 		80FBC58523225DB3007CC0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58423225DB3007CC0E0 /* AppDelegate.swift */; };
 		80FBC58723225DB3007CC0E0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58623225DB3007CC0E0 /* SceneDelegate.swift */; };
@@ -57,7 +57,7 @@
 		80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DifferenceKit.xcodeproj; path = DifferenceKit/DifferenceKit.xcodeproj; sourceTree = "<group>"; };
 		80136FA9232799CB00BF72F9 /* RDAEquatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDAEquatable.swift; sourceTree = "<group>"; };
 		80136FAB23279A9100BF72F9 /* RDAElementProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDAElementProtocol.swift; sourceTree = "<group>"; };
-		80285FD12325FE5D00EA7328 /* RDAChangeSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDAChangeSet.swift; sourceTree = "<group>"; };
+		80285FD12325FE5D00EA7328 /* RDADifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
 		80285FD32325FEBB00EA7328 /* RDASectionElementProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDASectionElementProtocol.swift; sourceTree = "<group>"; };
 		80FBC58123225DB3007CC0E0 /* RXCDiffArrayExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RXCDiffArrayExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80FBC58423225DB3007CC0E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				80FBC59923225DDD007CC0E0 /* RXCDiffArray.swift */,
-				80285FD12325FE5D00EA7328 /* RDAChangeSet.swift */,
+				80285FD12325FE5D00EA7328 /* RDADifference.swift */,
 				80136FA9232799CB00BF72F9 /* RDAEquatable.swift */,
 				80136FAB23279A9100BF72F9 /* RDAElementProtocol.swift */,
 				80285FD32325FEBB00EA7328 /* RDASectionElementProtocol.swift */,
@@ -239,7 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80285FD22325FE5D00EA7328 /* RDAChangeSet.swift in Sources */,
+				80285FD22325FE5D00EA7328 /* RDADifference.swift in Sources */,
 				80FBC59A23225DDD007CC0E0 /* RXCDiffArray.swift in Sources */,
 				80FBC58923225DB3007CC0E0 /* ViewController.swift in Sources */,
 				80FBC58523225DB3007CC0E0 /* AppDelegate.swift in Sources */,

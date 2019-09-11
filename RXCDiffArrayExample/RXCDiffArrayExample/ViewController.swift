@@ -7,6 +7,61 @@
 //
 
 import UIKit
+import DifferenceKit
+
+class Entity: Differentiable {
+
+    typealias DifferenceIdentifier = String
+
+    var differenceIdentifier: String {return self.id}
+
+    var id:String = ""
+
+    func rda_isEqualTo(other object: Entity) -> Bool {
+        return self.id == object.id
+    }
+
+    func isContentEqual(to source: Entity) -> Bool {
+        return self.rda_isEqualTo(other: source)
+    }
+
+}
+
+class Card: Entity, RDASectionElementProtocol {
+
+//    var elements: Array<Entity> {return self.rda_elements}
+
+//    required init<C>(source: Card, elements: C) where C: Card.Collection, C.Element == Card.Collection.Element {
+//
+//    }
+
+//    typealias Collection = Array<Entity>
+
+    typealias RDASectionElementsCollection = Array<Entity>
+
+    override var differenceIdentifier: String {
+        return self.cardId
+    }
+
+    var cardId:String = ""
+
+    func rda_isEqualTo(other object: Card) -> Bool {
+        return self.cardId == object.cardId
+    }
+
+    override func isContentEqual(to source: Entity) -> Bool {
+        if let card = source as? Card {
+            return self.cardId == card.cardId
+        }
+        return false
+    }
+
+    var rda_elements: [Entity] = []
+
+}
+
+extension String: Differentiable {}
+extension Int : Differentiable {}
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -17,13 +72,59 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
+
+
+        let a:[Int] = (0..<10000).map({_ in Int.random(in: 0..<100)})
+        let b:[Int] = (0..<10000).map({_ in Int.random(in: 0..<100)})
+        let start = Date().timeIntervalSince1970
+        let changes = a.difference(from: b)
+        print(Date().timeIntervalSince1970-start)
+        //print(changes)
+
+        if true {
+            let a:[Int] = (0..<10000).map({_ in Int.random(in: 0..<100)})
+            let b:[Int] = (0..<10000).map({_ in Int.random(in: 0..<100)})
+            let test = RXCDiffArray<Int>.init(objects: a)
+
+            let start = Date().timeIntervalSince1970
+
+            let changes = test.batch {
+                test.removeAll()
+                test.add(contentsOf: b)
+            }
+            print(Date().timeIntervalSince1970-start)
+        }
+
+        if true {
+            let testData:RXCDiffArray<Entity> = RXCDiffArray()
+            testData.batch() {
+                for i in 0..<10 {
+                    let entity = Entity()
+                    entity.id = Int.random(in: 0..<100).description
+                    testData.add(entity)
+                }
+            }
+        }
+
+        if true {
+            let testData:RXCDiffArray<Card> = RXCDiffArray()
+            testData.batch() {
+                for i in 0..<10 {
+                    let card = Card()
+                    card.cardId = Int.random(in: 0..<100).description
+                    testData.add(card)
+                }
+            }
+        }
+
+
         self.dataList.threadSafe = true
         self.view.addSubview(self.tableView)
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.tableView.reloadData()
 
-        let changes = self.dataList.add(contentsOf: [0,1,2,3])
+        //let changes = self.dataList.add(contentsOf: [0,1,2,3])
         //self.dataListChanged(changes: changes)
 
         let addButton = UIBarButtonItem(title: "add", style: .plain, target: self, action: #selector(addRandomly))
@@ -127,7 +228,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.reloadData()
     }
 
-    func dataListChanged(changes:RDAChangeSet<Int>) {
+    func dataListChanged(changes:RDADifference<Int>) {
 //        self.tableView.performBatchUpdates({
 //            for i in changes {
 //                switch i {
