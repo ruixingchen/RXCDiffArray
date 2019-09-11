@@ -8,22 +8,22 @@
 import Foundation
 
 ///两个集合之间的差异, 根据Swift的CollectionDifference改的, 支持二维数据和更多的改变类型
-public struct RDADifference<ChangeElement>  {
+public struct RDADifference<SectionElement, Element>  {
 
     static func empty()->RDADifference {
         return RDADifference(changes: [])
     }
 
     public enum Change {
-        case sectionInsert(offset:Int, element:ChangeElement)
-        case sectionRemove(offset:Int, element:ChangeElement)
-        case sectionUpdate(offset:Int, oldElement:ChangeElement, newElement:ChangeElement)
-        case sectionMove(fromOffset:Int, toOffset:Int, element:ChangeElement)
+        case sectionInsert(offset:Int, element:SectionElement)
+        case sectionRemove(offset:Int, element:SectionElement)
+        case sectionUpdate(offset:Int, oldElement:SectionElement, newElement:SectionElement)
+        case sectionMove(fromOffset:Int, toOffset:Int, element:SectionElement)
 
-        case elementInsert(offset:Int, section:Int, element:ChangeElement)
-        case elementRemove(offset:Int, section:Int, element:ChangeElement)
-        case elementUpdate(offset:Int, section:Int, oldElement:ChangeElement, newElement:ChangeElement)
-        case elementMove(fromOffset:Int,fromSection:Int, toOffset:Int,toSection:Int, element:ChangeElement)
+        case elementInsert(offset:Int, section:Int, element:Element)
+        case elementRemove(offset:Int, section:Int, element:Element)
+        case elementUpdate(offset:Int, section:Int, oldElement:Element, newElement:Element)
+        case elementMove(fromOffset:Int,fromSection:Int, toOffset:Int,toSection:Int, element:Element)
 
         var offset:Int {
             switch self {
@@ -164,7 +164,7 @@ extension RDADifference: Collection {
 
     public var endIndex: Int {return self.allChanges.endIndex}
 
-    public subscript(position: Int) -> RDADifference<ChangeElement>.Change {
+    public subscript(position: Int) -> RDADifference.Change {
         return self.allChanges[position]
     }
 

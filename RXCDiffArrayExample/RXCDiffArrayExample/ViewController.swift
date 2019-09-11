@@ -62,7 +62,7 @@ class Card: Entity, RDASectionElementProtocol {
 
 extension String: Differentiable {}
 extension Int : Differentiable {}
-
+/*
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let dataList:RXCDiffArray<Int> = RXCDiffArray()
@@ -250,3 +250,4 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 }
 
+*/

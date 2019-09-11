@@ -13,6 +13,162 @@ import DifferenceKit
 
 //对一维结构, 数据的操作默认是在Section 0 中进行的
 
+public protocol SectionElementProtocol {
+    
+    ///容纳第二维数据的容器类型, 一般是数组类型
+    associatedtype SubElementContainer: Collection
+    
+    var rda_elements:SubElementContainer {get set}
+    
+}
+
+///默认使用二维数据结构
+
+/// 范型表示Section的数据的容器类型, 一般是一个Array类型, 如RXCDiffArray<[Card]>, 兼容其他类型, 如连续数组
+public final class RXCDiffArray<SectionElementContainer: RangeReplaceableCollection> where SectionElementContainer.Element: SectionElementProtocol,SectionElementContainer.Index==Int  {
+    
+    public typealias SectionElement = SectionElementContainer.Element
+    public typealias SubElement = SectionElementContainer.Element.SubElementContainer.Element
+    
+    public typealias Element = SectionElementContainer.Element
+    public typealias Index = SectionElementContainer.Index
+    
+    internal var contentCollection:SectionElementContainer
+    
+    ///default we are not thread safe
+    public var threadSafe:Bool = false
+
+    public init() {
+        self.contentCollection = SectionElementContainer.init()
+    }
+    
+//    @inlinable
+//    public init<S>(_ elements: S) where S: Sequence, SectionElementContainer.Element == Element {
+//        self.contentCollection = SectionElementContainer.init(elements)
+//    }
+    
+    public init(repeating repeatedValue: Element, count: Int) {
+        self.contentCollection = SectionElementContainer.init(repeating: repeatedValue, count: count)
+    }
+
+    internal func lockContent() {
+        objc_sync_enter(self.contentCollection)
+    }
+    
+    internal func unlockContent() {
+        objc_sync_exit(self.contentCollection)
+    }
+    
+//    func rda_insert<C:Collection>(_ sections: C, at index: Int)->RDADifference<SectionElement, SubElement> where C.Element == RXCDiffArray.SectionElement {
+//
+//        let safe:Bool = self.threadSafe
+//        if safe {self.lockContent()}
+//        defer {if safe {self.unlockContent()}}
+//
+//        self.contentCollection.insert(contentsOf: sections, at: index)
+//
+//        //生成Change
+//        let changes:[RDADifference<SectionElement, SubElement>.Change] = sections.enumerated().map {
+//            return RDADifference<SectionElement, SubElement>.Change.sectionInsert(offset: $0.offset+index, element: $0.element)
+//        }
+//        return RDADifference(changes: changes)
+//    }
+    
+//    public func rda_append(_ element:SectionElement) {
+//        self.contentCollection.append(element)
+//    }
+//
+//    public func rda_append<S>(contentsOf newElements: __owned S) where S : Sequence, RXCDiffArray.SectionElement == S.Element {
+//        self.contentCollection.append(contentsOf: newElements)
+//    }
+//
+//    public func rda_insert(_ newElement: __owned SectionElement, at i: SectionElementContainer.Index) {
+//        self.contentCollection.insert(newElement, at: i)
+//    }
+//
+//    public func insert<C>(contentsOf newElements: __owned C, at i: SectionElementContainer.Index) where C : Collection, RXCDiffArray.Element == C.Element {
+//        self.contentCollection.insert(contentsOf: newElements, at: i)
+//    }
+//
+//    public func removeFirst(_ k: Int) {
+//        self.contentCollection.removeFirst(k)
+//    }
+//
+    
+}
+
+extension RXCDiffArray: Collection {
+
+    public var startIndex: SectionElementContainer.Index {return self.contentCollection.startIndex}
+
+    public var endIndex: SectionElementContainer.Index {return self.contentCollection.endIndex}
+
+    public subscript(position: SectionElementContainer.Index) -> SectionElementContainer.Element {
+        return self.contentCollection[position]
+    }
+
+    public func index(after i: SectionElementContainer.Index) -> SectionElementContainer.Index {
+        return self.contentCollection.index(after: i)
+    }
+
+    public var underestimatedCount: Int {return self.contentCollection.underestimatedCount}
+
+    public var count: Int {return self.contentCollection.count}
+
+    public var isEmpty: Bool {return self.contentCollection.isEmpty}
+
+}
+
+extension RXCDiffArray: RangeReplaceableCollection {
+
+    
+
+//    public func append<S>(contentsOf newElements: S) where S: Sequence, SectionElementContainer.Element == SectionElementContainer.Element {
+//
+//    }
+//
+//    public func replaceSubrange<C>(_ subrange: Range<SectionElementContainer.Index>, with newElements: C) where C: Collection, SectionElementContainer.Element == SectionElementContainer.Element {
+//    }
+//
+//    public func removeFirst() -> SectionElementContainer.Element {
+//        fatalError("removeFirst() has not been implemented")
+//    }
+//
+//    public func removeFirst(_ k: Int) {
+//    }
+//
+//    public func reserveCapacity(_ n: Int) {
+//
+//    }
+//
+//
+//
+//
+//
+//    public func append(_ newElement: SectionElementContainer.Element) {
+//    }
+//
+//    public func insert(_ newElement: SectionElementContainer.Element, at i: SectionElementContainer.Index) {
+//    }
+//
+//    public func insert<S>(contentsOf newElements: S, at i: SectionElementContainer.Index) where S: Collection, SectionElementContainer.Element == SectionElementContainer.Element {
+//    }
+//
+//    public func remove(at i: SectionElementContainer.Index) -> SectionElementContainer.Element {
+//        fatalError("remove(at:) has not been implemented")
+//    }
+//
+//    public func removeSubrange(_ bounds: Range<SectionElementContainer.Index>) {
+//    }
+//
+//    public func removeAll(keepingCapacity keepCapacity: Bool) {
+//    }
+//
+//    public func removeAll(where shouldBeRemoved: (SectionElementContainer.Element) throws -> Bool) rethrows {
+//    }
+}
+
+/*
 ///an array that can return changes, idea from DeepDiff: https://github.com/onmyway133/DeepDiff and DifferenceKit: https://github.com/ra1028/DifferenceKit
 public class RXCDiffArray<RDAElement>: Collection {
 
@@ -294,8 +450,8 @@ public class RXCDiffArray<RDAElement>: Collection {
 
         let __section = userInfo?[RXCDiffArray.Key.fakeSection] as? Int ?? 0
         let changes:[RDADifference<RDAElement>.Change] = range.map({
-            let change = RDADifference<RDAElement>.ElementDelete(item: self.contentArray[$0], index: $0, section: __section)
-            return RDADifference.Change.elementDelete(change)
+            let element = self.contentArray[$0]
+            return RDADifference.Change.elementRemove(offset: $0, section: __section, element: element)
         })
 
         self.contentArray.removeSubrange(range)
@@ -323,47 +479,9 @@ public class RXCDiffArray<RDAElement>: Collection {
         }
     }
 
-    //MARK: - Sequence
-
-    public func makeIterator() -> RXCDiffArray.RXCIterator<RDAElement> {
-        return RXCDiffArray.RXCIterator<RDAElement>(self)
-    }
-
     //MARK: - RangeReplaceableCollection 待实现
 
 }
-
-//MARK: - Equatable
-
-extension RXCDiffArray: Equatable where RDAElement: Equatable {
-
-    public static func == (lhs: RXCDiffArray, rhs: RXCDiffArray) -> Bool {
-        if lhs.count != rhs.count {return false}
-        for i in 0..<lhs.count {
-            if lhs.safeGet(at: i) != rhs.safeGet(at: i) {
-                return false
-            }
-        }
-        return true
-    }
-
-}
-
-//MARK: - DeepDiff
-
-#if canImport(DeepDiff)
-extension RXCDiffArray where RDAElement: DiffAware {
-
-//    public func batch(batchClosure:()->()) {
-//        let old:[Element] = [Element].init(self)
-//        batchClosure()
-//        let new:[Element] = [Element].init(self)
-//        let changes = DeepDiff.diff(old: old, new: new)
-//        return changes
-//    }
-
-}
-#endif
 
 public extension RXCDiffArray where RDAElement: RDASectionElementProtocol, RDAElement.RDASectionElementsCollection: RangeReplaceableCollection, RDAElement.RDASectionElementsCollection.Index == Int   {
 
@@ -400,8 +518,8 @@ public extension RXCDiffArray where RDAElement: RDASectionElementProtocol, RDAEl
 
         let range:Range<Int> = index..<index+objects.count
         let changes:[RDADifference<SubElement>.Change] = range.map({
-            let insert = RDADifference<SubElement>.ElementInsert(item: objects[$0-range.startIndex], index: index, section: section)
-            return RDADifference<SubElement>.Change.elementInsert(insert)
+            let element = objects[$0-range.startIndex]
+            return RDADifference.Change.elementInsert(offset: $0, section: section, element: element)
         })
         return RDADifference<SubElement>(changes: changes)
     }
@@ -421,7 +539,7 @@ public extension RXCDiffArray where RDAElement: RDASectionElementProtocol, RDAEl
         sectionElement.rda_elements = elements
         self.contentArray[section] = sectionElement
 
-        let change = RDADifference.Change.elementUpdate(RDADifference.ElementUpdate(oldItem: old, newItem: anObject, index: index, section: section))
+        let change = RDADifference.Change.elementUpdate(offset: index, section: section, oldElement: old, newElement: anObject)
         return RDADifference(changes: [change])
     }
 
@@ -431,7 +549,7 @@ public extension RXCDiffArray where RDAElement: RDASectionElementProtocol, RDAEl
         //send changes directly
         let sectionElement = self[section]
         let element = sectionElement.rda_elements[index]
-        let change = RDADifference.Change.elementUpdate(RDADifference.ElementUpdate(oldItem: element, newItem: element, index: index, section: section))
+        let change = RDADifference.Change.elementUpdate(offset: index, section: section, oldElement: element, newElement: element)
         return RDADifference(changes: [change])
     }
 
@@ -632,3 +750,4 @@ extension RXCDiffArray where RDAElement: RDASectionElementProtocol, RDAElement.R
     }
 
 }
+*/
