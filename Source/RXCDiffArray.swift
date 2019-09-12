@@ -16,10 +16,16 @@ import DifferenceKit
 public protocol SectionElementProtocol {
     
     ///容纳第二维数据的容器类型, 一般是数组类型
-    associatedtype SubElementContainer: Collection
+    associatedtype SubElementContainer: RangeReplaceableCollection
     
     var rda_elements:SubElementContainer {get set}
     
+}
+
+public protocol RXCDiffArrayDelegate: AnyObject {
+
+    func diffArray<SectionElementContainer: RangeReplaceableCollection>(array:RXCDiffArray<SectionElementContainer>, didChange difference:RDADifference<SectionElementContainer.Element,SectionElementContainer.Element.SubElementContainer.Element>) where SectionElementContainer.Element: SectionElementProtocol,SectionElementContainer.Index==Int
+
 }
 
 ///默认使用二维数据结构
@@ -32,11 +38,20 @@ public final class RXCDiffArray<SectionElementContainer: RangeReplaceableCollect
     
     public typealias Element = SectionElementContainer.Element
     public typealias Index = SectionElementContainer.Index
+
+    public typealias Difference = RDADifference<SectionElement, SubElement>
+
+    public struct Key {
+        ///是否通知代理
+        static var notify:String {return "notify"}
+    }
     
     internal var contentCollection:SectionElementContainer
     
     ///default we are not thread safe
     public var threadSafe:Bool = false
+
+    public weak var delegate:RXCDiffArrayDelegate?
 
     public init() {
         self.contentCollection = SectionElementContainer.init()
@@ -51,6 +66,12 @@ public final class RXCDiffArray<SectionElementContainer: RangeReplaceableCollect
         self.contentCollection = SectionElementContainer.init(repeating: repeatedValue, count: count)
     }
 
+    public var count: Int {return self.contentCollection.count}
+
+    public var isEmpty: Bool {return self.contentCollection.isEmpty}
+
+    //MARK: - Tool
+
     internal func lockContent() {
         objc_sync_enter(self.contentCollection)
     }
@@ -58,42 +79,97 @@ public final class RXCDiffArray<SectionElementContainer: RangeReplaceableCollect
     internal func unlockContent() {
         objc_sync_exit(self.contentCollection)
     }
-    
-//    func rda_insert<C:Collection>(_ sections: C, at index: Int)->RDADifference<SectionElement, SubElement> where C.Element == RXCDiffArray.SectionElement {
-//
-//        let safe:Bool = self.threadSafe
-//        if safe {self.lockContent()}
-//        defer {if safe {self.unlockContent()}}
-//
-//        self.contentCollection.insert(contentsOf: sections, at: index)
-//
-//        //生成Change
-//        let changes:[RDADifference<SectionElement, SubElement>.Change] = sections.enumerated().map {
-//            return RDADifference<SectionElement, SubElement>.Change.sectionInsert(offset: $0.offset+index, element: $0.element)
-//        }
-//        return RDADifference(changes: changes)
-//    }
-    
-//    public func rda_append(_ element:SectionElement) {
-//        self.contentCollection.append(element)
-//    }
-//
-//    public func rda_append<S>(contentsOf newElements: __owned S) where S : Sequence, RXCDiffArray.SectionElement == S.Element {
-//        self.contentCollection.append(contentsOf: newElements)
-//    }
-//
-//    public func rda_insert(_ newElement: __owned SectionElement, at i: SectionElementContainer.Index) {
-//        self.contentCollection.insert(newElement, at: i)
-//    }
-//
-//    public func insert<C>(contentsOf newElements: __owned C, at i: SectionElementContainer.Index) where C : Collection, RXCDiffArray.Element == C.Element {
-//        self.contentCollection.insert(contentsOf: newElements, at: i)
-//    }
-//
-//    public func removeFirst(_ k: Int) {
-//        self.contentCollection.removeFirst(k)
-//    }
-//
+
+    internal func notifyDelegate(diff:RDADifference<SectionElement, SubElement>, userInfo:[AnyHashable:Any]) {
+        self.delegate?.diffArray(array: self, didChange: diff)
+    }
+
+    //MARK: - RDA API, 返回Diff
+
+    public func rda_appendSection(_ newElement: __owned SectionElement, userInfo:[AnyHashable:Any]?=nil)->Difference {
+        return self.rda_insertSection(contentsOf: [newElement], at: self.count, userInfo: userInfo)
+    }
+
+    public func rda_appendSection<S>(contentsOf newElements: __owned S, userInfo:[AnyHashable:Any]?=nil)->Difference where S : Collection, S.Element==SectionElement  {
+        return self.rda_insertSection(contentsOf: newElements, at: self.count)
+    }
+
+    public func rda_insertSection(_ newElement: __owned SectionElement, at i: Int, userInfo:[AnyHashable:Any]?=nil)->Difference {
+        return self.rda_insertSection(contentsOf: [newElement], at: i)
+    }
+
+    public func rda_insertSection<C>(contentsOf newElements: __owned C, at i: Int, userInfo:[AnyHashable:Any]?=nil)->Difference where C : Collection, C.Element==SectionElement {
+        self.contentCollection.insert(contentsOf: newElements, at: i)
+        //生成Change
+        let changes:[Difference.Change] = newElements.enumerated().map {
+            return Difference.Change.sectionInsert(offset: $0.offset+i, element: $0.element)
+        }
+        return Difference(changes: changes)
+    }
+
+    ///删除Section
+    public func rda_removeSection(at position: Int) -> Difference {
+        let element = self.contentCollection.remove(at: position)
+        let change = Difference.Change.sectionRemove(offset: position, element: element)
+        return Difference(changes: [change])
+    }
+
+    ///移动Section
+    public func rda_moveSection(from position:Int, to toPosition:Int)->Difference {
+        let safe:Bool = self.threadSafe
+        if safe {self.lockContent()}
+        defer {if safe {self.unlockContent()}}
+
+        let element = self.contentCollection.remove(at: position)
+        self.contentCollection.insert(element, at: toPosition)
+
+        let change = Difference.Change.sectionMove(fromOffset: position, toOffset: toPosition, element: element)
+        return Difference(changes: [change])
+    }
+
+    public func rda_append(_ newElement: __owned SubElement, in s:Int, userInfo:[AnyHashable:Any]?=nil)->Difference {
+        var section = self.contentCollection[s]
+        section.rda_elements.append(newElement)
+        self.contentCollection.replaceSubrange(s..<s+1, with: CollectionOfOne(section))
+        return self.rda_insertSection(contentsOf: [newElement], at: self.count, userInfo: userInfo)
+    }
+
+    public func rda_appendSection<S>(contentsOf newElements: __owned S, userInfo:[AnyHashable:Any]?=nil)->Difference where S : Collection, RXCDiffArray.Element == S.Element {
+        return self.rda_insertSection(contentsOf: newElements, at: self.count)
+    }
+
+    public func rda_insertSection(_ newElement: __owned SectionElementContainer.Element, at i: Int, userInfo:[AnyHashable:Any]?=nil)->Difference {
+        return self.rda_insertSection(contentsOf: [newElement], at: i)
+    }
+
+    public func rda_insertSection<C>(contentsOf newElements: __owned C, at i: Int, userInfo:[AnyHashable:Any]?=nil)->Difference where C : Collection, RXCDiffArray.Element == C.Element {
+        self.contentCollection.insert(contentsOf: newElements, at: i)
+        //生成Change
+        let changes:[Difference.Change] = newElements.enumerated().map {
+            return Difference.Change.sectionInsert(offset: $0.offset+i, element: $0.element)
+        }
+        return Difference(changes: changes)
+    }
+
+    ///删除Section
+    public func rda_removeSection(at position: Int) -> Difference {
+        let element = self.contentCollection.remove(at: position)
+        let change = Difference.Change.sectionRemove(offset: position, element: element)
+        return Difference(changes: [change])
+    }
+
+    ///移动Section
+    public func rda_moveSection(from position:Int, to toPosition:Int)->Difference {
+        let safe:Bool = self.threadSafe
+        if safe {self.lockContent()}
+        defer {if safe {self.unlockContent()}}
+
+        let element = self.contentCollection.remove(at: position)
+        self.contentCollection.insert(element, at: toPosition)
+
+        let change = Difference.Change.sectionMove(fromOffset: position, toOffset: toPosition, element: element)
+        return Difference(changes: [change])
+    }
     
 }
 
@@ -113,15 +189,45 @@ extension RXCDiffArray: Collection {
 
     public var underestimatedCount: Int {return self.contentCollection.underestimatedCount}
 
-    public var count: Int {return self.contentCollection.count}
-
-    public var isEmpty: Bool {return self.contentCollection.isEmpty}
-
 }
 
 extension RXCDiffArray: RangeReplaceableCollection {
 
-    
+    public func append(_ newElement: __owned SectionElementContainer.Element) {
+        self.contentCollection.append(newElement)
+    }
+
+    public func append<S>(contentsOf newElements: __owned S) where S : Sequence, RXCDiffArray.Element == S.Element {
+        self.contentCollection.append(contentsOf: newElements)
+    }
+
+    public func insert(_ newElement: __owned SectionElementContainer.Element, at i: Int) {
+        self.contentCollection.insert(newElement, at: i)
+    }
+
+    public func insert<C>(contentsOf newElements: __owned C, at i: Int) where C : Collection, RXCDiffArray.Element == C.Element {
+        self.contentCollection.insert(contentsOf: newElements, at: i)
+    }
+
+    public func removeFirst(_ k: Int) {
+        self.contentCollection.removeFirst(k)
+    }
+
+    public func removeSubrange(_ bounds: Range<Int>) {
+        self.contentCollection.removeSubrange(bounds)
+    }
+
+    public func removeFirst() -> SectionElementContainer.Element {
+        return self.contentCollection.removeFirst()
+    }
+
+    public func remove(at position: Int) -> SectionElementContainer.Element {
+        return self.contentCollection.remove(at: position)
+    }
+
+    public func replaceSubrange<C, R>(_ subrange: R, with newElements: __owned C) where C : Collection, R : RangeExpression, RXCDiffArray.Element == C.Element, RXCDiffArray.Index == R.Bound {
+        self.contentCollection.replaceSubrange(subrange, with: newElements)
+    }
 
 //    public func append<S>(contentsOf newElements: S) where S: Sequence, SectionElementContainer.Element == SectionElementContainer.Element {
 //

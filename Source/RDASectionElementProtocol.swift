@@ -12,7 +12,7 @@ import Foundation
 public protocol RDASectionElementProtocol  {
 
     ///子元素集合的类型
-    associatedtype RDASectionElementsCollection: Collection
+    associatedtype RDASectionElementsCollection: RangeReplaceableCollection where RDASectionElementsCollection: MutableCollection
 
     ///这里需要setter为了方便在不可变对象的情况下操作第二维数据, 比如添加数据
     var rda_elements:RDASectionElementsCollection {get set}
