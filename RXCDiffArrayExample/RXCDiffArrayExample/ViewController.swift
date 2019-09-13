@@ -62,6 +62,7 @@ class Card: Entity, RDASectionElementProtocol {
 
 extension String: Differentiable {}
 extension Int : Differentiable {}
+
 /*
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 

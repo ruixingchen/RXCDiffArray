@@ -15,15 +15,15 @@ public struct RDADifference<SectionElement, Element>  {
     }
 
     public enum Change {
-        case sectionInsert(offset:Int, element:SectionElement)
-        case sectionRemove(offset:Int, element:SectionElement)
-        case sectionUpdate(offset:Int, oldElement:SectionElement, newElement:SectionElement)
-        case sectionMove(fromOffset:Int, toOffset:Int, element:SectionElement)
+        case sectionInsert(offset:Int, element:SectionElement?)
+        case sectionRemove(offset:Int, element:SectionElement?)
+        case sectionUpdate(offset:Int, oldElement:SectionElement?, newElement:SectionElement?)
+        case sectionMove(fromOffset:Int, toOffset:Int, element:SectionElement?)
 
-        case elementInsert(offset:Int, section:Int, element:Element)
-        case elementRemove(offset:Int, section:Int, element:Element)
-        case elementUpdate(offset:Int, section:Int, oldElement:Element, newElement:Element)
-        case elementMove(fromOffset:Int,fromSection:Int, toOffset:Int,toSection:Int, element:Element)
+        case elementInsert(offset:Int, section:Int, element:Element?)
+        case elementRemove(offset:Int, section:Int, element:Element?)
+        case elementUpdate(offset:Int, section:Int, oldElement:Element?, newElement:Element?)
+        case elementMove(fromOffset:Int,fromSection:Int, toOffset:Int,toSection:Int, element:Element?)
 
         var offset:Int {
             switch self {
