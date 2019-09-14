@@ -6,12 +6,15 @@
 //
 
 import Foundation
+#if canImport(DifferenceKit)
+import DifferenceKit
+#endif
 
 ///两个集合之间的差异, 根据Swift的CollectionDifference改的, 支持二维数据和更多的改变类型
-public struct RDADifference<SectionElement, Element>  {
+public struct RDADifference<SectionElement, SubElement>  {
 
     static func empty()->RDADifference {
-        return RDADifference(changes: [])
+        return RDADifference(changes: Array<Change>())
     }
 
     public enum Change {
@@ -20,10 +23,10 @@ public struct RDADifference<SectionElement, Element>  {
         case sectionUpdate(offset:Int, oldElement:SectionElement?, newElement:SectionElement?)
         case sectionMove(fromOffset:Int, toOffset:Int, element:SectionElement?)
 
-        case elementInsert(offset:Int, section:Int, element:Element?)
-        case elementRemove(offset:Int, section:Int, element:Element?)
-        case elementUpdate(offset:Int, section:Int, oldElement:Element?, newElement:Element?)
-        case elementMove(fromOffset:Int,fromSection:Int, toOffset:Int,toSection:Int, element:Element?)
+        case elementInsert(offset:Int, section:Int, element:SubElement?)
+        case elementRemove(offset:Int, section:Int, element:SubElement?)
+        case elementUpdate(offset:Int, section:Int, oldElement:SubElement?, newElement:SubElement?)
+        case elementMove(fromOffset:Int,fromSection:Int, toOffset:Int,toSection:Int, element:SubElement?)
 
         var offset:Int {
             switch self {
@@ -49,7 +52,7 @@ public struct RDADifference<SectionElement, Element>  {
     }
 
     ///已经完全排序好的所有Change, 主要用于遍历
-    internal let allChanges:[Change]
+    public let allChanges:[Change]
 
     ///from lower offset to larger offset
     public let sectionRemoved:[Change]
@@ -75,9 +78,8 @@ public struct RDADifference<SectionElement, Element>  {
     ///from lower offset to larger offset
     public let elementMoved:[Change]
 
-
-    public init<Changes:Collection>(changes:Changes) where Changes.Element == Change {
-        //sort changes
+    /// 注意: 手动随意初始化的Change记录可能会导致更新UI的时候崩溃, 要根据真实的数据变化顺序传入changes
+    public init<C:Collection>(changes:C, sorted:Bool=false) where C.Element == Change {
 
         var __sectionRemoved:[Change] = []
         var __sectionInserted:[Change] = []
@@ -109,14 +111,16 @@ public struct RDADifference<SectionElement, Element>  {
             }
         }
 
-        __sectionRemoved.sort {$0.offset < $1.offset}
-        __sectionInserted.sort {$0.offset < $1.offset}
-        __sectionUpdated.sort {$0.offset < $1.offset}
-        __sectionMoved.sort {$0.offset < $1.offset}
-        __elementRemoved.sort {$0.offset < $1.offset}
-        __elementInserted.sort {$0.offset < $1.offset}
-        __elementUpdated.sort {$0.offset < $1.offset}
-        __elementMoved.sort {$0.offset < $1.offset}
+        if !sorted {
+            __sectionRemoved.sort {$0.offset < $1.offset}
+            __sectionInserted.sort {$0.offset < $1.offset}
+            __sectionUpdated.sort {$0.offset < $1.offset}
+            __sectionMoved.sort {$0.offset < $1.offset}
+            __elementRemoved.sort {$0.offset < $1.offset}
+            __elementInserted.sort {$0.offset < $1.offset}
+            __elementUpdated.sort {$0.offset < $1.offset}
+            __elementMoved.sort {$0.offset < $1.offset}
+        }
 
         self.sectionRemoved = __sectionRemoved
         self.sectionInserted = __sectionInserted
@@ -137,7 +141,6 @@ public struct RDADifference<SectionElement, Element>  {
         allChanges.append(contentsOf: self.elementUpdated)
         allChanges.append(contentsOf: self.elementMoved)
         self.allChanges = allChanges
-
     }
 
 }
@@ -145,7 +148,7 @@ public struct RDADifference<SectionElement, Element>  {
 //MARK: - Collection
 extension RDADifference: Collection {
 
-    public typealias Element = Change
+    public typealias Element = RDADifference.Change
     public typealias Index = Int
 
     public func index(after i: Int) -> Int {
@@ -160,11 +163,11 @@ extension RDADifference: Collection {
         return self.allChanges.index(i, offsetBy: distance, limitedBy: limit)
     }
 
-    public var startIndex: Int {return self.allChanges.startIndex}
+    public var startIndex: Index {return self.allChanges.startIndex}
 
-    public var endIndex: Int {return self.allChanges.endIndex}
+    public var endIndex: Index {return self.allChanges.endIndex}
 
-    public subscript(position: Int) -> RDADifference.Change {
+    public subscript(position: Int) -> RDADifference<SectionElement, SubElement>.Change {
         return self.allChanges[position]
     }
 
