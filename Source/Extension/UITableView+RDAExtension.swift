@@ -10,7 +10,7 @@ import UIKit
 
 extension UITableView {
 
-    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDAReloadAnimations, completion:((Bool)->Void)?) where SectionElement: SectionElementProtocol, SubElement==SectionElement.SubElementContainer.Element {
+    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDATableViewAnimations, completion:((Bool)->Void)?) {
 
         guard self.window != .none else {
             self.reloadData()

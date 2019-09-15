@@ -14,7 +14,7 @@ import AsyncDisplayKit
 #if canImport(AsyncDisplayKit) || CanUSeASDK
 extension ASCollectionNode {
 
-    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, completion:((Bool)->Void)?) where SectionElement: SectionElementProtocol, SubElement==SectionElement.SubElementContainer.Element {
+    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, completion:((Bool)->Void)?) {
 
         guard self.isNodeLoaded else {
             self.reloadData()

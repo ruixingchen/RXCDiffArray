@@ -13,8 +13,9 @@
 		8040EE14232E510800BC8456 /* UICollectionView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE0D232E510800BC8456 /* UICollectionView+RDAExtension.swift */; };
 		8040EE15232E510800BC8456 /* ASTableNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE0E232E510800BC8456 /* ASTableNode+RDAExtension.swift */; };
 		8040EE16232E510800BC8456 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE0F232E510800BC8456 /* RDADifference.swift */; };
-		8040EE17232E510800BC8456 /* RDATableViewReloadAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE10232E510800BC8456 /* RDATableViewReloadAnimations.swift */; };
+		8040EE17232E510800BC8456 /* RDATableViewAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */; };
 		8040EE18232E510800BC8456 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE11232E510800BC8456 /* RXCDiffArray.swift */; };
+		8040EE32232E743D00BC8456 /* RXCSimpleDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE2C232E680C00BC8456 /* RXCSimpleDiffArray.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,8 +27,9 @@
 		8040EE0D232E510800BC8456 /* UICollectionView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RDAExtension.swift"; sourceTree = "<group>"; };
 		8040EE0E232E510800BC8456 /* ASTableNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASTableNode+RDAExtension.swift"; sourceTree = "<group>"; };
 		8040EE0F232E510800BC8456 /* RDADifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
-		8040EE10232E510800BC8456 /* RDATableViewReloadAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewReloadAnimations.swift; sourceTree = "<group>"; };
+		8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewAnimations.swift; sourceTree = "<group>"; };
 		8040EE11232E510800BC8456 /* RXCDiffArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXCDiffArray.swift; sourceTree = "<group>"; };
+		8040EE2C232E680C00BC8456 /* RXCSimpleDiffArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RXCSimpleDiffArray.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,9 +72,10 @@
 		8040EE09232E510800BC8456 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				8040EE2E232E6A5700BC8456 /* Simple */,
 				8040EE0A232E510800BC8456 /* Extension */,
 				8040EE0F232E510800BC8456 /* RDADifference.swift */,
-				8040EE10232E510800BC8456 /* RDATableViewReloadAnimations.swift */,
+				8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */,
 				8040EE11232E510800BC8456 /* RXCDiffArray.swift */,
 			);
 			path = Source;
@@ -87,6 +90,14 @@
 				8040EE0E232E510800BC8456 /* ASTableNode+RDAExtension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		8040EE2E232E6A5700BC8456 /* Simple */ = {
+			isa = PBXGroup;
+			children = (
+				8040EE2C232E680C00BC8456 /* RXCSimpleDiffArray.swift */,
+			);
+			path = Simple;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,7 +179,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8040EE16232E510800BC8456 /* RDADifference.swift in Sources */,
-				8040EE17232E510800BC8456 /* RDATableViewReloadAnimations.swift in Sources */,
+				8040EE17232E510800BC8456 /* RDATableViewAnimations.swift in Sources */,
+				8040EE32232E743D00BC8456 /* RXCSimpleDiffArray.swift in Sources */,
 				8040EE14232E510800BC8456 /* UICollectionView+RDAExtension.swift in Sources */,
 				8040EE12232E510800BC8456 /* ASCollectionNode+RDAExtension.swift in Sources */,
 				8040EE18232E510800BC8456 /* RXCDiffArray.swift in Sources */,
@@ -314,6 +326,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = RXCDiffArray/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -339,6 +352,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = RXCDiffArray/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

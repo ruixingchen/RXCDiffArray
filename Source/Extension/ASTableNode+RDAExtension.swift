@@ -11,10 +11,10 @@ import UIKit
 import AsyncDisplayKit
 #endif
 
-#if canImport(AsyncDisplayKit) || CanUSeASDK
-extension ASTableNode {
+#if canImport(AsyncDisplayKit) || CanUseASDK
+public extension ASTableNode {
 
-    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDAReloadAnimations, completion:((Bool)->Void)?) where SectionElement: SectionElementProtocol, SubElement==SectionElement.SubElementContainer.Element {
+    func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDATableViewAnimations, completion:((Bool)->Void)?) {
 
         guard self.isNodeLoaded else {
             self.reloadData()

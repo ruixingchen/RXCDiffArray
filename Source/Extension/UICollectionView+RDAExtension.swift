@@ -10,7 +10,7 @@ import UIKit
 
 extension UICollectionView {
 
-    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, completion:((Bool)->Void)?) where SectionElement: SectionElementProtocol, SubElement==SectionElement.SubElementContainer.Element {
+    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, completion:((Bool)->Void)?) {
 
         guard self.window != .none else {
             self.reloadData()
