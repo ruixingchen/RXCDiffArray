@@ -10,6 +10,11 @@
 		80136FA623277DC900BF72F9 /* DifferenceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80136FA323277DC300BF72F9 /* DifferenceKit.framework */; };
 		80136FA723277DC900BF72F9 /* DifferenceKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 80136FA323277DC300BF72F9 /* DifferenceKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		80285FD22325FE5D00EA7328 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD12325FE5D00EA7328 /* RDADifference.swift */; };
+		8040EDC7232E22B700BC8456 /* RXCDiffArrayExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EDC6232E22B700BC8456 /* RXCDiffArrayExampleTests.swift */; };
+		8040EDD0232E234C00BC8456 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC59923225DDD007CC0E0 /* RXCDiffArray.swift */; };
+		8040EDD1232E234C00BC8456 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD12325FE5D00EA7328 /* RDADifference.swift */; };
+		8040EDD2232E236900BC8456 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58823225DB3007CC0E0 /* ViewController.swift */; };
+		8040EDD3232E23ED00BC8456 /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B7FABA232CEF1A00F1BE6B /* UITableView+RDAExtension.swift */; };
 		80B7FABB232CEF1A00F1BE6B /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B7FABA232CEF1A00F1BE6B /* UITableView+RDAExtension.swift */; };
 		80FBC58523225DB3007CC0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58423225DB3007CC0E0 /* AppDelegate.swift */; };
 		80FBC58923225DB3007CC0E0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58823225DB3007CC0E0 /* ViewController.swift */; };
@@ -34,6 +39,13 @@
 			remoteGlobalIDString = 6B2DF877210E2C12004D2D40;
 			remoteInfo = Tests;
 		};
+		8040EDC9232E22B700BC8456 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80FBC57923225DB3007CC0E0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 80FBC58023225DB3007CC0E0;
+			remoteInfo = RXCDiffArrayExample;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +65,9 @@
 /* Begin PBXFileReference section */
 		80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DifferenceKit.xcodeproj; path = DifferenceKit/DifferenceKit.xcodeproj; sourceTree = "<group>"; };
 		80285FD12325FE5D00EA7328 /* RDADifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
+		8040EDC4232E22B700BC8456 /* RXCDiffArrayExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RXCDiffArrayExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8040EDC6232E22B700BC8456 /* RXCDiffArrayExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RXCDiffArrayExampleTests.swift; sourceTree = "<group>"; };
+		8040EDC8232E22B700BC8456 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		80B7FABA232CEF1A00F1BE6B /* UITableView+RDAExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+RDAExtension.swift"; sourceTree = "<group>"; };
 		80FBC58123225DB3007CC0E0 /* RXCDiffArrayExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RXCDiffArrayExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80FBC58423225DB3007CC0E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +80,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8040EDC1232E22B700BC8456 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		80FBC57E23225DB3007CC0E0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -92,6 +114,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8040EDC5232E22B700BC8456 /* RXCDiffArrayExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				8040EDC6232E22B700BC8456 /* RXCDiffArrayExampleTests.swift */,
+				8040EDC8232E22B700BC8456 /* Info.plist */,
+			);
+			path = RXCDiffArrayExampleTests;
+			sourceTree = "<group>";
+		};
 		80B7FAB7232CEEF400F1BE6B /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +137,7 @@
 				80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */,
 				80FBC59823225DCB007CC0E0 /* Source */,
 				80FBC58323225DB3007CC0E0 /* RXCDiffArrayExample */,
+				8040EDC5232E22B700BC8456 /* RXCDiffArrayExampleTests */,
 				80FBC58223225DB3007CC0E0 /* Products */,
 				80136F9723277C2500BF72F9 /* Frameworks */,
 			);
@@ -115,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				80FBC58123225DB3007CC0E0 /* RXCDiffArrayExample.app */,
+				8040EDC4232E22B700BC8456 /* RXCDiffArrayExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,6 +179,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8040EDC3232E22B700BC8456 /* RXCDiffArrayExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8040EDCF232E22B700BC8456 /* Build configuration list for PBXNativeTarget "RXCDiffArrayExampleTests" */;
+			buildPhases = (
+				8040EDC0232E22B700BC8456 /* Sources */,
+				8040EDC1232E22B700BC8456 /* Frameworks */,
+				8040EDC2232E22B700BC8456 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8040EDCA232E22B700BC8456 /* PBXTargetDependency */,
+			);
+			name = RXCDiffArrayExampleTests;
+			productName = RXCDiffArrayExampleTests;
+			productReference = 8040EDC4232E22B700BC8456 /* RXCDiffArrayExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		80FBC58023225DB3007CC0E0 /* RXCDiffArrayExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 80FBC59523225DB5007CC0E0 /* Build configuration list for PBXNativeTarget "RXCDiffArrayExample" */;
@@ -174,6 +225,10 @@
 				LastUpgradeCheck = 1100;
 				ORGANIZATIONNAME = ruixingchen;
 				TargetAttributes = {
+					8040EDC3232E22B700BC8456 = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 80FBC58023225DB3007CC0E0;
+					};
 					80FBC58023225DB3007CC0E0 = {
 						CreatedOnToolsVersion = 11.0;
 					};
@@ -199,6 +254,7 @@
 			projectRoot = "";
 			targets = (
 				80FBC58023225DB3007CC0E0 /* RXCDiffArrayExample */,
+				8040EDC3232E22B700BC8456 /* RXCDiffArrayExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -221,6 +277,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8040EDC2232E22B700BC8456 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		80FBC57F23225DB3007CC0E0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -234,6 +297,18 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8040EDC0232E22B700BC8456 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8040EDD0232E234C00BC8456 /* RXCDiffArray.swift in Sources */,
+				8040EDD3232E23ED00BC8456 /* UITableView+RDAExtension.swift in Sources */,
+				8040EDD1232E234C00BC8456 /* RDADifference.swift in Sources */,
+				8040EDD2232E236900BC8456 /* ViewController.swift in Sources */,
+				8040EDC7232E22B700BC8456 /* RXCDiffArrayExampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		80FBC57D23225DB3007CC0E0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -247,6 +322,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8040EDCA232E22B700BC8456 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 80FBC58023225DB3007CC0E0 /* RXCDiffArrayExample */;
+			targetProxy = 8040EDC9232E22B700BC8456 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		80FBC58A23225DB3007CC0E0 /* Main.storyboard */ = {
@@ -268,6 +351,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		8040EDCB232E22B700BC8456 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4RHHQE5755;
+				INFOPLIST_FILE = RXCDiffArrayExampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ruixingchenwork.RXCDiffArrayExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RXCDiffArrayExample.app/RXCDiffArrayExample";
+			};
+			name = Debug;
+		};
+		8040EDCC232E22B700BC8456 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4RHHQE5755;
+				INFOPLIST_FILE = RXCDiffArrayExampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ruixingchenwork.RXCDiffArrayExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RXCDiffArrayExample.app/RXCDiffArrayExample";
+			};
+			name = Release;
+		};
 		80FBC59323225DB5007CC0E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -423,6 +546,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8040EDCF232E22B700BC8456 /* Build configuration list for PBXNativeTarget "RXCDiffArrayExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8040EDCB232E22B700BC8456 /* Debug */,
+				8040EDCC232E22B700BC8456 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		80FBC57C23225DB3007CC0E0 /* Build configuration list for PBXProject "RXCDiffArrayExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

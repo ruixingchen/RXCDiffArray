@@ -45,8 +45,12 @@ public final class RXCDiffArray<SectionContainer: RangeReplaceableCollection> wh
         ///是否通知代理
         static var notify:String {return "notify"}
     }
-    
+
+    #if (debug || DEBUG)
+    public var contentCollection:SectionContainer
+    #else
     internal var contentCollection:SectionContainer
+    #endif
     
     ///default we are not thread safe
     public var threadSafe:Bool = false
@@ -137,25 +141,9 @@ extension RXCDiffArray where SectionContainer.Index==Int {
     }
     
     @discardableResult
-    public func rda_appendSection<S>(contentsOf newElements: __owned S, userInfo:[AnyHashable:Any]?=nil)->Difference where S : Sequence, Element == S.Element {
-        return self.rda_replaceSection(self.contentCollection.endIndex..<self.contentCollection.endIndex, with: newElements, userInfo: userInfo)
-        /*
-        let safe:Bool = self.threadSafe
-        if safe {self.lockContent()}
-        defer {if safe {self.unlockContent()}}
-
-        let count = self.contentCollection.count
-        let changes:[Difference.Change] = newElements.enumerated().map { (i) -> Difference.Change in
-            let offset = count + i.offset
-            return Difference.Change.sectionInsert(offset: offset, element: i.element)
-        }
-
-        self.contentCollection.append(contentsOf: newElements)
-        
-        let diff = Difference(changes: changes)
-        self.notifyDelegate(diff: diff, userInfo: userInfo)
-        return diff
-         */
+    public func rda_appendSection<S: Sequence>(contentsOf newElements: __owned S, userInfo:[AnyHashable:Any]?=nil)->Difference where S.Element==SectionElement {
+        let array = [S.Element].init(newElements)
+        return self.rda_replaceSection(self.contentCollection.endIndex..<self.contentCollection.endIndex, with: array, userInfo: userInfo)
     }
 
     @discardableResult
@@ -165,35 +153,14 @@ extension RXCDiffArray where SectionContainer.Index==Int {
 
     @discardableResult
     public func rda_insertSection<C>(contentsOf newElements: __owned C, at i: SectionIndex, userInfo:[AnyHashable:Any]?=nil)->Difference where C : Collection, C.Element==SectionElement {
-        return self.rda_replaceSection(i..<self.contentCollection.index(after: i), with: newElements, userInfo: userInfo)
-        /*
-        //生成Change
-        let changes:[Difference.Change] = newElements.enumerated().map {
-            let offset = i+$0.offset
-            return Difference.Change.sectionInsert(offset: offset, element: $0.element)
-        }
-
-        self.contentCollection.insert(contentsOf: newElements, at: i)
-
-        let diff = Difference(changes: changes)
-        self.notifyDelegate(diff: diff, userInfo: userInfo)
-        return diff
-         */
+        return self.rda_replaceSection(i..<i, with: newElements, userInfo: userInfo)
     }
 
     //MARK: - Section 修改
-
+    
+    @discardableResult
     public func rda_replaceSection(at position: SectionIndex, with newElement: SectionElement, userInfo:[AnyHashable:Any]?=nil)->Difference {
         return self.rda_replaceSection(position..<self.contentCollection.index(after: position), with: CollectionOfOne(newElement), userInfo: userInfo)
-        /*
-        let oldElement = self.contentCollection[position]
-        self.contentCollection.replaceSubrange(position..<self.contentCollection.index(position, offsetBy: 1), with: CollectionOfOne(newElement))
-        let change = Difference.Change.sectionUpdate(offset: position, oldElement: oldElement, newElement: newElement)
-
-        let diff = Difference(changes: CollectionOfOne(change))
-        self.notifyDelegate(diff: diff, userInfo: userInfo)
-        return diff
-         */
     }
 
     @discardableResult
@@ -215,10 +182,10 @@ extension RXCDiffArray where SectionContainer.Index==Int {
         var changes:[Difference.Change] = []
 
         //重合部分的长度
-        let publicCount:Int = Swift.min(realRange.distance(from: realRange.startIndex, to: realRange.endIndex), newElements.distance(from: newElements.startIndex, to: newElements.endIndex))
+        let publicCount:Int = Swift.min(self.contentCollection.distance(from: realRange.startIndex, to: realRange.endIndex), newElements.distance(from: newElements.startIndex, to: newElements.endIndex))
         if true {
             //重合部分转换成sectionUpdate
-            let publicRange = realRange.startIndex..<realRange.index(realRange.startIndex, offsetBy: publicCount)
+            let publicRange = realRange.startIndex..<self.contentCollection.index(realRange.startIndex, offsetBy: publicCount)
             for i:SectionIndex in publicRange {
                 //公共部分为替换数据
                 let oldElement = self.contentCollection[i]
@@ -228,9 +195,11 @@ extension RXCDiffArray where SectionContainer.Index==Int {
             }
         }
 
-        if true {
-            let maxLength = Swift.max(realRange.distance(from: realRange.startIndex, to: realRange.endIndex), newElements.distance(from: newElements.startIndex, to: newElements.endIndex))
-            let unevenRange:Range<R.Bound> = realRange.index(realRange.startIndex, offsetBy: publicCount)..<realRange.index(realRange.startIndex, offsetBy: maxLength)
+        if newElements.count != realRange.count {
+            let maxLength = Swift.max(self.contentCollection.distance(from: realRange.startIndex, to: realRange.endIndex), newElements.distance(from: newElements.startIndex, to: newElements.endIndex))
+            let unevenStart = self.contentCollection.index(realRange.startIndex, offsetBy: publicCount)
+            let unevenEnd = realRange.startIndex + maxLength
+            let unevenRange:Range<R.Bound> = unevenStart..<unevenEnd
 
             if newElements.count > realRange.count {
                 //新数据的长度大于原始片段长度, 超出的部分视为插入的数据
@@ -263,32 +232,18 @@ extension RXCDiffArray where SectionContainer.Index==Int {
 
     //MARK: - Section 删除
 
+    public func rda_removeEmptySection() {
+
+    }
+
     @discardableResult
     public func rda_removeSection(at position: SectionIndex, userInfo:[AnyHashable:Any]?=nil) -> Difference {
-        let removed = self.contentCollection.remove(at: position)
-        let change = Difference.Change.sectionRemove(offset: position, element: removed)
-
-        let diff = Difference(changes: CollectionOfOne(change))
-        self.notifyDelegate(diff: diff, userInfo: userInfo)
-        return diff
+        return self.rda_replaceSection(position..<self.contentCollection.index(after: position), with: EmptyCollection(), userInfo: userInfo)
     }
     
     @discardableResult
     public func rda_removeSection(_ bounds: Range<SectionContainer.Index>, userInfo:[AnyHashable:Any]?=nil)->Difference {
-        let safe:Bool = self.threadSafe
-        if safe {self.lockContent()}
-        defer {if safe {self.unlockContent()}}
-        
-        let changes:[Difference.Change] = bounds.map({
-            let change = Difference.Change.sectionRemove(offset: $0, element: self.contentCollection[$0])
-            return change
-        })
-        
-        self.contentCollection.removeSubrange(bounds)
-        
-        let diff = Difference(changes: changes)
-        self.notifyDelegate(diff: diff, userInfo: userInfo)
-        return diff
+        return self.rda_replaceSection(bounds, with: EmptyCollection(), userInfo: userInfo)
     }
     
     ///删除所有符合条件的一维数据
@@ -360,26 +315,13 @@ extension RXCDiffArray where SectionIndex==Int, RowIndex==Int {
     }
 
     @discardableResult
-    public func rda_appendRow<S>(contentsOf newElements: __owned S, in s:RowIndex, userInfo:[AnyHashable:Any]?=nil)->Difference where S : Collection, S.Element==RowElement {
-        return self.rda_replaceRow(self.contentCollection.endIndex..<self.contentCollection.endIndex, with: newElements, in: s, userInfo: userInfo)
-        /*
+    public func rda_appendRow<S>(contentsOf newElements: __owned S, in s:SectionIndex, userInfo:[AnyHashable:Any]?=nil)->Difference where S : Collection, S.Element==RowElement {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
-        var section = self.contentCollection[s]
-
-        let changes:[Difference.Change] = newElements.enumerated().map { (i) -> Difference.Change in
-            let offset = section.rda_elements.count+i.offset
-            return Difference.Change.elementInsert(offset: offset, section: s, element: i.element)
-        }
-        section.rda_elements.append(contentsOf: newElements)
-        self.updateSectionWithNoNotify(at: s, newElement: section)
-
-        let diff = Difference(changes: changes)
-        self.notifyDelegate(diff: diff, userInfo: userInfo)
-        return diff
-         */
+        let elements = self.contentCollection[s].rda_elements
+        return self.rda_replaceRow(elements.endIndex..<elements.endIndex, with: newElements, in: s, userInfo: userInfo)
     }
 
     @discardableResult
@@ -389,53 +331,15 @@ extension RXCDiffArray where SectionIndex==Int, RowIndex==Int {
 
     @discardableResult
     public func rda_insertRow<C>(contentsOf newElements: __owned C, at i: RowIndex, in s:SectionIndex, userInfo:[AnyHashable:Any]?=nil)->Difference where C : Collection,C.Element==RowElement {
-        self.rda_replaceRow(i..<i, with: newElements, in: s, userInfo: userInfo)
-        /*
-        let safe:Bool = self.threadSafe
-        if safe {self.lockContent()}
-        defer {if safe {self.unlockContent()}}
-
-        var section = self.contentCollection[s]
-
-        //生成Change
-        let changes:[Difference.Change] = newElements.enumerated().map {
-            let offset = section.rda_elements.index(i, offsetBy: $0.offset)
-            return Difference.Change.elementInsert(offset: offset, section: s, element: $0.element)
-        }
-
-        section.rda_elements.insert(contentsOf: newElements, at: i)
-        self.updateSectionWithNoNotify(at: s, newElement: section)
-    
-        let diff = Difference(changes: changes)
-        self.notifyDelegate(diff: diff, userInfo: userInfo)
-        return diff
-         */
+        return self.rda_replaceRow(i..<i, with: newElements, in: s, userInfo: userInfo)
     }
 
     //MARK: - 二维 更新
 
     @discardableResult
     public func rda_replaceRow(at position: RowIndex, in s:SectionIndex, with newElement: RowElement, userInfo:[AnyHashable:Any]?=nil)->Difference {
-        return self.rda_replaceRow(position..<self.contentCollection.index(after: position), with: CollectionOfOne(newElement), in: s, userInfo: userInfo)
-        /*
-        let safe:Bool = self.threadSafe
-        if safe {self.lockContent()}
-        defer {if safe {self.unlockContent()}}
-
-        var section = self.contentCollection[s]
-        var elements = section.rda_elements
-
-        let oldElement = elements[position]
-        let change = Difference.Change.elementUpdate(offset: position, section: s, oldElement: oldElement, newElement: newElement)
-
-        elements.replaceSubrange(position..<elements.index(position, offsetBy: 1), with: CollectionOfOne(newElement))
-        section.rda_elements = elements
-        self.updateSectionWithNoNotify(at: s, newElement: section)
-
-        let diff = Difference(changes: CollectionOfOne(change))
-        self.notifyDelegate(diff: diff, userInfo: userInfo)
-        return diff
-         */
+        let elements = self.contentCollection[s].rda_elements
+        return self.rda_replaceRow(position..<elements.index(after: position), with: CollectionOfOne(newElement), in: s, userInfo: userInfo)
     }
 
     @discardableResult
@@ -458,20 +362,6 @@ extension RXCDiffArray where SectionIndex==Int, RowIndex==Int {
 
         var changes:[Difference.Change] = []
 
-        //下面这块代码是简单的采用删除和插入来描述数据变化的逻辑, UI上会有明显的删除和插入数据的动画, 个人觉得不是很好
-
-        /*
-        let deleteChanges:[Difference.Change] = realRange.map { (i) -> Difference.Change in
-            return Difference.Change.elementRemove(offset: i, section: s, element: elements[i])
-        }
-        changes.append(contentsOf: deleteChanges)
-        let insertChanges:[Difference.Change] = newElements.enumerated().map { (i) -> Difference.Change  in
-            let row = realRange.startIndex + i.offset
-            return Difference.Change.elementInsert(offset: row, section: s, element: i.element)
-        }
-        changes.append(contentsOf: insertChanges)
-         */
-
         //重合部分我们认为是更新数据, 之后的部分认为是删除或者新增数据
 
         //重合部分的长度
@@ -489,9 +379,11 @@ extension RXCDiffArray where SectionIndex==Int, RowIndex==Int {
             }
         }
 
-        if true {
-            let maxLength = Swift.max(realRange.distance(from: realRange.startIndex, to: realRange.endIndex), newElements.distance(from: newElements.startIndex, to: newElements.endIndex))
-            let unevenRange:Range<R.Bound> = realRange.index(realRange.startIndex, offsetBy: publicCount)..<realRange.index(realRange.startIndex, offsetBy: maxLength)
+        if newElements.count != realRange.count {
+            let maxLength = Swift.max(elements.distance(from: realRange.startIndex, to: realRange.endIndex), newElements.distance(from: newElements.startIndex, to: newElements.endIndex))
+            let unevenStart = elements.index(realRange.startIndex, offsetBy: publicCount)
+            let unevenEnd = realRange.startIndex + maxLength
+            let unevenRange:Range<R.Bound> = unevenStart..<unevenEnd
 
             if newElements.count > realRange.count {
                 //新数据的长度大于原始片段长度, 超出的部分视为插入的数据
@@ -528,50 +420,63 @@ extension RXCDiffArray where SectionIndex==Int, RowIndex==Int {
 
     @discardableResult
     public func rda_removeRow(at position: RowIndex, in s:SectionIndex,userInfo:[AnyHashable:Any]?=nil) -> Difference {
-        return self.rda_replaceRow(position..<self.contentCollection.index(after: position), with: EmptyCollection(), in: s, userInfo: userInfo)
-        /*
-        let safe:Bool = self.threadSafe
-        if safe {self.lockContent()}
-        defer {if safe {self.unlockContent()}}
-
-        var section = self.contentCollection[s]
-        let element = section.rda_elements.remove(at: position)
-        self.updateSectionWithNoNotify(at: s, newElement: section)
-
-        let change = Difference.Change.elementRemove(offset: position, section: s, element: element)
-
-        let diff = Difference(changes: CollectionOfOne(change))
-        self.notifyDelegate(diff: diff, userInfo: userInfo)
-        return diff
-         */
+        let elements = self.contentCollection[s].rda_elements
+        return self.rda_replaceRow(position..<elements.index(after: position), with: EmptyCollection(), in: s, userInfo: userInfo)
     }
 
     @discardableResult
     public func rda_removeRow<R:RangeExpression>(_ bounds: R, in s:SectionIndex, userInfo:[AnyHashable:Any]?=nil)->Difference where R.Bound==RowIndex {
-
         return self.rda_replaceRow(bounds, with: EmptyCollection(), in: s, userInfo: userInfo)
-        /*
+    }
+
+    @discardableResult
+    public func rda_removeAllRow(userInfo:[AnyHashable:Any]?=nil, where shouldBeRemoved: (RowElement) -> Bool)->Difference {
+        let safe:Bool = self.threadSafe
+        if safe {self.lockContent()}
+        defer {if safe {self.unlockContent()}}
+        return self.rda_removeAllRow(in: self.contentCollection.startIndex..<self.contentCollection.endIndex, userInfo: userInfo, where: shouldBeRemoved)
+    }
+
+    @discardableResult
+    public func rda_removeAllRow<R:RangeExpression>(in range:R, userInfo:[AnyHashable:Any]?=nil, where shouldBeRemoved: (RowElement) -> Bool)->Difference where R.Bound==SectionIndex{
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
-        var section = self.contentCollection[s]
-        var elements = section.rda_elements
+        let realRange = range.relative(to: self.contentCollection)
+        let slice:SectionContainer.SubSequence = self.contentCollection[realRange]
+        var changes:[Difference.Change] = []
 
-        let realRange = bounds.relative(to: elements)
-        let changes = realRange.map { (i) -> Difference.Change in
-            let change = Difference.Change.elementRemove(offset: i, section: s, element: elements[i])
-            return change
+        for sectionEnum in slice.enumerated() {
+            var section = sectionEnum.element
+            let sectionIndex = self.contentCollection.index(realRange.startIndex, offsetBy: sectionEnum.offset)
+            var elements = section.rda_elements
+
+            if elements.isEmpty {continue}
+
+            var removeIndex:[RowIndex] = []
+            var removeElement:[RowElement] = []
+
+            for rowIndex in (elements.startIndex..<elements.endIndex).reversed() {
+                if shouldBeRemoved(elements[rowIndex]) {
+                    removeIndex.append(rowIndex)
+                    //在这里执行删除元素的操作
+                    removeElement.append(elements.remove(at: rowIndex))
+                }
+            }
+            //生成Change
+            for i in (0..<removeIndex.count).reversed() {
+                let change = Difference.Change.elementRemove(offset: removeIndex[i], section: sectionIndex, element: removeElement[i])
+                changes.append(change)
+            }
+
+            section.rda_elements = elements
+            self.updateSectionWithNoNotify(at: sectionIndex, newElement: section)
         }
-
-        elements.removeSubrange(bounds)
-        section.rda_elements = elements
-        self.updateSectionWithNoNotify(at: s, newElement: section)
 
         let diff = Difference(changes: changes)
         self.notifyDelegate(diff: diff, userInfo: userInfo)
         return diff
-         */
     }
 
     //MARK: - 二维 移动
@@ -624,19 +529,22 @@ import DifferenceKit
 
 extension RXCDiffArray where SectionElement: Differentiable, RowElement:Differentiable {
 
-    private func dk_toArraySection()->[DifferenceKit.ArraySection<SectionElement, RowElement>] {
-        let sections:[DifferenceKit.ArraySection<SectionElement, RowElement>] = self.contentCollection.map {
-            return ArraySection(model: $0, elements: $0.rda_elements)
-        }
-        return sections
-    }
-
     ///进行批量处理后使用 DifferenceKit 计算差异, 返回计算结果
     ///返回的结果是一个数组, 且后一个数组的数据是依赖于前一个数组的, 将前一个数组的改变映射到UI上后才可以进行下一个数组的映射
+    ///注意在修改的同时需要传入userInfo, 让batch期间的操作不要通知代理
     func batchWithDifferenceKit(batch:()->Void)->[Difference] {
-        let oldElements = self.dk_toArraySection()
+        let safe:Bool = self.threadSafe
+        if safe {self.lockContent()}
+        defer {if safe {self.unlockContent()}}
+
+        let oldElements = self.contentCollection.map {
+            return ArraySection(model: $0, elements: $0.rda_elements)
+        }
         batch()
-        let newElements = self.dk_toArraySection()
+        let newElements = self.contentCollection.map {
+            return ArraySection(model: $0, elements: $0.rda_elements)
+        }
+
         let dk_diff = StagedChangeset(source: oldElements, target: newElements)
         var differences:[Difference] = []
         for i in dk_diff {
@@ -698,6 +606,4 @@ extension RXCDiffArray where SectionElement: Differentiable, RowElement:Differen
     }
 
 }
-
-
 #endif
