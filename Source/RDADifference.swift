@@ -11,7 +11,7 @@ import DifferenceKit
 #endif
 
 ///两个集合之间的差异, 根据Swift的CollectionDifference改的, 支持二维数据和更多的改变类型
-public struct RDADifference<SectionElement, SubElement>  {
+public struct RDADifference<SectionElement, RowElement>  {
 
     static func empty()->RDADifference {
         return RDADifference(changes: Array<Change>())
@@ -23,10 +23,10 @@ public struct RDADifference<SectionElement, SubElement>  {
         case sectionUpdate(offset:Int, oldElement:SectionElement?, newElement:SectionElement?)
         case sectionMove(fromOffset:Int, toOffset:Int, element:SectionElement?)
 
-        case elementInsert(offset:Int, section:Int, element:SubElement?)
-        case elementRemove(offset:Int, section:Int, element:SubElement?)
-        case elementUpdate(offset:Int, section:Int, oldElement:SubElement?, newElement:SubElement?)
-        case elementMove(fromOffset:Int,fromSection:Int, toOffset:Int,toSection:Int, element:SubElement?)
+        case elementInsert(offset:Int, section:Int, element:RowElement?)
+        case elementRemove(offset:Int, section:Int, element:RowElement?)
+        case elementUpdate(offset:Int, section:Int, oldElement:RowElement?, newElement:RowElement?)
+        case elementMove(fromOffset:Int,fromSection:Int, toOffset:Int,toSection:Int, element:RowElement?)
 
         var offset:Int {
             switch self {
@@ -167,7 +167,7 @@ extension RDADifference: Collection {
 
     public var endIndex: Index {return self.allChanges.endIndex}
 
-    public subscript(position: Int) -> RDADifference<SectionElement, SubElement>.Change {
+    public subscript(position: Int) -> RDADifference<SectionElement, RowElement>.Change {
         return self.allChanges[position]
     }
 

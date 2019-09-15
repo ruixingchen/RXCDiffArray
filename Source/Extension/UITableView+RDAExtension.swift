@@ -8,9 +8,9 @@
 
 import UIKit
 
-extension UITableView {
+public extension UITableView {
 
-    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDATableViewAnimations, completion:((Bool)->Void)?) {
+    func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDATableViewAnimations, completion:((Bool)->Void)?) {
 
         guard self.window != .none else {
             self.reloadData()

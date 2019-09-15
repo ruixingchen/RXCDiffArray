@@ -15,7 +15,6 @@
 		8040EE16232E510800BC8456 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE0F232E510800BC8456 /* RDADifference.swift */; };
 		8040EE17232E510800BC8456 /* RDATableViewAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */; };
 		8040EE18232E510800BC8456 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE11232E510800BC8456 /* RXCDiffArray.swift */; };
-		8040EE32232E743D00BC8456 /* RXCSimpleDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE2C232E680C00BC8456 /* RXCSimpleDiffArray.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,7 +28,6 @@
 		8040EE0F232E510800BC8456 /* RDADifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
 		8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewAnimations.swift; sourceTree = "<group>"; };
 		8040EE11232E510800BC8456 /* RXCDiffArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXCDiffArray.swift; sourceTree = "<group>"; };
-		8040EE2C232E680C00BC8456 /* RXCSimpleDiffArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RXCSimpleDiffArray.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +70,6 @@
 		8040EE09232E510800BC8456 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				8040EE2E232E6A5700BC8456 /* Simple */,
 				8040EE0A232E510800BC8456 /* Extension */,
 				8040EE0F232E510800BC8456 /* RDADifference.swift */,
 				8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */,
@@ -90,14 +87,6 @@
 				8040EE0E232E510800BC8456 /* ASTableNode+RDAExtension.swift */,
 			);
 			path = Extension;
-			sourceTree = "<group>";
-		};
-		8040EE2E232E6A5700BC8456 /* Simple */ = {
-			isa = PBXGroup;
-			children = (
-				8040EE2C232E680C00BC8456 /* RXCSimpleDiffArray.swift */,
-			);
-			path = Simple;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,7 +169,6 @@
 			files = (
 				8040EE16232E510800BC8456 /* RDADifference.swift in Sources */,
 				8040EE17232E510800BC8456 /* RDATableViewAnimations.swift in Sources */,
-				8040EE32232E743D00BC8456 /* RXCSimpleDiffArray.swift in Sources */,
 				8040EE14232E510800BC8456 /* UICollectionView+RDAExtension.swift in Sources */,
 				8040EE12232E510800BC8456 /* ASCollectionNode+RDAExtension.swift in Sources */,
 				8040EE18232E510800BC8456 /* RXCDiffArray.swift in Sources */,
@@ -332,9 +320,11 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ruixingchenwork.RXCDiffArray;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG CanUseASDK";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -358,9 +348,11 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ruixingchenwork.RXCDiffArray;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = CanUseASDK;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
