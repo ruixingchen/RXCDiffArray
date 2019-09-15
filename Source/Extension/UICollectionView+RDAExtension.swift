@@ -1,16 +1,16 @@
 //
-//  UITableView+RDAExtension.swift
+//  UICollectionView+RDAExtension.swift
 //  RXCDiffArrayExample
 //
-//  Created by ruixingchen on 9/14/19.
+//  Created by ruixingchen on 9/15/19.
 //  Copyright © 2019 ruixingchen. All rights reserved.
 //
 
 import UIKit
 
-extension UITableView {
+extension UICollectionView {
 
-    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDAReloadAnimations, completion:((Bool)->Void)?) where SectionElement: SectionElementProtocol, SubElement==SectionElement.SubElementContainer.Element {
+    public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, completion:((Bool)->Void)?) where SectionElement: SectionElementProtocol, SubElement==SectionElement.SubElementContainer.Element {
 
         guard self.window != .none else {
             self.reloadData()
@@ -20,13 +20,13 @@ extension UITableView {
         let updatesClosure:()->Void = {
 
             if !difference.sectionRemoved.isEmpty {
-                self.deleteSections(IndexSet(difference.sectionRemoved.map({$0.offset})), with: animations.deleteSection)
+                self.deleteSections(IndexSet(difference.sectionRemoved.map({$0.offset})))
             }
             if !difference.sectionInserted.isEmpty {
-                self.insertSections(IndexSet(difference.sectionInserted.map({$0.offset})), with: animations.insertSection)
+                self.insertSections(IndexSet(difference.sectionInserted.map({$0.offset})))
             }
             if !difference.sectionUpdated.isEmpty {
-                self.reloadSections(IndexSet(difference.sectionUpdated.map({$0.offset})), with: animations.reloadSection)
+                self.reloadSections(IndexSet(difference.sectionUpdated.map({$0.offset})))
             }
             for i in difference.sectionMoved {
                 switch i {
@@ -47,7 +47,7 @@ extension UITableView {
                         break
                     }
                 }
-                self.deleteRows(at: indexPathes, with: animations.deleteRow)
+                self.deleteItems(at: indexPathes)
             }
             if !difference.elementInserted.isEmpty {
                 var indexPathes:[IndexPath] = []
@@ -59,7 +59,7 @@ extension UITableView {
                         break
                     }
                 }
-                self.insertRows(at: indexPathes, with: animations.insertRow)
+                self.insertItems(at: indexPathes)
             }
             if !difference.elementUpdated.isEmpty {
                 var indexPathes:[IndexPath] = []
@@ -71,25 +71,18 @@ extension UITableView {
                         break
                     }
                 }
-                self.reloadRows(at: indexPathes, with: animations.reloadRow)
+                self.reloadItems(at: indexPathes)
             }
             for i in difference.elementMoved {
                 switch i {
                 case .elementMove(fromOffset: let fromRow, fromSection: let fromSection, toOffset: let toRow, toSection: let toSection, element: _):
-                    self.moveRow(at: IndexPath(row: fromRow, section: fromSection), to: IndexPath(row: toRow, section: toSection))
+                    self.moveItem(at: IndexPath(row: fromRow, section: fromSection), to: IndexPath(row: toRow, section: toSection))
                 default:break
                 }
             }
         }
 
-        if #available(iOS 11, *) {
-            self.performBatchUpdates(updatesClosure, completion: completion)
-        }else {
-            self.beginUpdates()
-            updatesClosure()
-            self.endUpdates()
-            completion?(true)
-        }
+        self.performBatchUpdates(updatesClosure, completion: completion)
     }
 
 }

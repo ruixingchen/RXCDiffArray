@@ -1,18 +1,22 @@
 //
-//  UITableView+RDAExtension.swift
+//  ASTableNode+RDAExtension.swift
 //  RXCDiffArrayExample
 //
-//  Created by ruixingchen on 9/14/19.
+//  Created by ruixingchen on 9/15/19.
 //  Copyright © 2019 ruixingchen. All rights reserved.
 //
 
 import UIKit
+#if canImport(AsyncDisplayKit)
+import AsyncDisplayKit
+#endif
 
-extension UITableView {
+#if canImport(AsyncDisplayKit) || CanUSeASDK
+extension ASTableNode {
 
     public func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDAReloadAnimations, completion:((Bool)->Void)?) where SectionElement: SectionElementProtocol, SubElement==SectionElement.SubElementContainer.Element {
 
-        guard self.window != .none else {
+        guard self.isNodeLoaded else {
             self.reloadData()
             return
         }
@@ -82,14 +86,10 @@ extension UITableView {
             }
         }
 
-        if #available(iOS 11, *) {
-            self.performBatchUpdates(updatesClosure, completion: completion)
-        }else {
-            self.beginUpdates()
-            updatesClosure()
-            self.endUpdates()
-            completion?(true)
-        }
+        self.performBatchUpdates(updatesClosure, completion: completion)
+
     }
 
+
 }
+#endif

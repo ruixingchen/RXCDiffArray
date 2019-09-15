@@ -23,12 +23,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/macOSInjection.bundle")?.load()
         #endif
 
-        let vc = ViewController()
-        let nav = UINavigationController(rootViewController: vc)
-
-        self.window = UIWindow()
-        self.window?.rootViewController = nav
-        self.window?.makeKeyAndVisible()
+//        let vc = ViewController()
+//        let nav = UINavigationController(rootViewController: vc)
+//
+//        self.window = UIWindow()
+//        self.window?.rootViewController = nav
+//        self.window?.makeKeyAndVisible()
 
         return true
     }

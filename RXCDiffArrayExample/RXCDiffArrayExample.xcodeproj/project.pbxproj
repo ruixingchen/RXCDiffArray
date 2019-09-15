@@ -7,14 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		80136FA623277DC900BF72F9 /* DifferenceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80136FA323277DC300BF72F9 /* DifferenceKit.framework */; };
-		80136FA723277DC900BF72F9 /* DifferenceKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 80136FA323277DC300BF72F9 /* DifferenceKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		80285FD22325FE5D00EA7328 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD12325FE5D00EA7328 /* RDADifference.swift */; };
 		8040EDC7232E22B700BC8456 /* RXCDiffArrayExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EDC6232E22B700BC8456 /* RXCDiffArrayExampleTests.swift */; };
 		8040EDD0232E234C00BC8456 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC59923225DDD007CC0E0 /* RXCDiffArray.swift */; };
 		8040EDD1232E234C00BC8456 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80285FD12325FE5D00EA7328 /* RDADifference.swift */; };
 		8040EDD2232E236900BC8456 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58823225DB3007CC0E0 /* ViewController.swift */; };
 		8040EDD3232E23ED00BC8456 /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B7FABA232CEF1A00F1BE6B /* UITableView+RDAExtension.swift */; };
+		8040EDD7232E33B800BC8456 /* UICollectionView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EDD6232E33B800BC8456 /* UICollectionView+RDAExtension.swift */; };
+		8040EDDB232E3A2100BC8456 /* ASTableNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EDDA232E3A2100BC8456 /* ASTableNode+RDAExtension.swift */; };
+		8040EDDD232E3A8300BC8456 /* ASCollectionNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EDDC232E3A8300BC8456 /* ASCollectionNode+RDAExtension.swift */; };
+		8040EDEA232E3B0900BC8456 /* AsyncDisplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8040EDE5232E3AA700BC8456 /* AsyncDisplayKit.framework */; };
+		8040EDEB232E3B0900BC8456 /* AsyncDisplayKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8040EDE5232E3AA700BC8456 /* AsyncDisplayKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8040EDED232E3CA300BC8456 /* RDATableViewReloadAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EDEC232E3CA300BC8456 /* RDATableViewReloadAnimations.swift */; };
+		8040EDF7232E3E1300BC8456 /* DifferenceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8040EDF4232E3E0C00BC8456 /* DifferenceKit.framework */; };
+		8040EDF8232E3E1300BC8456 /* DifferenceKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8040EDF4232E3E0C00BC8456 /* DifferenceKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8040EDFA232E3E9B00BC8456 /* TableViewExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EDF9232E3E9B00BC8456 /* TableViewExampleViewController.swift */; };
+		8040EDFD232E3EE600BC8456 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EDFC232E3EE600BC8456 /* Model.swift */; };
+		8040EE03232E4CE800BC8456 /* ASTableNodeExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE02232E4CE800BC8456 /* ASTableNodeExampleViewController.swift */; };
 		80B7FABB232CEF1A00F1BE6B /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B7FABA232CEF1A00F1BE6B /* UITableView+RDAExtension.swift */; };
 		80FBC58523225DB3007CC0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58423225DB3007CC0E0 /* AppDelegate.swift */; };
 		80FBC58923225DB3007CC0E0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FBC58823225DB3007CC0E0 /* ViewController.swift */; };
@@ -25,26 +34,47 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		80136FA223277DC300BF72F9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6B2DF86E210E2C12004D2D40;
-			remoteInfo = DifferenceKit;
-		};
-		80136FA423277DC300BF72F9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6B2DF877210E2C12004D2D40;
-			remoteInfo = Tests;
-		};
 		8040EDC9232E22B700BC8456 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 80FBC57923225DB3007CC0E0 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 80FBC58023225DB3007CC0E0;
 			remoteInfo = RXCDiffArrayExample;
+		};
+		8040EDE4232E3AA700BC8456 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8040EDDE232E3AA700BC8456 /* AsyncDisplayKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B35061DA1B010EDF0018CF92;
+			remoteInfo = AsyncDisplayKit;
+		};
+		8040EDE6232E3AA700BC8456 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8040EDDE232E3AA700BC8456 /* AsyncDisplayKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 058D09BC195D04C000B7D73C;
+			remoteInfo = AsyncDisplayKitTests;
+		};
+		8040EDE8232E3AA700BC8456 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8040EDDE232E3AA700BC8456 /* AsyncDisplayKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 057D02BF1AC0A66700C7AC3C;
+			remoteInfo = AsyncDisplayKitTestHost;
+		};
+		8040EDF3232E3E0C00BC8456 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8040EDEE232E3E0C00BC8456 /* DifferenceKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6B2DF86E210E2C12004D2D40;
+			remoteInfo = DifferenceKit;
+		};
+		8040EDF5232E3E0C00BC8456 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8040EDEE232E3E0C00BC8456 /* DifferenceKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6B2DF877210E2C12004D2D40;
+			remoteInfo = Tests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -55,7 +85,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				80136FA723277DC900BF72F9 /* DifferenceKit.framework in Embed Frameworks */,
+				8040EDF8232E3E1300BC8456 /* DifferenceKit.framework in Embed Frameworks */,
+				8040EDEB232E3B0900BC8456 /* AsyncDisplayKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -63,11 +94,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DifferenceKit.xcodeproj; path = DifferenceKit/DifferenceKit.xcodeproj; sourceTree = "<group>"; };
 		80285FD12325FE5D00EA7328 /* RDADifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
 		8040EDC4232E22B700BC8456 /* RXCDiffArrayExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RXCDiffArrayExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8040EDC6232E22B700BC8456 /* RXCDiffArrayExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RXCDiffArrayExampleTests.swift; sourceTree = "<group>"; };
 		8040EDC8232E22B700BC8456 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8040EDD6232E33B800BC8456 /* UICollectionView+RDAExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RDAExtension.swift"; sourceTree = "<group>"; };
+		8040EDDA232E3A2100BC8456 /* ASTableNode+RDAExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ASTableNode+RDAExtension.swift"; sourceTree = "<group>"; };
+		8040EDDC232E3A8300BC8456 /* ASCollectionNode+RDAExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ASCollectionNode+RDAExtension.swift"; sourceTree = "<group>"; };
+		8040EDDE232E3AA700BC8456 /* AsyncDisplayKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AsyncDisplayKit.xcodeproj; path = ../../../../../../Volumes/SGAPFS/Users/ruixingchen/Developer/OpenSource/Texture/AsyncDisplayKit.xcodeproj; sourceTree = "<group>"; };
+		8040EDEC232E3CA300BC8456 /* RDATableViewReloadAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDATableViewReloadAnimations.swift; sourceTree = "<group>"; };
+		8040EDEE232E3E0C00BC8456 /* DifferenceKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DifferenceKit.xcodeproj; path = ../../../../../../Volumes/SGAPFS/Users/ruixingchen/Developer/OpenSource/DifferenceKit/DifferenceKit.xcodeproj; sourceTree = "<group>"; };
+		8040EDF9232E3E9B00BC8456 /* TableViewExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewExampleViewController.swift; sourceTree = "<group>"; };
+		8040EDFC232E3EE600BC8456 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		8040EE02232E4CE800BC8456 /* ASTableNodeExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTableNodeExampleViewController.swift; sourceTree = "<group>"; };
 		80B7FABA232CEF1A00F1BE6B /* UITableView+RDAExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+RDAExtension.swift"; sourceTree = "<group>"; };
 		80FBC58123225DB3007CC0E0 /* RXCDiffArrayExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RXCDiffArrayExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80FBC58423225DB3007CC0E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -91,7 +130,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80136FA623277DC900BF72F9 /* DifferenceKit.framework in Frameworks */,
+				8040EDF7232E3E1300BC8456 /* DifferenceKit.framework in Frameworks */,
+				8040EDEA232E3B0900BC8456 /* AsyncDisplayKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,15 +145,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		80136F9E23277DC300BF72F9 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				80136FA323277DC300BF72F9 /* DifferenceKit.framework */,
-				80136FA523277DC300BF72F9 /* Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		8040EDC5232E22B700BC8456 /* RXCDiffArrayExampleTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,10 +154,32 @@
 			path = RXCDiffArrayExampleTests;
 			sourceTree = "<group>";
 		};
+		8040EDDF232E3AA700BC8456 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8040EDE5232E3AA700BC8456 /* AsyncDisplayKit.framework */,
+				8040EDE7232E3AA700BC8456 /* AsyncDisplayKitTests.xctest */,
+				8040EDE9232E3AA700BC8456 /* AsyncDisplayKitTestHost.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8040EDEF232E3E0C00BC8456 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8040EDF4232E3E0C00BC8456 /* DifferenceKit.framework */,
+				8040EDF6232E3E0C00BC8456 /* Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		80B7FAB7232CEEF400F1BE6B /* Extension */ = {
 			isa = PBXGroup;
 			children = (
 				80B7FABA232CEF1A00F1BE6B /* UITableView+RDAExtension.swift */,
+				8040EDD6232E33B800BC8456 /* UICollectionView+RDAExtension.swift */,
+				8040EDDA232E3A2100BC8456 /* ASTableNode+RDAExtension.swift */,
+				8040EDDC232E3A8300BC8456 /* ASCollectionNode+RDAExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -134,7 +187,8 @@
 		80FBC57823225DB3007CC0E0 = {
 			isa = PBXGroup;
 			children = (
-				80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */,
+				8040EDEE232E3E0C00BC8456 /* DifferenceKit.xcodeproj */,
+				8040EDDE232E3AA700BC8456 /* AsyncDisplayKit.xcodeproj */,
 				80FBC59823225DCB007CC0E0 /* Source */,
 				80FBC58323225DB3007CC0E0 /* RXCDiffArrayExample */,
 				8040EDC5232E22B700BC8456 /* RXCDiffArrayExampleTests */,
@@ -156,7 +210,10 @@
 			isa = PBXGroup;
 			children = (
 				80FBC58423225DB3007CC0E0 /* AppDelegate.swift */,
+				8040EDFC232E3EE600BC8456 /* Model.swift */,
 				80FBC58823225DB3007CC0E0 /* ViewController.swift */,
+				8040EDF9232E3E9B00BC8456 /* TableViewExampleViewController.swift */,
+				8040EE02232E4CE800BC8456 /* ASTableNodeExampleViewController.swift */,
 				80FBC58A23225DB3007CC0E0 /* Main.storyboard */,
 				80FBC58D23225DB5007CC0E0 /* Assets.xcassets */,
 				80FBC58F23225DB5007CC0E0 /* LaunchScreen.storyboard */,
@@ -171,6 +228,7 @@
 				80B7FAB7232CEEF400F1BE6B /* Extension */,
 				80FBC59923225DDD007CC0E0 /* RXCDiffArray.swift */,
 				80285FD12325FE5D00EA7328 /* RDADifference.swift */,
+				8040EDEC232E3CA300BC8456 /* RDATableViewReloadAnimations.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -247,8 +305,12 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 80136F9E23277DC300BF72F9 /* Products */;
-					ProjectRef = 80136F9D23277DC300BF72F9 /* DifferenceKit.xcodeproj */;
+					ProductGroup = 8040EDDF232E3AA700BC8456 /* Products */;
+					ProjectRef = 8040EDDE232E3AA700BC8456 /* AsyncDisplayKit.xcodeproj */;
+				},
+				{
+					ProductGroup = 8040EDEF232E3E0C00BC8456 /* Products */;
+					ProjectRef = 8040EDEE232E3E0C00BC8456 /* DifferenceKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -260,18 +322,39 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		80136FA323277DC300BF72F9 /* DifferenceKit.framework */ = {
+		8040EDE5232E3AA700BC8456 /* AsyncDisplayKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AsyncDisplayKit.framework;
+			remoteRef = 8040EDE4232E3AA700BC8456 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8040EDE7232E3AA700BC8456 /* AsyncDisplayKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AsyncDisplayKitTests.xctest;
+			remoteRef = 8040EDE6232E3AA700BC8456 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8040EDE9232E3AA700BC8456 /* AsyncDisplayKitTestHost.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = AsyncDisplayKitTestHost.app;
+			remoteRef = 8040EDE8232E3AA700BC8456 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8040EDF4232E3E0C00BC8456 /* DifferenceKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = DifferenceKit.framework;
-			remoteRef = 80136FA223277DC300BF72F9 /* PBXContainerItemProxy */;
+			remoteRef = 8040EDF3232E3E0C00BC8456 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		80136FA523277DC300BF72F9 /* Tests.xctest */ = {
+		8040EDF6232E3E0C00BC8456 /* Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = Tests.xctest;
-			remoteRef = 80136FA423277DC300BF72F9 /* PBXContainerItemProxy */;
+			remoteRef = 8040EDF5232E3E0C00BC8456 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -313,9 +396,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8040EDD7232E33B800BC8456 /* UICollectionView+RDAExtension.swift in Sources */,
+				8040EDDB232E3A2100BC8456 /* ASTableNode+RDAExtension.swift in Sources */,
+				8040EE03232E4CE800BC8456 /* ASTableNodeExampleViewController.swift in Sources */,
 				80285FD22325FE5D00EA7328 /* RDADifference.swift in Sources */,
+				8040EDDD232E3A8300BC8456 /* ASCollectionNode+RDAExtension.swift in Sources */,
+				8040EDFA232E3E9B00BC8456 /* TableViewExampleViewController.swift in Sources */,
+				8040EDED232E3CA300BC8456 /* RDATableViewReloadAnimations.swift in Sources */,
 				80FBC59A23225DDD007CC0E0 /* RXCDiffArray.swift in Sources */,
 				80FBC58923225DB3007CC0E0 /* ViewController.swift in Sources */,
+				8040EDFD232E3EE600BC8456 /* Model.swift in Sources */,
 				80FBC58523225DB3007CC0E0 /* AppDelegate.swift in Sources */,
 				80B7FABB232CEF1A00F1BE6B /* UITableView+RDAExtension.swift in Sources */,
 			);

@@ -90,6 +90,13 @@ public final class RXCDiffArray<SectionContainer: RangeReplaceableCollection> wh
         }
     }
 
+    internal func shouldNotify(with userInfo:[AnyHashable:Any]?)->Bool {
+        if let b = userInfo?[Key.notify] as? Bool {
+            return b
+        }
+        return true
+    }
+
     ///更新某个Section同时不发出通知, 主要是为了方便操作Element的时候更新数据
     fileprivate func updateSectionWithNoNotify(at position:SectionIndex, newElement: SectionElement) {
         self.contentCollection.replaceSubrange(position..<self.contentCollection.index(position, offsetBy: 1), with: CollectionOfOne(newElement))
@@ -101,7 +108,7 @@ public final class RXCDiffArray<SectionContainer: RangeReplaceableCollection> wh
 
 extension RXCDiffArray where SectionContainer.Index==Int, RowIndex==Int {
 
-    public func elementOptional(at indexPath:IndexPath)->RowElement? {
+    public func element(at indexPath:IndexPath)->RowElement? {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
@@ -109,21 +116,6 @@ extension RXCDiffArray where SectionContainer.Index==Int, RowIndex==Int {
         if indexPath.section < 0 || indexPath.section >= self.contentCollection.count {return nil}
         let section = self.contentCollection[indexPath.section]
         if indexPath.item < 0 || indexPath.item >= section.rda_elements.count {return nil}
-        return section.rda_elements[indexPath.item]
-    }
-
-    public func element(at indexPath:IndexPath)->RowElement {
-        let safe:Bool = self.threadSafe
-        if safe {self.lockContent()}
-        defer {if safe {self.unlockContent()}}
-
-        if indexPath.section < 0 || indexPath.section >= self.contentCollection.count {
-            preconditionFailure("IndexPath Section范围不合法")
-        }
-        let section = self.contentCollection[indexPath.section]
-        if indexPath.item < 0 || indexPath.item >= section.rda_elements.count {
-            preconditionFailure("IndexPath Item范围不合法")
-        }
         return section.rda_elements[indexPath.item]
     }
 }
