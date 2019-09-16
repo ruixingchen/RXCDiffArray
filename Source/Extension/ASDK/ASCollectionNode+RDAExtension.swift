@@ -14,7 +14,7 @@ import AsyncDisplayKit
 #if canImport(AsyncDisplayKit) || CanUSeASDK
 public extension ASCollectionNode {
 
-    func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, completion:((Bool)->Void)?) {
+    func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>,batch:Bool, completion:((Bool)->Void)?) {
 
         guard self.isNodeLoaded else {
             self.reloadData()
@@ -86,7 +86,12 @@ public extension ASCollectionNode {
             }
         }
 
-        self.performBatchUpdates(updatesClosure, completion: completion)
+        if batch {
+            self.performBatchUpdates(updatesClosure, completion: completion)
+        }else {
+            updatesClosure()
+            completion?(true)
+        }
     }
 
 }

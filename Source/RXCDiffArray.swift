@@ -17,7 +17,7 @@ public protocol SectionElementProtocol {
 
 public protocol RXCDiffArrayDelegate: AnyObject {
 
-    func diffArray<SectionContainer: RangeReplaceableCollection, RowElement>(array:RXCDiffArray<SectionContainer, RowElement>, didChange difference:RDADifference<SectionContainer.Element,RowElement>)
+    func diffArray<SectionContainer: RangeReplaceableCollection, RowElement>(array:RXCDiffArray<SectionContainer, RowElement>, didChange difference:RDADifference<SectionContainer.Element,RowElement>, userInfo:[AnyHashable:Any]?)
 }
 
 ///支持且只支持二维数据结构
@@ -37,7 +37,7 @@ public final class RXCDiffArray<SectionContainer: RangeReplaceableCollection, Ro
 
     public struct Key {
         ///是否通知代理
-        static var notify:String {return "notify"}
+        public static var notify:String {return "notify"}
     }
 
     #if (debug || DEBUG)
@@ -70,11 +70,11 @@ public final class RXCDiffArray<SectionContainer: RangeReplaceableCollection, Ro
     //MARK: - Tool
 
     internal func lockContent() {
-        objc_sync_enter(self.contentCollection)
+        objc_sync_enter(self)
     }
 
     internal func unlockContent() {
-        objc_sync_exit(self.contentCollection)
+        objc_sync_exit(self)
     }
 
     internal func shouldNotify(with userInfo:[AnyHashable:Any]?)->Bool {
@@ -87,7 +87,7 @@ public final class RXCDiffArray<SectionContainer: RangeReplaceableCollection, Ro
     internal func notifyDelegate(diff:RDADifference<SectionContainer.Element, RowElement>, userInfo:[AnyHashable:Any]?) {
         if userInfo?[RXCDiffArray.Key.notify] as? Bool ?? true {
             //only false works, anything else is *true*
-            self.delegate?.diffArray(array: self, didChange: diff)
+            self.delegate?.diffArray(array: self, didChange: diff, userInfo: userInfo)
         }
     }
 
@@ -513,87 +513,3 @@ extension RXCDiffArray: Collection {
     public var underestimatedCount: Int {return self.contentCollection.underestimatedCount}
 
 }
-
-#if canImport(DifferenceKit)
-import DifferenceKit
-
-extension RXCDiffArray where SectionContainer.Element: Differentiable, RowElement: Differentiable {
-
-    ///进行批量处理后使用 DifferenceKit 计算差异, 返回计算结果
-    ///返回的结果是一个数组, 且后一个数组的数据是依赖于前一个数组的, 将前一个数组的改变映射到UI上后才可以进行下一个数组的映射
-    ///注意在修改的同时需要传入userInfo, 让batch期间的操作不要通知代理
-    func batchWithDifferenceKit(batch:()->Void)->[Difference] {
-        let safe:Bool = self.threadSafe
-        if safe {self.lockContent()}
-        defer {if safe {self.unlockContent()}}
-
-        let oldElements = self.contentCollection.map {
-            return ArraySection(model: $0, elements: $0.rda_elements)
-        }
-        batch()
-        let newElements = self.contentCollection.map {
-            return ArraySection(model: $0, elements: $0.rda_elements)
-        }
-
-        let dk_diff = StagedChangeset(source: oldElements, target: newElements)
-        var differences:[Difference] = []
-        for i in dk_diff {
-            var changes:[Difference.Change] = []
-
-            if !i.sectionDeleted.isEmpty {
-                let _changes = i.sectionDeleted.map { (section) -> Difference.Change in
-                    return Difference.Change.sectionRemove(offset: section, element: nil)
-                }
-                changes.append(contentsOf: _changes)
-            }
-            if !i.sectionInserted.isEmpty {
-                let _changes = i.sectionInserted.map { (section) -> Difference.Change in
-                    return Difference.Change.sectionInsert(offset: section, element: nil)
-                }
-                changes.append(contentsOf: _changes)
-            }
-            if !i.sectionUpdated.isEmpty {
-                let _changes = i.sectionUpdated.map { (section) -> Difference.Change in
-                    return Difference.Change.sectionUpdate(offset: section, oldElement: nil, newElement: nil)
-                }
-                changes.append(contentsOf: _changes)
-            }
-            if !i.sectionMoved.isEmpty {
-                let _changes = i.sectionMoved.map { (section) -> Difference.Change in
-                    return Difference.Change.sectionMove(fromOffset: section.source, toOffset: section.target, element: nil)
-                }
-                changes.append(contentsOf: _changes)
-            }
-
-            if !i.elementDeleted.isEmpty {
-                let _changes = i.elementDeleted.map { (path) -> Difference.Change in
-                    return Difference.Change.elementRemove(offset: path.element, section: path.section, element: nil)
-                }
-                changes.append(contentsOf: _changes)
-            }
-            if !i.elementInserted.isEmpty {
-                let _changes = i.elementInserted.map { (path) -> Difference.Change in
-                    return Difference.Change.elementInsert(offset: path.element, section: path.section, element: nil)
-                }
-                changes.append(contentsOf: _changes)
-            }
-            if !i.elementUpdated.isEmpty {
-                let _changes = i.elementUpdated.map { (path) -> Difference.Change in
-                    return Difference.Change.elementUpdate(offset: path.element, section: path.section, oldElement: nil, newElement: nil)
-                }
-                changes.append(contentsOf: _changes)
-            }
-            if !i.elementMoved.isEmpty {
-                let _changes = i.elementMoved.map { (path) -> Difference.Change in
-                    return Difference.Change.elementMove(fromOffset: path.source.element, fromSection: path.source.section, toOffset: path.target.element, toSection: path.target.section, element: nil)
-                }
-                changes.append(contentsOf: _changes)
-            }
-            let diff = Difference(changes: changes)
-            differences.append(diff)
-        }
-        return differences
-    }
-
-}
-#endif

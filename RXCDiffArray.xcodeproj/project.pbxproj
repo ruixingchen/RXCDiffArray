@@ -8,28 +8,52 @@
 
 /* Begin PBXBuildFile section */
 		8033FF04232E50CA00F1B233 /* RXCDiffArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 8033FF02232E50CA00F1B233 /* RXCDiffArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8040EE12232E510800BC8456 /* ASCollectionNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE0B232E510800BC8456 /* ASCollectionNode+RDAExtension.swift */; };
-		8040EE13232E510800BC8456 /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE0C232E510800BC8456 /* UITableView+RDAExtension.swift */; };
-		8040EE14232E510800BC8456 /* UICollectionView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE0D232E510800BC8456 /* UICollectionView+RDAExtension.swift */; };
-		8040EE15232E510800BC8456 /* ASTableNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE0E232E510800BC8456 /* ASTableNode+RDAExtension.swift */; };
-		8040EE16232E510800BC8456 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE0F232E510800BC8456 /* RDADifference.swift */; };
-		8040EE17232E510800BC8456 /* RDATableViewAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */; };
-		8040EE18232E510800BC8456 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8040EE11232E510800BC8456 /* RXCDiffArray.swift */; };
+		806684F0232FE5D5006A73B6 /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684D6232FE5D5006A73B6 /* UITableView+RDAExtension.swift */; };
+		806684F1232FE5D5006A73B6 /* UICollectionView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684D7232FE5D5006A73B6 /* UICollectionView+RDAExtension.swift */; };
+		806684F2232FE5D5006A73B6 /* ASCollectionNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684D9232FE5D5006A73B6 /* ASCollectionNode+RDAExtension.swift */; };
+		806684F3232FE5D5006A73B6 /* ASTableNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684DA232FE5D5006A73B6 /* ASTableNode+RDAExtension.swift */; };
+		806684F4232FE5D5006A73B6 /* RXCDiffArray+DifferenceKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684DC232FE5D5006A73B6 /* RXCDiffArray+DifferenceKit.swift */; };
+		806684F6232FE5D5006A73B6 /* ContentEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684E0232FE5D5006A73B6 /* ContentEquatable.swift */; };
+		806684F7232FE5D5006A73B6 /* ArraySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684E1232FE5D5006A73B6 /* ArraySection.swift */; };
+		806684F8232FE5D5006A73B6 /* Algorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684E2232FE5D5006A73B6 /* Algorithm.swift */; };
+		806684F9232FE5D5006A73B6 /* AppKitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684E4232FE5D5006A73B6 /* AppKitExtension.swift */; };
+		806684FA232FE5D5006A73B6 /* UIKitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684E5232FE5D5006A73B6 /* UIKitExtension.swift */; };
+		806684FB232FE5D5006A73B6 /* AnyDifferentiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684E6232FE5D5006A73B6 /* AnyDifferentiable.swift */; };
+		806684FC232FE5D5006A73B6 /* StagedChangeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684E7232FE5D5006A73B6 /* StagedChangeset.swift */; };
+		806684FD232FE5D5006A73B6 /* ElementPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684E8232FE5D5006A73B6 /* ElementPath.swift */; };
+		806684FE232FE5D5006A73B6 /* DifferentiableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684E9232FE5D5006A73B6 /* DifferentiableSection.swift */; };
+		806684FF232FE5D5006A73B6 /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684EA232FE5D5006A73B6 /* Changeset.swift */; };
+		80668501232FE5D5006A73B6 /* Differentiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684EC232FE5D5006A73B6 /* Differentiable.swift */; };
+		80668502232FE5D5006A73B6 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684ED232FE5D5006A73B6 /* RDADifference.swift */; };
+		80668503232FE5D5006A73B6 /* RDATableViewAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684EE232FE5D5006A73B6 /* RDATableViewAnimations.swift */; };
+		80668504232FE5D5006A73B6 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806684EF232FE5D5006A73B6 /* RXCDiffArray.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8033FEFF232E50CA00F1B233 /* RXCDiffArray.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RXCDiffArray.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8033FF02232E50CA00F1B233 /* RXCDiffArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RXCDiffArray.h; sourceTree = "<group>"; };
 		8033FF03232E50CA00F1B233 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8040EE0B232E510800BC8456 /* ASCollectionNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASCollectionNode+RDAExtension.swift"; sourceTree = "<group>"; };
-		8040EE0C232E510800BC8456 /* UITableView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+RDAExtension.swift"; sourceTree = "<group>"; };
-		8040EE0D232E510800BC8456 /* UICollectionView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RDAExtension.swift"; sourceTree = "<group>"; };
-		8040EE0E232E510800BC8456 /* ASTableNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASTableNode+RDAExtension.swift"; sourceTree = "<group>"; };
-		8040EE0F232E510800BC8456 /* RDADifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
-		8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewAnimations.swift; sourceTree = "<group>"; };
-		8040EE11232E510800BC8456 /* RXCDiffArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXCDiffArray.swift; sourceTree = "<group>"; };
 		8053A795232F1CD20041F84C /* AsyncDisplayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AsyncDisplayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8053A799232F1D580041F84C /* Pods_RXCEntityListViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_RXCEntityListViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		806684D6232FE5D5006A73B6 /* UITableView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+RDAExtension.swift"; sourceTree = "<group>"; };
+		806684D7232FE5D5006A73B6 /* UICollectionView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RDAExtension.swift"; sourceTree = "<group>"; };
+		806684D9232FE5D5006A73B6 /* ASCollectionNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASCollectionNode+RDAExtension.swift"; sourceTree = "<group>"; };
+		806684DA232FE5D5006A73B6 /* ASTableNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASTableNode+RDAExtension.swift"; sourceTree = "<group>"; };
+		806684DC232FE5D5006A73B6 /* RXCDiffArray+DifferenceKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+DifferenceKit.swift"; sourceTree = "<group>"; };
+		806684E0232FE5D5006A73B6 /* ContentEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentEquatable.swift; sourceTree = "<group>"; };
+		806684E1232FE5D5006A73B6 /* ArraySection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArraySection.swift; sourceTree = "<group>"; };
+		806684E2232FE5D5006A73B6 /* Algorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Algorithm.swift; sourceTree = "<group>"; };
+		806684E4232FE5D5006A73B6 /* AppKitExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppKitExtension.swift; sourceTree = "<group>"; };
+		806684E5232FE5D5006A73B6 /* UIKitExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitExtension.swift; sourceTree = "<group>"; };
+		806684E6232FE5D5006A73B6 /* AnyDifferentiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyDifferentiable.swift; sourceTree = "<group>"; };
+		806684E7232FE5D5006A73B6 /* StagedChangeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StagedChangeset.swift; sourceTree = "<group>"; };
+		806684E8232FE5D5006A73B6 /* ElementPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElementPath.swift; sourceTree = "<group>"; };
+		806684E9232FE5D5006A73B6 /* DifferentiableSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DifferentiableSection.swift; sourceTree = "<group>"; };
+		806684EA232FE5D5006A73B6 /* Changeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Changeset.swift; sourceTree = "<group>"; };
+		806684EC232FE5D5006A73B6 /* Differentiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Differentiable.swift; sourceTree = "<group>"; };
+		806684ED232FE5D5006A73B6 /* RDADifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
+		806684EE232FE5D5006A73B6 /* RDATableViewAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewAnimations.swift; sourceTree = "<group>"; };
+		806684EF232FE5D5006A73B6 /* RXCDiffArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXCDiffArray.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +70,7 @@
 		8033FEF5232E50CA00F1B233 = {
 			isa = PBXGroup;
 			children = (
-				8040EE09232E510800BC8456 /* Source */,
+				806684D3232FE5D5006A73B6 /* Source */,
 				8033FF01232E50CA00F1B233 /* RXCDiffArray */,
 				8033FF00232E50CA00F1B233 /* Products */,
 				8053A794232F1CD20041F84C /* Frameworks */,
@@ -70,28 +94,6 @@
 			path = RXCDiffArray;
 			sourceTree = "<group>";
 		};
-		8040EE09232E510800BC8456 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				8040EE0A232E510800BC8456 /* Extension */,
-				8040EE0F232E510800BC8456 /* RDADifference.swift */,
-				8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */,
-				8040EE11232E510800BC8456 /* RXCDiffArray.swift */,
-			);
-			path = Source;
-			sourceTree = "<group>";
-		};
-		8040EE0A232E510800BC8456 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				8040EE0B232E510800BC8456 /* ASCollectionNode+RDAExtension.swift */,
-				8040EE0C232E510800BC8456 /* UITableView+RDAExtension.swift */,
-				8040EE0D232E510800BC8456 /* UICollectionView+RDAExtension.swift */,
-				8040EE0E232E510800BC8456 /* ASTableNode+RDAExtension.swift */,
-			);
-			path = Extension;
-			sourceTree = "<group>";
-		};
 		8053A794232F1CD20041F84C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +101,88 @@
 				8053A795232F1CD20041F84C /* AsyncDisplayKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		806684D3232FE5D5006A73B6 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				806684D4232FE5D5006A73B6 /* Extension */,
+				806684DB232FE5D5006A73B6 /* DifferenceKit */,
+				806684ED232FE5D5006A73B6 /* RDADifference.swift */,
+				806684EE232FE5D5006A73B6 /* RDATableViewAnimations.swift */,
+				806684EF232FE5D5006A73B6 /* RXCDiffArray.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		806684D4232FE5D5006A73B6 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				806684D5232FE5D5006A73B6 /* UIKit */,
+				806684D8232FE5D5006A73B6 /* ASDK */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		806684D5232FE5D5006A73B6 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				806684D6232FE5D5006A73B6 /* UITableView+RDAExtension.swift */,
+				806684D7232FE5D5006A73B6 /* UICollectionView+RDAExtension.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		806684D8232FE5D5006A73B6 /* ASDK */ = {
+			isa = PBXGroup;
+			children = (
+				806684D9232FE5D5006A73B6 /* ASCollectionNode+RDAExtension.swift */,
+				806684DA232FE5D5006A73B6 /* ASTableNode+RDAExtension.swift */,
+			);
+			path = ASDK;
+			sourceTree = "<group>";
+		};
+		806684DB232FE5D5006A73B6 /* DifferenceKit */ = {
+			isa = PBXGroup;
+			children = (
+				806684DC232FE5D5006A73B6 /* RXCDiffArray+DifferenceKit.swift */,
+				806684DD232FE5D5006A73B6 /* DifferenceKit */,
+			);
+			path = DifferenceKit;
+			sourceTree = "<group>";
+		};
+		806684DD232FE5D5006A73B6 /* DifferenceKit */ = {
+			isa = PBXGroup;
+			children = (
+				806684DF232FE5D5006A73B6 /* Sources */,
+			);
+			path = DifferenceKit;
+			sourceTree = "<group>";
+		};
+		806684DF232FE5D5006A73B6 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				806684E0232FE5D5006A73B6 /* ContentEquatable.swift */,
+				806684E1232FE5D5006A73B6 /* ArraySection.swift */,
+				806684E2232FE5D5006A73B6 /* Algorithm.swift */,
+				806684E3232FE5D5006A73B6 /* Extensions */,
+				806684E6232FE5D5006A73B6 /* AnyDifferentiable.swift */,
+				806684E7232FE5D5006A73B6 /* StagedChangeset.swift */,
+				806684E8232FE5D5006A73B6 /* ElementPath.swift */,
+				806684E9232FE5D5006A73B6 /* DifferentiableSection.swift */,
+				806684EA232FE5D5006A73B6 /* Changeset.swift */,
+				806684EC232FE5D5006A73B6 /* Differentiable.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		806684E3232FE5D5006A73B6 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				806684E4232FE5D5006A73B6 /* AppKitExtension.swift */,
+				806684E5232FE5D5006A73B6 /* UIKitExtension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,13 +263,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8040EE16232E510800BC8456 /* RDADifference.swift in Sources */,
-				8040EE17232E510800BC8456 /* RDATableViewAnimations.swift in Sources */,
-				8040EE14232E510800BC8456 /* UICollectionView+RDAExtension.swift in Sources */,
-				8040EE12232E510800BC8456 /* ASCollectionNode+RDAExtension.swift in Sources */,
-				8040EE18232E510800BC8456 /* RXCDiffArray.swift in Sources */,
-				8040EE15232E510800BC8456 /* ASTableNode+RDAExtension.swift in Sources */,
-				8040EE13232E510800BC8456 /* UITableView+RDAExtension.swift in Sources */,
+				806684F1232FE5D5006A73B6 /* UICollectionView+RDAExtension.swift in Sources */,
+				806684F8232FE5D5006A73B6 /* Algorithm.swift in Sources */,
+				806684F9232FE5D5006A73B6 /* AppKitExtension.swift in Sources */,
+				806684F7232FE5D5006A73B6 /* ArraySection.swift in Sources */,
+				806684F0232FE5D5006A73B6 /* UITableView+RDAExtension.swift in Sources */,
+				806684FD232FE5D5006A73B6 /* ElementPath.swift in Sources */,
+				806684FB232FE5D5006A73B6 /* AnyDifferentiable.swift in Sources */,
+				806684FC232FE5D5006A73B6 /* StagedChangeset.swift in Sources */,
+				806684F3232FE5D5006A73B6 /* ASTableNode+RDAExtension.swift in Sources */,
+				806684F4232FE5D5006A73B6 /* RXCDiffArray+DifferenceKit.swift in Sources */,
+				806684FE232FE5D5006A73B6 /* DifferentiableSection.swift in Sources */,
+				806684FF232FE5D5006A73B6 /* Changeset.swift in Sources */,
+				806684F2232FE5D5006A73B6 /* ASCollectionNode+RDAExtension.swift in Sources */,
+				80668503232FE5D5006A73B6 /* RDATableViewAnimations.swift in Sources */,
+				806684FA232FE5D5006A73B6 /* UIKitExtension.swift in Sources */,
+				806684F6232FE5D5006A73B6 /* ContentEquatable.swift in Sources */,
+				80668502232FE5D5006A73B6 /* RDADifference.swift in Sources */,
+				80668504232FE5D5006A73B6 /* RXCDiffArray.swift in Sources */,
+				80668501232FE5D5006A73B6 /* Differentiable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

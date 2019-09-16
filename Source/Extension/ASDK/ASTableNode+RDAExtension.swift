@@ -14,7 +14,7 @@ import AsyncDisplayKit
 #if canImport(AsyncDisplayKit) || CanUseASDK
 public extension ASTableNode {
 
-    func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDATableViewAnimations, completion:((Bool)->Void)?) {
+    func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDATableViewAnimations,animated:Bool, batch:Bool, completion:((Bool)->Void)?) {
 
         guard self.isNodeLoaded else {
             self.reloadData()
@@ -86,7 +86,12 @@ public extension ASTableNode {
             }
         }
 
-        self.performBatchUpdates(updatesClosure, completion: completion)
+        if batch {
+            self.performBatch(animated: animated, updates: updatesClosure, completion: completion)
+        }else {
+            updatesClosure()
+            completion?(true)
+        }
 
     }
 

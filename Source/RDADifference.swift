@@ -13,7 +13,7 @@ import DifferenceKit
 ///两个集合之间的差异, 根据Swift的CollectionDifference改的, 支持二维数据和更多的改变类型
 public struct RDADifference<SectionElement, RowElement>  {
 
-    static func empty()->RDADifference {
+    public static func empty()->RDADifference {
         return RDADifference(changes: Array<Change>())
     }
 
@@ -28,7 +28,7 @@ public struct RDADifference<SectionElement, RowElement>  {
         case elementUpdate(offset:Int, section:Int, oldElement:RowElement?, newElement:RowElement?)
         case elementMove(fromOffset:Int,fromSection:Int, toOffset:Int,toSection:Int, element:RowElement?)
 
-        var offset:Int {
+        public var offset:Int {
             switch self {
             case .sectionRemove(offset: let o, element: _):
                 return o
@@ -50,6 +50,9 @@ public struct RDADifference<SectionElement, RowElement>  {
         }
 
     }
+
+    ///当使用DifferenceKit计算差异的时候, 会有一个每一步的中间状态, 这个状态需要在更新UI的时候被同步到数据源中, 如果这个值不为nil, 那么应该重新设置数据源, 以防止数据源和UI不同步而崩溃
+    public var dk_finalDataForCurrentStep:ContiguousArray<SectionElement>?
 
     ///已经完全排序好的所有Change, 主要用于遍历
     public let allChanges:[Change]

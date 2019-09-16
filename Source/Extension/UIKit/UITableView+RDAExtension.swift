@@ -1,16 +1,16 @@
 //
-//  UICollectionView+RDAExtension.swift
+//  UITableView+RDAExtension.swift
 //  RXCDiffArrayExample
 //
-//  Created by ruixingchen on 9/15/19.
+//  Created by ruixingchen on 9/14/19.
 //  Copyright © 2019 ruixingchen. All rights reserved.
 //
 
 import UIKit
 
-public extension UICollectionView {
+public extension UITableView {
 
-    func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, completion:((Bool)->Void)?) {
+    func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDATableViewAnimations, batch:Bool, completion:((Bool)->Void)?) {
 
         guard self.window != .none else {
             self.reloadData()
@@ -20,13 +20,13 @@ public extension UICollectionView {
         let updatesClosure:()->Void = {
 
             if !difference.sectionRemoved.isEmpty {
-                self.deleteSections(IndexSet(difference.sectionRemoved.map({$0.offset})))
+                self.deleteSections(IndexSet(difference.sectionRemoved.map({$0.offset})), with: animations.deleteSection)
             }
             if !difference.sectionInserted.isEmpty {
-                self.insertSections(IndexSet(difference.sectionInserted.map({$0.offset})))
+                self.insertSections(IndexSet(difference.sectionInserted.map({$0.offset})), with: animations.insertSection)
             }
             if !difference.sectionUpdated.isEmpty {
-                self.reloadSections(IndexSet(difference.sectionUpdated.map({$0.offset})))
+                self.reloadSections(IndexSet(difference.sectionUpdated.map({$0.offset})), with: animations.reloadSection)
             }
             for i in difference.sectionMoved {
                 switch i {
@@ -47,7 +47,7 @@ public extension UICollectionView {
                         break
                     }
                 }
-                self.deleteItems(at: indexPathes)
+                self.deleteRows(at: indexPathes, with: animations.deleteRow)
             }
             if !difference.elementInserted.isEmpty {
                 var indexPathes:[IndexPath] = []
@@ -59,7 +59,7 @@ public extension UICollectionView {
                         break
                     }
                 }
-                self.insertItems(at: indexPathes)
+                self.insertRows(at: indexPathes, with: animations.insertRow)
             }
             if !difference.elementUpdated.isEmpty {
                 var indexPathes:[IndexPath] = []
@@ -71,18 +71,29 @@ public extension UICollectionView {
                         break
                     }
                 }
-                self.reloadItems(at: indexPathes)
+                self.reloadRows(at: indexPathes, with: animations.reloadRow)
             }
             for i in difference.elementMoved {
                 switch i {
                 case .elementMove(fromOffset: let fromRow, fromSection: let fromSection, toOffset: let toRow, toSection: let toSection, element: _):
-                    self.moveItem(at: IndexPath(row: fromRow, section: fromSection), to: IndexPath(row: toRow, section: toSection))
+                    self.moveRow(at: IndexPath(row: fromRow, section: fromSection), to: IndexPath(row: toRow, section: toSection))
                 default:break
                 }
             }
         }
-
-        self.performBatchUpdates(updatesClosure, completion: completion)
+        if batch {
+            if #available(iOS 11, *) {
+                self.performBatchUpdates(updatesClosure, completion: completion)
+            }else {
+                self.beginUpdates()
+                updatesClosure()
+                self.endUpdates()
+                completion?(true)
+            }
+        }else {
+            updatesClosure()
+            completion?(true)
+        }
     }
 
 }
