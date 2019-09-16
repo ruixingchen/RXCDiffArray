@@ -28,6 +28,8 @@
 		8040EE0F232E510800BC8456 /* RDADifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
 		8040EE10232E510800BC8456 /* RDATableViewAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewAnimations.swift; sourceTree = "<group>"; };
 		8040EE11232E510800BC8456 /* RXCDiffArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXCDiffArray.swift; sourceTree = "<group>"; };
+		8053A795232F1CD20041F84C /* AsyncDisplayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AsyncDisplayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8053A799232F1D580041F84C /* Pods_RXCEntityListViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_RXCEntityListViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 				8040EE09232E510800BC8456 /* Source */,
 				8033FF01232E50CA00F1B233 /* RXCDiffArray */,
 				8033FF00232E50CA00F1B233 /* Products */,
+				8053A794232F1CD20041F84C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -87,6 +90,15 @@
 				8040EE0E232E510800BC8456 /* ASTableNode+RDAExtension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		8053A794232F1CD20041F84C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8053A799232F1D580041F84C /* Pods_RXCEntityListViewController.framework */,
+				8053A795232F1CD20041F84C /* AsyncDisplayKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,7 +336,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ruixingchenwork.RXCDiffArray;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG CanUseASDK";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -352,7 +364,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ruixingchenwork.RXCDiffArray;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = CanUseASDK;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
