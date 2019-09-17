@@ -14,6 +14,7 @@ public extension UICollectionView {
 
         guard self.window != .none else {
             self.reloadData()
+            completion?(true)
             return
         }
 

@@ -25,6 +25,7 @@ public protocol RXCDiffArrayDelegate: AnyObject {
 ///思想来源 DeepDiff: https://github.com/onmyway133/DeepDiff and DifferenceKit: https://github.com/ra1028/DifferenceKit
 
 /// 范型表示Section的数据的容器类型, 一般是一个Array类型, 如RXCDiffArray<[Card]>, 兼容其他RangeReplaceableCollection类型
+/// SectionElement一定要遵循SectionElementProtocol, RowElement无要求
 public final class RXCDiffArray<SectionContainer: RangeReplaceableCollection, RowElement> {
 
     public typealias Element = SectionContainer.Element
@@ -100,7 +101,7 @@ public final class RXCDiffArray<SectionContainer: RangeReplaceableCollection, Ro
 
 //MARK: - Read
 
-extension RXCDiffArray where SectionContainer.Index==Int, SectionContainer.Element: SectionElementProtocol {
+extension RXCDiffArray where SectionContainer.Index==Int {
 
     public func element(at indexPath:IndexPath)->RowElement? {
         let safe:Bool = self.threadSafe
@@ -108,7 +109,7 @@ extension RXCDiffArray where SectionContainer.Index==Int, SectionContainer.Eleme
         defer {if safe {self.unlockContent()}}
 
         if indexPath.section < 0 || indexPath.section >= self.contentCollection.count {return nil}
-        let section = self.contentCollection[indexPath.section]
+        let section = self.contentCollection[indexPath.section] as! SectionElementProtocol
         if indexPath.item < 0 || indexPath.item >= section.rda_elements.count {return nil}
         let element = section.rda_elements[indexPath.item]
         guard let rowElement = element as? RowElement else {
@@ -122,7 +123,7 @@ extension RXCDiffArray where SectionContainer.Index==Int, SectionContainer.Eleme
 //MARK: - Section 操作
 
 //这里要求Int是为了兼容RDADifference
-extension RXCDiffArray where Element: SectionElementProtocol, SectionContainer.Index==Int {
+extension RXCDiffArray where SectionContainer.Index==Int {
 
     //MARK: - Section 新增
 

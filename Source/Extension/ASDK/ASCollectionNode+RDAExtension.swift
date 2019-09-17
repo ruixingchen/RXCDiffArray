@@ -18,6 +18,7 @@ public extension ASCollectionNode {
 
         guard self.isNodeLoaded else {
             self.reloadData()
+            completion?(true)
             return
         }
 

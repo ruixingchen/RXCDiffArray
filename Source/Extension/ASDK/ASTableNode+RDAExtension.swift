@@ -18,6 +18,7 @@ public extension ASTableNode {
 
         guard self.isNodeLoaded else {
             self.reloadData()
+            completion?(true)
             return
         }
 

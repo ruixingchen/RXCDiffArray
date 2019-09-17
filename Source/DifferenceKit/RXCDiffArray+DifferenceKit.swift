@@ -7,22 +7,26 @@
 
 import Foundation
 
-public extension RXCDiffArray where SectionElement: Differentiable,SectionElement: SectionElementProtocol, RowElement: Differentiable {
+public extension RXCDiffArray {
 
     ///进行批量处理后使用 DifferenceKit 计算差异, 返回计算结果
     ///返回的结果是一个数组, 且后一个数组的数据是依赖于前一个数组的, 将前一个数组的改变映射到UI上后才可以进行下一个数组的映射
-    ///注意在修改的同时需要传入userInfo, 让batch期间的操作不要通知代理
+    ///注意在修改的同时需要传入userInfo, 让batch期间的操作只针对数据而不影响UI
     func batchWithDifferenceKit(batch:()->Void)->[Difference] {
         let safe:Bool = self.threadSafe
         if safe {self.lockContent()}
         defer {if safe {self.unlockContent()}}
 
-        let oldElements = self.contentCollection.map { (i) -> ArraySection<SectionElement, RowElement> in
-            return ArraySection(model: i, elements: i.rda_elements as! [RowElement])
+        let oldElements = self.contentCollection.map { (i) -> SimpleArraySection<Differentiable, Differentiable> in
+            let section:Differentiable = i as! Differentiable
+            let elements:[Differentiable] = ((section as! SectionElementProtocol).rda_elements as! [Differentiable])
+            return SimpleArraySection(model: section, elements: elements)
         }
         batch()
-        let newElements = self.contentCollection.map { (i) -> ArraySection<SectionElement, RowElement> in
-            return ArraySection(model: i, elements: i.rda_elements as! [RowElement])
+        let newElements = self.contentCollection.map { (i) -> SimpleArraySection<Differentiable, Differentiable> in
+            let section:Differentiable = i as! Differentiable
+            let elements:[Differentiable] = ((section as! SectionElementProtocol).rda_elements as! [Differentiable])
+            return SimpleArraySection(model: section, elements: elements)
         }
 
         let dk_diff = StagedChangeset(source: oldElements, target: newElements)
@@ -83,10 +87,10 @@ public extension RXCDiffArray where SectionElement: Differentiable,SectionElemen
             ///每一个步骤的数据
             let stepData = i.data
             diff.dk_finalDataForCurrentStep = ContiguousArray.init(stepData.map({ (i) -> SectionElement in
-                var section = i.model
+                var section = i.model as! SectionElementProtocol
                 let element = i.elements as! [RowElement]
                 section.rda_elements = element
-                return section
+                return section as! SectionContainer.Element
             }))
             differences.append(diff)
         }
