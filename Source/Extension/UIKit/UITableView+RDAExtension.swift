@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+/*
 public extension UITableView {
 
     func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>, animations:RDATableViewAnimations, batch:Bool, completion:((Bool)->Void)?) {
@@ -98,3 +98,4 @@ public extension UITableView {
     }
 
 }
+*/

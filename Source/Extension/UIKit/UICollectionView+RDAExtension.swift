@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+/*
 public extension UICollectionView {
 
     func reload<SectionElement, SubElement>(with difference:RDADifference<SectionElement, SubElement>,batch:Bool, completion:((Bool)->Void)?) {
@@ -91,3 +91,4 @@ public extension UICollectionView {
     }
 
 }
+*/

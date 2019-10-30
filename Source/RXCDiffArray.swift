@@ -386,10 +386,10 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
             var removeElement:[RowElement] = []
 
             for rowIndex in (elements.startIndex..<elements.endIndex).reversed() {
-                if shouldBeRemoved(elements[rowIndex] as! RowElement) {
+                if shouldBeRemoved(elements[rowIndex]) {
                     removeIndex.append(rowIndex)
                     //在这里执行删除元素的操作
-                    removeElement.append(elements.remove(at: rowIndex) as! RowElement)
+                    removeElement.append(elements.remove(at: rowIndex))
                 }
             }
 

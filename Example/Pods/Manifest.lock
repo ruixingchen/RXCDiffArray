@@ -1,16 +1,35 @@
 PODS:
+  - DifferenceKit (1.1.3):
+    - DifferenceKit/Core (= 1.1.3)
+    - DifferenceKit/UIKitExtension (= 1.1.3)
+  - DifferenceKit/Core (1.1.3)
+  - DifferenceKit/UIKitExtension (1.1.3):
+    - DifferenceKit/Core
+  - RXCDiffArray (1.0):
+    - RXCDiffArray/Core (= 1.0)
+    - RXCDiffArray/UIKitExtension (= 1.0)
   - RXCDiffArray/Core (1.0)
+  - RXCDiffArray/DifferenceKit (1.0):
+    - DifferenceKit (~> 1.1)
+  - RXCDiffArray/UIKitExtension (1.0)
 
 DEPENDENCIES:
-  - RXCDiffArray/Core (from `../`)
+  - DifferenceKit/UIKitExtension
+  - RXCDiffArray (from `../`)
+  - RXCDiffArray/DifferenceKit (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - DifferenceKit
 
 EXTERNAL SOURCES:
   RXCDiffArray:
     :path: "../"
 
 SPEC CHECKSUMS:
-  RXCDiffArray: 851a656784f9d5619adafdf12caece521ed3a859
+  DifferenceKit: 5018791b6c1fc839921a3c171a0a539ace6ea60c
+  RXCDiffArray: bf1b754e482a1aa1190f3d47c7e5a15ebe5c193a
 
-PODFILE CHECKSUM: e1e05226bd501504716797849613cd26abe9fdbc
+PODFILE CHECKSUM: 8c11c5f0a307be8c5bc03d90040f334f0b5b6c3d
 
 COCOAPODS: 1.8.4
