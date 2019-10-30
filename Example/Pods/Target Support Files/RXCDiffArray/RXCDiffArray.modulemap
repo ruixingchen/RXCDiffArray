@@ -1,0 +1,6 @@
+framework module RXCDiffArray {
+  umbrella header "RXCDiffArray-umbrella.h"
+
+  export *
+  module * { export * }
+}

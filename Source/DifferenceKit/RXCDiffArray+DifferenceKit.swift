@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import DifferenceKit
 
 public protocol RDADiffableELement {
 

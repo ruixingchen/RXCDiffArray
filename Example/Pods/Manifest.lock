@@ -1,0 +1,16 @@
+PODS:
+  - RXCDiffArray/Core (1.0)
+
+DEPENDENCIES:
+  - RXCDiffArray/Core (from `../`)
+
+EXTERNAL SOURCES:
+  RXCDiffArray:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  RXCDiffArray: 851a656784f9d5619adafdf12caece521ed3a859
+
+PODFILE CHECKSUM: e1e05226bd501504716797849613cd26abe9fdbc
+
+COCOAPODS: 1.8.4
