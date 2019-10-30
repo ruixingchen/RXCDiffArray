@@ -299,7 +299,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
 
         //重合部分的长度
         let publicCount:Int = Swift.min(realSubrange.distance(from: realSubrange.startIndex, to: realSubrange.endIndex), newElements.distance(from: newElements.startIndex, to: newElements.endIndex))
-        if true {
+        if publicCount > 0 {
             //将重合的部分转换成elementUpdate
             let publicRange = realSubrange.startIndex..<realSubrange.index(realSubrange.startIndex, offsetBy: publicCount)
             for i:Index in publicRange {

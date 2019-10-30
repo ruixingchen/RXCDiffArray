@@ -62,6 +62,13 @@ func generateRandomNum(numRange:Range<Int>, quantityRange:Range<Int>)->[Int] {
     return arr
 }
 
+func measureTime(identifier:String, closure:()->Void) {
+    let start = Date().timeIntervalSince1970
+    closure()
+    let time = Date().timeIntervalSince1970 - start
+    print("\(identifier)结束, 耗时: \(String.init(format: "%.4f", time))")
+}
+
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
@@ -73,24 +80,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableView.dataSource = self
         self.tableView.delegate = self
 
-        for _ in (0..<3) {
-            let card = SimpleCard()
-            card.elements = generateRandomNum(numRange: 1..<9, quantityRange: 2..<5)
-            self.dataSource.add(card)
-        }
-
-        if true {
-            let diff = self.dataSource.batchWithDifferenceKit_2D {
-                self.dataSource.removeRow(at: 1, in: 1)
+        measureTime(identifier: "添加数据") {
+            for i in (1..<4) {
+                let card = SimpleCard()
+                //card.entityType = (0...100000).randomElement()!.description
+                card.elements = generateRandomNum(numRange: 0..<10, quantityRange: 3..<10)
+                self.dataSource.add(card)
             }
-            print(diff)
         }
 
-        let a:RXCDiffArray<[Int]> = RXCDiffArray(elements: [0,1,2,3,4,5])
-        let diff = a.batchWithDifferenceKit_1D {
-            a.removeAll(where: {$0 < 3})
-        }
-        print(diff)
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -108,7 +106,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     @IBAction func didTapAddSection(_ sender: Any) {
-
+        let card = SimpleCard()
+        //card.entityType = UnicodeScalar((0x0030...0x0039).randomElement()!)!.description
+        card.elements = generateRandomNum(numRange: 0..<10, quantityRange: 3..<10)
+        let diff = self.dataSource.batchWithDifferenceKit_2D {
+            self.dataSource.add(card)
+        }
+        print(diff)
+        for i in diff {
+            self.tableView!.reload(with: i, animations: .automatic(), batch: true, reloadDataSource: { (newData) in
+                if let data = newData {
+                    self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
+                    self.dataSource.add(contentsOf: data, userInfo: ["notify": false])
+                }
+            }, completion: nil)
+        }
     }
 
     @IBAction func didTapRemoveSection(_ sender: Any) {
@@ -116,7 +128,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     @IBAction func didTapInsertSection(_ sender: Any) {
-
+        
     }
 
     @IBAction func didTapUpdateSection(_ sender: Any) {
@@ -128,7 +140,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     @IBAction func didTapAddRow(_ sender: Any) {
-
+        let elements = generateRandomNum(numRange: 0..<10, quantityRange: 3..<10)
+        let diff = self.dataSource.batchWithDifferenceKit_2D {
+            self.dataSource.addRow(contentsOf: elements, in: 1, userInfo: ["notify":false])
+        }
+        print(diff)
+        for i in diff {
+            self.tableView!.reload(with: i, animations: .automatic(), batch: true, reloadDataSource: { (newData) in
+                if let data = newData {
+                    self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
+                    self.dataSource.add(contentsOf: data, userInfo: ["notify": false])
+                }
+            }, completion: nil)
+        }
     }
 
     @IBAction func didTapRemoveRow(_ sender: Any) {
