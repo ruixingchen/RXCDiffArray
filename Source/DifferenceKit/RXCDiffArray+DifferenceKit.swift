@@ -27,7 +27,7 @@ internal class RDADiffableElementWrapper: Differentiable {
 }
 
 ///一维 batch
-extension RXCDiffArray2 where ElementContainer.Element: RDADiffableELement {
+extension RXCDiffArray where ElementContainer.Element: RDADiffableELement {
 
     func batchWithDifferenceKit(batch:()->Void)->[Difference] {
         //记录原始数据
@@ -41,7 +41,7 @@ extension RXCDiffArray2 where ElementContainer.Element: RDADiffableELement {
 
 }
 
-extension RXCDiffArray2 where ElementContainer.Element: RDADiffableSectionElementProtocol {
+extension RXCDiffArray where ElementContainer.Element: RDADiffableSectionElementProtocol {
 
     func batchWithDifferenceKit(batch:()->Void)->[Difference] {
 
