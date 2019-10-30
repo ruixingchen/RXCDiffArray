@@ -114,11 +114,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         print(diff)
         for i in diff {
-            self.tableView!.reload(with: i, animations: .automatic(), batch: true, reloadDataSource: { (newData) in
-                if let data = newData {
-                    self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
-                    self.dataSource.add(contentsOf: data, userInfo: ["notify": false])
-                }
+            self.tableView!.reload(with: i, animations: .automatic(), reloadDataSource: { (newData) in
+                self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
+                self.dataSource.add(contentsOf: newData, userInfo: ["notify": false])
             }, completion: nil)
         }
     }
@@ -144,13 +142,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let diff = self.dataSource.batchWithDifferenceKit_2D {
             self.dataSource.addRow(contentsOf: elements, in: 1, userInfo: ["notify":false])
         }
-        print(diff)
         for i in diff {
-            self.tableView!.reload(with: i, animations: .automatic(), batch: true, reloadDataSource: { (newData) in
-                if let data = newData {
-                    self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
-                    self.dataSource.add(contentsOf: data, userInfo: ["notify": false])
-                }
+            self.tableView!.reload(with: i, animations: .automatic(), reloadDataSource: { (newData) in
+                self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
+                self.dataSource.add(contentsOf: newData, userInfo: ["notify": false])
             }, completion: nil)
         }
     }

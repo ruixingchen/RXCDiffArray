@@ -24,32 +24,27 @@ Pod::Spec.new do |spec|
     subspec.ios.frameworks = 'Foundation'
   end
 
-  spec.subspec 'UIKitExtension' do |subspec|
-    source_files = 'Source/Extension/UIKit/*.swift'
-    frameworks = 'Foundation', 'UIKit'
+  spec.subspec 'DifferenceKit' do |subspec|
+    subspec.dependency 'DifferenceKit', '~> 1.1'
+    subspec.dependency 'RXCDiffArray/Core'
 
-    subspec.ios.source_files = source_files
-    subspec.ios.frameworks = frameworks
+    subspec.ios.source_files = 'Source/DifferenceKit/*.swift'
+    subspec.ios.frameworks = 'Foundation'
+  end
+
+  spec.subspec 'UIKitExtension' do |subspec|
+    subspec.dependency 'RXCDiffArray/Core'
+
+    subspec.ios.source_files = 'Source/Extension/UIKit/*.swift'
+    subspec.ios.frameworks = 'UIKit'
   end
 
   spec.subspec 'ASDKExtension' do |subspec|
-    subspec.dependency 'Texture', '> 2.8'
+    subspec.dependency 'Texture', '~> 2.8'
+    subspec.dependency 'RXCDiffArray/Core'
 
-    source_files = 'Source/Extension/ASDK/*.swift'
-    frameworks = 'Foundation', 'UIKit', 'AsyncDisplayKit'
-
-    subspec.ios.source_files = source_files
-    subspec.ios.frameworks = frameworks
-  end
-
-  spec.subspec 'DifferenceKit' do |subspec|
-    subspec.dependency 'DifferenceKit', '~> 1.1'
-
-    source_files = 'Source/DifferenceKit/**/*.swift'
-    frameworks = 'Foundation', 'DifferenceKit'
-
-    subspec.ios.source_files = source_files
-    subspec.ios.frameworks = frameworks
+    subspec.ios.source_files = 'Source/Extension/ASDK/*.swift'
+    subspec.ios.frameworks = 'UIKit'
   end
 
 end

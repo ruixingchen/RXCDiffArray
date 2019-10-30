@@ -8,12 +8,14 @@
 
 import UIKit
 
-public extension UITableView {
+extension UITableView {
 
-    func reload<ElementContainer:Collection>(with difference:RDADifference<ElementContainer>, animations:RDATableViewAnimations, batch:Bool,reloadDataSource:(ElementContainer?)->Void, completion:((Bool)->Void)?) {
+    public func reload<ElementContainer:Collection>(with difference:RDADifference<ElementContainer>, animations:RDATableViewAnimations, reloadDataSource:(ElementContainer)->Void, completion:((Bool)->Void)?) {
 
         guard self.window != .none else {
-            reloadDataSource(difference.dataAfterChange)
+            if let data = difference.dataAfterChange {
+                reloadDataSource(data)
+            }
             self.reloadData()
             completion?(true)
             return
@@ -42,19 +44,16 @@ public extension UITableView {
             }
         }
 
-        if batch {
-            reloadDataSource(difference.dataAfterChange)
-            if #available(iOS 11, *) {
-                self.performBatchUpdates(updatesClosure, completion: completion)
-            }else {
-                self.beginUpdates()
-                updatesClosure()
-                self.endUpdates()
-                completion?(true)
-            }
+        if let data = difference.dataAfterChange {
+            reloadDataSource(data)
+        }
+
+        if #available(iOS 11, *) {
+            self.performBatchUpdates(updatesClosure, completion: completion)
         }else {
-            reloadDataSource(difference.dataAfterChange)
+            self.beginUpdates()
             updatesClosure()
+            self.endUpdates()
             completion?(true)
         }
     }

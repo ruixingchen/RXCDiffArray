@@ -5,8 +5,9 @@ target 'Example' do
   platform :ios, '11.0'
   use_frameworks!
 
+
   pod 'RXCDiffArray', :path => '../'
   pod 'RXCDiffArray/DifferenceKit', :path => '../'
-  pod 'DifferenceKit/UIKitExtension'
-  
+  pod 'RXCDiffArray/ASDKExtension', :path => '../'
+
 end
