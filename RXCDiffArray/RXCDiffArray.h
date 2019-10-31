@@ -2,11 +2,11 @@
 //  RXCDiffArray.h
 //  RXCDiffArray
 //
-//  Created by ruixingchen on 9/15/19.
+//  Created by ruixingchen on 10/30/19.
 //  Copyright © 2019 ruixingchen. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for RXCDiffArray.
 FOUNDATION_EXPORT double RXCDiffArrayVersionNumber;

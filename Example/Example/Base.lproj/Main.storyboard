@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="URF-Ii-jGo">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="1NP-lc-h0G">
+            <objects>
+                <viewController id="ULp-wj-Paw" customClass="ViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fTo-4Y-Ce8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="ccC-mf-bhl">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="separatorColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eXs-uN-d2X">
+                                <rect key="frame" x="0.0" y="813" width="414" height="49"/>
+                                <items>
+                                    <barButtonItem title="Add" id="ATM-DU-JKI">
+                                        <connections>
+                                            <action selector="didTapAddRow:" destination="ULp-wj-Paw" id="krM-4Y-cmo"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="Remove" id="nPn-3V-7nD">
+                                        <connections>
+                                            <action selector="didTapRemoveRow:" destination="ULp-wj-Paw" id="PSJ-Nc-cnP"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="Insert" id="3Mq-id-op4">
+                                        <connections>
+                                            <action selector="didTapInsertRow:" destination="ULp-wj-Paw" id="73h-9P-77Y"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="Update" id="mOr-DA-g3s">
+                                        <connections>
+                                            <action selector="didTapUpdateRow:" destination="ULp-wj-Paw" id="rXp-B2-Wol"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="Move" id="nvE-Hi-gkS">
+                                        <connections>
+                                            <action selector="didTapMoveRow:" destination="ULp-wj-Paw" id="xMm-sj-mMc"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="ccC-mf-bhl" firstAttribute="centerX" secondItem="fTo-4Y-Ce8" secondAttribute="centerX" id="1zP-5N-qsK"/>
+                            <constraint firstItem="ccC-mf-bhl" firstAttribute="leading" secondItem="fTo-4Y-Ce8" secondAttribute="leading" id="7Qq-4O-kpT"/>
+                            <constraint firstItem="ccC-mf-bhl" firstAttribute="centerY" secondItem="fTo-4Y-Ce8" secondAttribute="centerY" id="DbI-zz-VsF"/>
+                            <constraint firstItem="ccC-mf-bhl" firstAttribute="top" secondItem="fTo-4Y-Ce8" secondAttribute="top" id="IS4-16-pgV"/>
+                            <constraint firstItem="eXs-uN-d2X" firstAttribute="width" secondItem="ccC-mf-bhl" secondAttribute="width" id="SqB-BS-1rB"/>
+                            <constraint firstItem="eXs-uN-d2X" firstAttribute="bottom" secondItem="os3-gr-0DZ" secondAttribute="bottom" id="Ukn-lF-Dph"/>
+                            <constraint firstItem="eXs-uN-d2X" firstAttribute="centerX" secondItem="ccC-mf-bhl" secondAttribute="centerX" id="jWi-Ru-2qw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="os3-gr-0DZ"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="reO-lR-jYb">
+                        <leftBarButtonItems>
+                            <barButtonItem title="Add" id="WQX-lB-BrK">
+                                <connections>
+                                    <action selector="didTapAddSection:" destination="ULp-wj-Paw" id="uRu-7R-7fN"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Remove" id="43r-wx-sj9">
+                                <connections>
+                                    <action selector="didTapRemoveSection:" destination="ULp-wj-Paw" id="5kR-Sm-OhT"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Insert" id="9G1-fI-KyP">
+                                <connections>
+                                    <action selector="didTapInsertSection:" destination="ULp-wj-Paw" id="NOx-A5-9KN"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Update" id="qGD-PR-v3E">
+                                <connections>
+                                    <action selector="didTapUpdateSection:" destination="ULp-wj-Paw" id="ola-oH-6jb"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Move" id="O01-6i-vNA">
+                                <connections>
+                                    <action selector="didTapMoveSection:" destination="ULp-wj-Paw" id="mE8-iZ-jAs"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="ccC-mf-bhl" id="xvd-3p-Tnl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aSK-7p-x07" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-97.101449275362327" y="103.79464285714285"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4eu-tT-Qhp">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="URF-Ii-jGo" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="jYF-Pp-8TK">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ULp-wj-Paw" kind="relationship" relationship="rootViewController" id="Neh-gh-ttj"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bff-12-oum" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-791.304347826087" y="104.46428571428571"/>
+        </scene>
+    </scenes>
+</document>

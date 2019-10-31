@@ -11,7 +11,7 @@ Pod::Spec.new do |spec|
   spec.license      = "MIT"
 
   spec.source       = { :git => "https://github.com/ruixingchen/RXCDiffArray.git", :tag => spec.version.to_s }
-  spec.source_files  = "Source", "Source/*.swift"
+  #spec.source_files  = "Source/*.swift"
 
   spec.requires_arc = true
   spec.swift_versions = "5.0"
@@ -20,35 +20,31 @@ Pod::Spec.new do |spec|
   spec.default_subspecs = 'Core', 'UIKitExtension'
   
   spec.subspec 'Core' do |subspec|
-    subspec.source_files = 'Source/*.swift'
-  end
-
-  spec.subspec 'UIKitExtension' do |subspec|
-    source_files = 'Source/Extension/UIKit/*.swift'
-    frameworks = 'UIKit'
-
-    subspec.ios.source_files = source_files
-    subspec.ios.frameworks = frameworks
-  end
-
-  spec.subspec 'ASDKExtension' do |subspec|
-    subspec.dependency 'Texture', '> 2.7'
-
-    source_files = 'Source/Extension/ASDK/*.swift'
-    frameworks = 'UIKit', 'AsyncDisplayKit'
-
-    subspec.ios.source_files = source_files
-    subspec.ios.frameworks = frameworks
+    subspec.ios.source_files = 'Source/*.swift'
+    subspec.ios.frameworks = 'Foundation'
   end
 
   spec.subspec 'DifferenceKit' do |subspec|
-    #subspec.dependency 'DifferenceKit', '~> 1.1'
+    subspec.dependency 'DifferenceKit', '~> 1.1'
+    subspec.dependency 'RXCDiffArray/Core'
 
-    source_files = 'Source/DifferenceKit/**/*.swift'
-    frameworks = 'Foundation'
+    subspec.ios.source_files = 'Source/DifferenceKit/*.swift'
+    subspec.ios.frameworks = 'Foundation'
+  end
 
-    subspec.ios.source_files = source_files
-    subspec.ios.frameworks = frameworks
+  spec.subspec 'UIKitExtension' do |subspec|
+    subspec.dependency 'RXCDiffArray/Core'
+
+    subspec.ios.source_files = 'Source/Extension/UIKit/*.swift'
+    subspec.ios.frameworks = 'UIKit'
+  end
+
+  spec.subspec 'ASDKExtension' do |subspec|
+    subspec.dependency 'Texture', '~> 2.8'
+    subspec.dependency 'RXCDiffArray/Core'
+
+    subspec.ios.source_files = 'Source/Extension/ASDK/*.swift'
+    subspec.ios.frameworks = 'UIKit'
   end
 
 end

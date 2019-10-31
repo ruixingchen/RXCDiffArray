@@ -6,95 +6,189 @@
 //
 
 import Foundation
+#if canImport(DifferenceKit)
+import DifferenceKit
 
-public extension RXCDiffArray {
+///描述一个可以进行Diff的Row
+public protocol RDADiffableRowElementProtocol {
 
-    ///进行批量处理后使用 DifferenceKit 计算差异, 返回计算结果
-    ///返回的结果是一个数组, 且后一个数组的数据是依赖于前一个数组的, 将前一个数组的改变映射到UI上后才可以进行下一个数组的映射
-    ///注意在修改的同时需要传入userInfo, 让batch期间的操作只针对数据而不影响UI
-    func batchWithDifferenceKit(batch:()->Void)->[Difference] {
-        let safe:Bool = self.threadSafe
-        if safe {self.lockContent()}
-        defer {if safe {self.unlockContent()}}
+    var rda_diffIdentifier:AnyHashable {get}
 
-        let oldElements = self.contentCollection.map { (i) -> SimpleArraySection<Differentiable, Differentiable> in
-            let section:Differentiable = i as! Differentiable
-            let elements:[Differentiable] = ((section as! SectionElementProtocol).rda_elements as! [Differentiable])
-            return SimpleArraySection(model: section, elements: elements)
-        }
-        batch()
-        let newElements = self.contentCollection.map { (i) -> SimpleArraySection<Differentiable, Differentiable> in
-            let section:Differentiable = i as! Differentiable
-            let elements:[Differentiable] = ((section as! SectionElementProtocol).rda_elements as! [Differentiable])
-            return SimpleArraySection(model: section, elements: elements)
-        }
+}
 
-        let dk_diff = StagedChangeset(source: oldElements, target: newElements)
-        var differences:[Difference] = []
-        for i in dk_diff {
-            var changes:[Difference.Change] = []
+///描述一个可以进行Diff的Section
+public protocol RDADiffableSectionElementProtocol: RDASectionElementProtocol {
+
+    var rda_diffIdentifier:AnyHashable {get}
+    var rda_diffableElements:[RDADiffableRowElementProtocol] {get}
+
+}
+
+///将我们自己的RDADiffableRowElementProtocol包装成DK的Differentiable
+public class RDADiffableRowElementWrapper: Differentiable, RDADiffableRowElementProtocol {
+
+    public typealias DifferenceIdentifier = AnyHashable
+
+    let element:RDADiffableRowElementProtocol
+
+    init(element:RDADiffableRowElementProtocol) {
+        self.element = element
+    }
+
+    public var differenceIdentifier: AnyHashable {return self.element.rda_diffIdentifier}
+    public var rda_diffIdentifier: AnyHashable  {return self.element.rda_diffIdentifier}
+
+    public func isContentEqual(to source: RDADiffableRowElementWrapper) -> Bool {
+        return self.element.rda_diffIdentifier == source.element.rda_diffIdentifier
+    }
+
+}
+
+///将我们自己的RDADiffableSectionElementProtocol包装成DK的Differentiable
+public class RDADiffableSectionElementWrapper: Differentiable, RDADiffableSectionElementProtocol {
+
+    public typealias DifferenceIdentifier = AnyHashable
+
+    var element:RDADiffableSectionElementProtocol
+
+    init(element:RDADiffableSectionElementProtocol) {
+        self.element = element
+    }
+
+    public var differenceIdentifier: AnyHashable {return self.element.rda_diffIdentifier}
+
+    public var rda_diffIdentifier: AnyHashable {return self.element.rda_diffIdentifier}
+
+    public var rda_diffableElements: [RDADiffableRowElementProtocol] {return self.element.rda_diffableElements}
+
+    public var rda_elements: [Any] {
+        get {return self.element.rda_elements}
+        set {self.element.rda_elements = newValue}
+    }
+
+    public func isContentEqual(to source: RDADiffableSectionElementWrapper) -> Bool {
+        return self.element.rda_diffIdentifier == source.element.rda_diffIdentifier
+    }
+
+}
+
+internal extension StagedChangeset {
+
+    func rda_toDifference<ElementContainer: RangeReplaceableCollection>()->[RDADifference<ElementContainer>] {
+        var differences:[RDADifference<ElementContainer>] = []
+        for i in self {
+
+            var changes:[RDADifference<ElementContainer>.Change] = []
 
             if !i.sectionDeleted.isEmpty {
-                let _changes = i.sectionDeleted.map { (section) -> Difference.Change in
-                    return Difference.Change.sectionRemove(offset: section, element: nil)
+                let _changes = i.sectionDeleted.map { (section) -> RDADifference<ElementContainer>.Change in
+                    return RDADifference.Change.sectionRemove(offset: section)
                 }
                 changes.append(contentsOf: _changes)
             }
             if !i.sectionInserted.isEmpty {
-                let _changes = i.sectionInserted.map { (section) -> Difference.Change in
-                    return Difference.Change.sectionInsert(offset: section, element: nil)
+                let _changes = i.sectionInserted.map { (section) -> RDADifference<ElementContainer>.Change in
+                    return RDADifference.Change.sectionInsert(offset: section)
                 }
                 changes.append(contentsOf: _changes)
             }
             if !i.sectionUpdated.isEmpty {
-                let _changes = i.sectionUpdated.map { (section) -> Difference.Change in
-                    return Difference.Change.sectionUpdate(offset: section, oldElement: nil, newElement: nil)
+                let _changes = i.sectionUpdated.map { (section) -> RDADifference<ElementContainer>.Change in
+                    return RDADifference.Change.sectionUpdate(offset: section)
                 }
                 changes.append(contentsOf: _changes)
             }
             if !i.sectionMoved.isEmpty {
-                let _changes = i.sectionMoved.map { (section) -> Difference.Change in
-                    return Difference.Change.sectionMove(fromOffset: section.source, toOffset: section.target, element: nil)
+                let _changes = i.sectionMoved.map { (section) -> RDADifference<ElementContainer>.Change in
+                    return RDADifference.Change.sectionMove(fromOffset: section.source, toOffset: section.target)
                 }
                 changes.append(contentsOf: _changes)
             }
 
             if !i.elementDeleted.isEmpty {
-                let _changes = i.elementDeleted.map { (path) -> Difference.Change in
-                    return Difference.Change.elementRemove(offset: path.element, section: path.section, element: nil)
+                let _changes = i.elementDeleted.map { (path) -> RDADifference<ElementContainer>.Change in
+                    return RDADifference.Change.elementRemove(offset: path.element, section: path.section)
                 }
                 changes.append(contentsOf: _changes)
             }
             if !i.elementInserted.isEmpty {
-                let _changes = i.elementInserted.map { (path) -> Difference.Change in
-                    return Difference.Change.elementInsert(offset: path.element, section: path.section, element: nil)
+                let _changes = i.elementInserted.map { (path) -> RDADifference<ElementContainer>.Change in
+                    return RDADifference.Change.elementInsert(offset: path.element, section: path.section)
                 }
                 changes.append(contentsOf: _changes)
             }
             if !i.elementUpdated.isEmpty {
-                let _changes = i.elementUpdated.map { (path) -> Difference.Change in
-                    return Difference.Change.elementUpdate(offset: path.element, section: path.section, oldElement: nil, newElement: nil)
+                let _changes = i.elementUpdated.map { (path) -> RDADifference<ElementContainer>.Change in
+                    return RDADifference.Change.elementUpdate(offset: path.element, section: path.section)
                 }
                 changes.append(contentsOf: _changes)
             }
             if !i.elementMoved.isEmpty {
-                let _changes = i.elementMoved.map { (path) -> Difference.Change in
-                    return Difference.Change.elementMove(fromOffset: path.source.element, fromSection: path.source.section, toOffset: path.target.element, toSection: path.target.section, element: nil)
+                let _changes = i.elementMoved.map { (path) -> RDADifference<ElementContainer>.Change in
+                    return RDADifference.Change.elementMove(fromOffset: path.source.element, fromSection: path.source.section, toOffset: path.target.element, toSection: path.target.section)
                 }
                 changes.append(contentsOf: _changes)
             }
-            var diff = Difference(changes: changes)
-            ///每一个步骤的数据
-            let stepData = i.data
-            diff.dk_finalDataForCurrentStep = ContiguousArray.init(stepData.map({ (i) -> SectionElement in
-                var section = i.model as! SectionElementProtocol
-                let element = i.elements as! [RowElement]
-                section.rda_elements = element
-                return section as! SectionContainer.Element
-            }))
+            var diff:RDADifference<ElementContainer> = RDADifference.init(changes: changes)
+            let data = i.data.map { (mapElement) -> ElementContainer.Element in
+                if let arraySection = mapElement as? ArraySection<RDADiffableSectionElementWrapper, RDADiffableRowElementWrapper> {
+                    var section:RDASectionElementProtocol = arraySection.model.element
+                    let rowElementWrappers:[RDADiffableRowElementWrapper] = arraySection.elements
+                    let elements:[RDADiffableRowElementProtocol] = rowElementWrappers.map({
+                        $0.element
+                    })
+                    section.rda_elements = elements
+                    return section as! ElementContainer.Element
+                }else if let wrapper = mapElement as? RDADiffableRowElementWrapper {
+                    return wrapper.element as! ElementContainer.Element
+                }else {
+                    fatalError()
+                }
+            }
+            diff.dataAfterChange = ElementContainer.init(data)
             differences.append(diff)
         }
         return differences
     }
 
 }
+
+///一维 batch
+extension RXCDiffArray where ElementContainer.Element: RDADiffableRowElementProtocol {
+
+    ///进行一维batch, 只会进行一维方向上的对比
+    public func batchWithDifferenceKit_1D(section:Int, batch:()->Void)->[Difference] {
+        //记录原始数据
+        let originData = self.map({RDADiffableRowElementWrapper.init(element: $0)})
+        batch()
+        let currentData = self.map({RDADiffableRowElementWrapper.init(element: $0)})
+        let changeSet = StagedChangeset(source: originData, target: currentData,section: 0)
+        //将DK的changeSet转换为我们自己的Change
+        let differences:[Difference] = changeSet.rda_toDifference()
+        return differences
+    }
+}
+
+extension RXCDiffArray where ElementContainer.Element: RDADiffableSectionElementProtocol {
+
+    ///二维batch, 进行二维方向上的对比
+    public func batchWithDifferenceKit_2D(batch:()->Void)->[Difference] {
+        //记录原始数据
+        let originData = self.map { (section) -> ArraySection<RDADiffableSectionElementWrapper, RDADiffableRowElementWrapper> in
+            let sectionWrapper = RDADiffableSectionElementWrapper(element: section)
+            let rowWrappers = section.rda_diffableElements.map({RDADiffableRowElementWrapper(element: $0)})
+            return ArraySection.init(model: sectionWrapper, elements: rowWrappers)
+        }
+        batch()
+        let currentData = self.map { (section) -> ArraySection<RDADiffableSectionElementWrapper, RDADiffableRowElementWrapper> in
+            let sectionWrapper = RDADiffableSectionElementWrapper(element: section)
+            let rowWrappers = section.rda_diffableElements.map({RDADiffableRowElementWrapper(element: $0)})
+            return ArraySection.init(model: sectionWrapper, elements: rowWrappers)
+        }
+        let changeset = StagedChangeset(source: originData, target: currentData)
+        let differences:[Difference] = changeset.rda_toDifference()
+        return differences
+    }
+
+}
+#endif
