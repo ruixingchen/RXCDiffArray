@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "RXCDiffArray"
-  spec.version      = "1.0"
+  spec.version      = "1.1"
 
   spec.author       = { "ruixingchen" => "rxc@ruixingchen.com" }
 

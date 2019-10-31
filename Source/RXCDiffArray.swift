@@ -8,10 +8,18 @@
 
 import Foundation
 
-///描述一个具有二维结构的数据
+///描述一个具有二维元素的容器
+///describe a 2D element container
 public protocol RDASectionElementProtocol {
 
     var rda_elements:[Any] {get set}
+
+}
+
+///the delegate
+public protocol RXCDiffArrayDelegate: AnyObject {
+
+    func diffArray<ElementContainer: RangeReplaceableCollection>(diffArray:RXCDiffArray<ElementContainer>, didModifiedWith differences:[RDADifference<ElementContainer>])
 
 }
 
@@ -24,6 +32,8 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
     public var threadSafe:Bool = true
 
     internal fileprivate(set) var container:ElementContainer = ElementContainer.init()
+
+    internal let delegates:NSHashTable<AnyObject> = NSHashTable.weakObjects()
 
     public init() {
         self.container = ElementContainer.init()
@@ -55,16 +65,30 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
     //MARK: - Tool
 
     internal func lockContainer() {
-
+        ///should lock the container but just lock self just works fine, ha~😂
+        objc_sync_enter(self)
     }
 
     internal func unlockContainer() {
+        objc_sync_exit(self)
+    }
 
+    public func addDelegate(_ delegate:RXCDiffArrayDelegate) {
+        guard !self.delegates.contains(delegate as AnyObject) else {return}
+        self.delegates.add(delegate)
+    }
+
+    public func removeDelegate(_ delegate:RXCDiffArrayDelegate) {
+        self.delegates.remove(delegate)
     }
 
     internal func notifyDelegate(diff:[Difference], userInfo:[AnyHashable:Any]?) {
         if (userInfo?["notify"] as? Bool ?? true) {
-
+            for i in self.delegates.allObjects {
+                if let delegate = i as? RXCDiffArrayDelegate {
+                    delegate.diffArray(diffArray: self, didModifiedWith: diff)
+                }
+            }
         }
     }
 

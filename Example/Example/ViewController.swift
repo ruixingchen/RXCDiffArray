@@ -32,16 +32,27 @@ func measureTime(identifier:String, closure:()->Void) {
     print("\(identifier)结束, 耗时: \(String.init(format: "%.4f", time))")
 }
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, RXCDiffArrayDelegate {
 
     @IBOutlet weak var tableView: UITableView!
 
     let dataSource:RXCDiffArray<[Entity]> = RXCDiffArray()
 
+    deinit {
+        print("deinit")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        self.dataSource.addDelegate(self)
+
+        for _ in 0..<10 {
+            //check weak reference
+            let vc = ViewController()
+            self.dataSource.addDelegate(vc)
+        }
 
         measureTime(identifier: "添加数据") {
             for _ in (1..<4) {
@@ -56,17 +67,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     }
 
+    func diffArray<ElementContainer>(diffArray: RXCDiffArray<ElementContainer>, didModifiedWith differences: [RDADifference<ElementContainer>]) where ElementContainer : RangeReplaceableCollection {
+        print(differences)
+    }
+
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.dataSource.count
+        return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return self.dataSource.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = self.dataSource[indexPath.section].entityType
+        cell.textLabel?.text = self.dataSource[indexPath.row].entityType
         return cell
     }
 
@@ -76,21 +91,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let ds:RXCDiffArray<[EntityWrapper]> = RXCDiffArray(elements: self.dataSource.map({EntityWrapper(entity: $0)}))
 
-        let diff = ds.batchWithDifferenceKit_1D {
+        let diff = ds.batchWithDifferenceKit_1D(section: 0) {
             ds.add(contentsOf: card.entities.map({$0.wrappedEntity()}))
         }
 
         for i in diff {
-            self.tableView.reload(withDifference_1D_toSection: i, animations: .automatic(), reloadDataSource: { (newData) in
+            self.tableView.reload(withDifference_1D_toRow: i, section: 0, animations: .automatic(), reloadDataSource: { (newData) in
                 self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
                 let newDataUnwrapped = newData.map({$0.unwrappedEntity()})
                 self.dataSource.add(contentsOf: newDataUnwrapped, userInfo: ["notify": false])
             }, completion: nil)
-//            self.tableView!.reload(with: i, animations: .automatic(), reloadDataSource: { (newData) in
-//                self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
-//                let newDataUnwrapped = newData.map({$0.unwrappedEntity()})
-//                self.dataSource.add(contentsOf: newDataUnwrapped, userInfo: ["notify": false])
-//            }, completion: nil)
         }
     }
 
