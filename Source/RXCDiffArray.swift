@@ -8,6 +8,7 @@
 
 import Foundation
 
+///描述一个具有二维结构的数据
 public protocol RDASectionElementProtocol {
 
     var rda_elements:[Any] {get set}
@@ -65,6 +66,11 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
         if (userInfo?["notify"] as? Bool ?? true) {
 
         }
+    }
+
+    ///convert to a swift array
+    public func toArray()->[Element] {
+        return self.container.map({$0})
     }
 
 }

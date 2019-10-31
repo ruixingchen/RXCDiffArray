@@ -17,43 +17,6 @@ extension Int: RDADiffableRowElementProtocol {
     public var rda_diffIdentifier: AnyHashable {return self}
 }
 
-protocol Entity {
-    var entityType:String {get}
-}
-
-protocol Card: Entity {
-
-    var entities:[Entity] {get}
-
-}
-
-class SimpleEntity:Entity {
-
-    var entityType: String = ""
-
-}
-
-class SimpleCard {
-
-    var entityType: String = "card"
-
-    var elements: [Int] = []
-
-}
-
-extension SimpleCard: RDASectionElementProtocol, RDADiffableSectionElementProtocol {
-
-    var rda_elements: [Any] {
-        get {return self.elements}
-        set {self.elements = newValue as! [Int]}
-    }
-
-    var rda_diffIdentifier: AnyHashable {return self.entityType}
-
-    var rda_diffableElements: [RDADiffableRowElementProtocol] {return self.elements}
-
-}
-
 func generateRandomNum(numRange:Range<Int>, quantityRange:Range<Int>)->[Int] {
     var arr:[Int] = []
     for _ in 0..<(quantityRange.randomElement() ?? 0) {
@@ -73,7 +36,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @IBOutlet weak var tableView: UITableView!
 
-    let dataSource:RXCDiffArray<[SimpleCard]> = RXCDiffArray()
+    let dataSource:RXCDiffArray<[Entity]> = RXCDiffArray()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,11 +44,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableView.delegate = self
 
         measureTime(identifier: "添加数据") {
-            for i in (1..<4) {
-                let card = SimpleCard()
-                //card.entityType = (0...100000).randomElement()!.description
-                card.elements = generateRandomNum(numRange: 0..<10, quantityRange: 3..<10)
-                self.dataSource.add(card)
+            for _ in (1..<4) {
+                let entities = generateRandomNum(numRange: 0..<10, quantityRange: 3..<10).map({ (num) -> SimpleEntity in
+                    let entity = SimpleEntity()
+                    entity.entityType = num.description
+                    return entity
+                })
+                self.dataSource.add(contentsOf: entities)
             }
         }
 
@@ -96,28 +61,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataSource[section].elements.count
+        return 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = self.dataSource[indexPath.section].elements[indexPath.row].description
+        cell.textLabel?.text = self.dataSource[indexPath.section].entityType
         return cell
     }
 
     @IBAction func didTapAddSection(_ sender: Any) {
         let card = SimpleCard()
-        //card.entityType = UnicodeScalar((0x0030...0x0039).randomElement()!)!.description
-        card.elements = generateRandomNum(numRange: 0..<10, quantityRange: 3..<10)
-        let diff = self.dataSource.batchWithDifferenceKit_2D {
-            self.dataSource.add(card)
+        card.entities = generateRandomNum(numRange: 0..<100000, quantityRange: 1..<10).map({let e=SimpleEntity();e.entityType=$0.description;return e})
+        
+        let ds:RXCDiffArray<[EntityWrapper]> = RXCDiffArray(elements: self.dataSource.map({EntityWrapper(entity: $0)}))
+
+        let diff = ds.batchWithDifferenceKit_1D {
+            ds.add(contentsOf: card.entities.map({$0.wrappedEntity()}))
         }
-        print(diff)
+
         for i in diff {
-            self.tableView!.reload(with: i, animations: .automatic(), reloadDataSource: { (newData) in
+            self.tableView.reload(withDifference_1D_toSection: i, animations: .automatic(), reloadDataSource: { (newData) in
                 self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
-                self.dataSource.add(contentsOf: newData, userInfo: ["notify": false])
+                let newDataUnwrapped = newData.map({$0.unwrappedEntity()})
+                self.dataSource.add(contentsOf: newDataUnwrapped, userInfo: ["notify": false])
             }, completion: nil)
+//            self.tableView!.reload(with: i, animations: .automatic(), reloadDataSource: { (newData) in
+//                self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
+//                let newDataUnwrapped = newData.map({$0.unwrappedEntity()})
+//                self.dataSource.add(contentsOf: newDataUnwrapped, userInfo: ["notify": false])
+//            }, completion: nil)
         }
     }
 
@@ -139,15 +112,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @IBAction func didTapAddRow(_ sender: Any) {
         let elements = generateRandomNum(numRange: 0..<10, quantityRange: 3..<10)
-        let diff = self.dataSource.batchWithDifferenceKit_2D {
-            self.dataSource.addRow(contentsOf: elements, in: 1, userInfo: ["notify":false])
-        }
-        for i in diff {
-            self.tableView!.reload(with: i, animations: .automatic(), reloadDataSource: { (newData) in
-                self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
-                self.dataSource.add(contentsOf: newData, userInfo: ["notify": false])
-            }, completion: nil)
-        }
+//        let diff = self.dataSource.batchWithDifferenceKit_2D {
+//            self.dataSource.addRow(contentsOf: elements, in: 1, userInfo: ["notify":false])
+//        }
+//        for i in diff {
+//            self.tableView!.reload(with: i, animations: .automatic(), reloadDataSource: { (newData) in
+//                self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
+//                self.dataSource.add(contentsOf: newData, userInfo: ["notify": false])
+//            }, completion: nil)
+//        }
     }
 
     @IBAction func didTapRemoveRow(_ sender: Any) {
@@ -163,9 +136,39 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     @IBAction func didTapMoveRow(_ sender: Any) {
-        
-    }
 
+    }
 
 }
 
+protocol RootProtocol {
+
+}
+
+protocol SubProtocol: RootProtocol {
+
+}
+
+extension Array where Element == RootProtocol {
+    func printRoot() {
+        print("root")
+    }
+}
+
+extension Array where Element: RootProtocol {
+    func printRoot2() {
+        print("root2")
+    }
+}
+
+extension Array where Element == SubProtocol {
+    func printSub() {
+        print("sub")
+    }
+}
+
+extension Array where Element: SubProtocol {
+    func printSub2() {
+        print("sub2")
+    }
+}

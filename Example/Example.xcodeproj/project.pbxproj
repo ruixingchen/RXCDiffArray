@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		804CE808236ABD540049B06C /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE807236ABD540049B06C /* Entity.swift */; };
+		804CE80A236ABDF50049B06C /* SimpleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE809236ABDF50049B06C /* SimpleCard.swift */; };
+		804CE80C236ABE050049B06C /* EntityWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE80B236ABE050049B06C /* EntityWrapper.swift */; };
+		804CE80E236ABE150049B06C /* SimpleEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE80D236ABE150049B06C /* SimpleEntity.swift */; };
 		807927412369777500E05148 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807927402369777500E05148 /* AppDelegate.swift */; };
 		807927452369777500E05148 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807927442369777500E05148 /* ViewController.swift */; };
 		807927482369777500E05148 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 807927462369777500E05148 /* Main.storyboard */; };
@@ -16,6 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		804CE807236ABD540049B06C /* Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
+		804CE809236ABDF50049B06C /* SimpleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCard.swift; sourceTree = "<group>"; };
+		804CE80B236ABE050049B06C /* EntityWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityWrapper.swift; sourceTree = "<group>"; };
+		804CE80D236ABE150049B06C /* SimpleEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleEntity.swift; sourceTree = "<group>"; };
 		8079273D2369777500E05148 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		807927402369777500E05148 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		807927442369777500E05148 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +78,10 @@
 			isa = PBXGroup;
 			children = (
 				807927402369777500E05148 /* AppDelegate.swift */,
+				804CE807236ABD540049B06C /* Entity.swift */,
+				804CE80B236ABE050049B06C /* EntityWrapper.swift */,
+				804CE80D236ABE150049B06C /* SimpleEntity.swift */,
+				804CE809236ABDF50049B06C /* SimpleCard.swift */,
 				807927442369777500E05148 /* ViewController.swift */,
 				807927462369777500E05148 /* Main.storyboard */,
 				807927492369777600E05148 /* Assets.xcassets */,
@@ -203,8 +215,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				804CE808236ABD540049B06C /* Entity.swift in Sources */,
+				804CE80C236ABE050049B06C /* EntityWrapper.swift in Sources */,
 				807927452369777500E05148 /* ViewController.swift in Sources */,
 				807927412369777500E05148 /* AppDelegate.swift in Sources */,
+				804CE80E236ABE150049B06C /* SimpleEntity.swift in Sources */,
+				804CE80A236ABDF50049B06C /* SimpleCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
