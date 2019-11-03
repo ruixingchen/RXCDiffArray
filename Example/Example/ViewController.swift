@@ -42,6 +42,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print("deinit")
     }
 
+    override func loadView() {
+        super.loadView()
+        let arr = RXCDiffArray<[Int]>()
+        for _ in 0..<100 {
+            let toAdd = (0..<100).map({$0})
+            arr.add(contentsOf: toAdd)
+            print("added")
+        }
+        print(arr.toArray())
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.dataSource = self
