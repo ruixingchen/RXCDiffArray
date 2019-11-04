@@ -23,13 +23,21 @@ public protocol RXCDiffArrayDelegate: AnyObject {
 
 }
 
-public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: Collection {
+public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: Collection, CustomStringConvertible {
 
     public typealias Element = ElementContainer.Element
     public typealias Index = ElementContainer.Index
     public typealias Difference = RDADifference<ElementContainer>
 
-    private lazy var queue:DispatchQueue = DispatchQueue.init(label: "queue", qos: .default, attributes: .concurrent)
+    public struct Key {
+        ///if we do not want to notify delegates, pass false in the userInfo
+        public static var notify:String {return "RXCDiffArray_notify"}
+        ///if we are already in the barrier flag, pass true to avoid dead lock
+        internal static var avoid_barrier:String {return "RXCDiffArray_avoid_barrier"}
+    }
+
+    ///the queue to implement read write lock
+    internal lazy var readWriteQueue:DispatchQueue = DispatchQueue.init(label: "multiReadSingleWriteQueue", qos: .default, attributes: .concurrent)
 
     internal fileprivate(set) var container:ElementContainer = ElementContainer.init()
 
@@ -45,6 +53,16 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
 
     public init<S:Sequence>(elements:S) where S.Element==ElementContainer.Element {
         self.container = ElementContainer.init(elements)
+    }
+
+    public var description: String {
+        var str:String = "RXCDiffArray:["
+        for i in self {
+            str += String.init(describing: i)
+            str += "\n"
+        }
+        str += "]"
+        return str
     }
 
     //MARK: - Collection Property
@@ -64,21 +82,30 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
 
     //MARK: - Tool
 
-    public func safeReadExecute(closure:()->Void) {
-        self.queue.sync {
+    ///will execute in sync mode
+    internal func safeReadExecute(closure:()->Void) {
+        self.readWriteQueue.sync {
             closure()
         }
     }
 
-    public func safeWriteExecute(userInfo:[AnyHashable:Any]?, closure:@escaping ()->Void) {
-        if (userInfo?["locked"] as? Bool ?? false) == true {
+    //will wait the closure to finish, do not do heavy tasks
+    internal func safeWriteExecute(userInfo:[AnyHashable:Any]?, closure:@escaping ()->Void) {
+        if (userInfo?[Key.avoid_barrier] as? Bool ?? false) == true {
             closure()
         }else {
             let g = DispatchGroup()
-            self.queue.async(group: g, qos: .default, flags: .barrier, execute: closure)
+            self.readWriteQueue.async(group: g, qos: .default, flags: .barrier, execute: closure)
             g.wait()
         }
     }
+
+    ///convert to a swift array
+    public func toArray()->[Element] {
+        return self.container.map({$0})
+    }
+
+    //MARK: - Delegate
 
     public func addDelegate(_ delegate:RXCDiffArrayDelegate) {
         self.safeWriteExecute(userInfo: nil) {
@@ -88,7 +115,9 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
     }
 
     public func removeDelegate(_ delegate:RXCDiffArrayDelegate) {
-        self.delegates.remove(delegate)
+        self.safeWriteExecute(userInfo: nil) {
+            self.delegates.remove(delegate)
+        }
     }
 
     internal func notifyDelegate(diff:[Difference], userInfo:[AnyHashable:Any]?) {
@@ -99,14 +128,9 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
                         delegate.diffArray(diffArray: self, didModifiedWith: diff)
                     }
                 }
-                print("通知完成")
+                //print("通知完成")
             }
         }
-    }
-
-    ///convert to a swift array
-    public func toArray()->[Element] {
-        return self.container.map({$0})
     }
 
 }
@@ -125,7 +149,7 @@ extension RXCDiffArray where Index==Int {
         self.safeWriteExecute(userInfo: userInfo) {
             let array = [S.Element].init(newElements)
             var userInfo = userInfo ?? [:]
-            userInfo["locked"] = true
+            userInfo[Key.avoid_barrier] = true
             diff = self.replace(self.container.endIndex..<self.container.endIndex, with: array, userInfo: userInfo)
         }
         return diff
@@ -145,7 +169,13 @@ extension RXCDiffArray where Index==Int {
 
     @discardableResult
     public func replace(at position: Index, with newElement: Element, userInfo:[AnyHashable:Any]?=nil)->Difference {
-        return self.replace(position..<self.container.index(after: position), with: CollectionOfOne(newElement), userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var userInfo = userInfo ?? [:]
+            userInfo[Key.avoid_barrier] = true
+            diff = self.replace(position..<self.container.index(after: position), with: CollectionOfOne(newElement), userInfo: userInfo)
+        }
+        return diff
     }
 
     @discardableResult
@@ -221,7 +251,13 @@ extension RXCDiffArray where Index==Int {
 
     @discardableResult
     public func remove(at position: Index, userInfo:[AnyHashable:Any]?=nil) -> Difference {
-        return self.replace(position..<self.container.index(after: position), with: EmptyCollection(), userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var userInfo = userInfo ?? [:]
+            userInfo[Key.avoid_barrier] = true
+            diff = self.replace(position..<self.container.index(after: position), with: EmptyCollection(), userInfo: userInfo)
+        }
+        return diff
     }
 
     @discardableResult
@@ -297,7 +333,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
             var userInfo = userInfo ?? [:]
-            userInfo["locked"] = true
+            userInfo[Key.avoid_barrier] = true
             let elements = self.container[s].rda_elements
             diff = self.replaceRow(elements.endIndex..<elements.endIndex, with: newElements, in: s, userInfo: userInfo)
         }
@@ -321,7 +357,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
             var userInfo = userInfo ?? [:]
-            userInfo["locked"] = true
+            userInfo[Key.avoid_barrier] = true
             let elements = self.container[s].rda_elements
             diff = self.replaceRow(position..<elements.index(after: position), with: CollectionOfOne(newElement), in: s, userInfo: userInfo)
         }
@@ -406,7 +442,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
             var userInfo = userInfo ?? [:]
-            userInfo["locked"] = true
+            userInfo[Key.avoid_barrier] = true
             let elements = self.container[s].rda_elements
             diff = self.replaceRow(position..<elements.index(after: position), with: EmptyCollection(), in: s, userInfo: userInfo)
         }
@@ -423,7 +459,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
             var userInfo = userInfo ?? [:]
-            userInfo["locked"] = true
+            userInfo[Key.avoid_barrier] = true
             diff = self.removeAllRow(in: self.container.startIndex..<self.container.endIndex, userInfo: userInfo, where: shouldBeRemoved)
         }
         return diff
