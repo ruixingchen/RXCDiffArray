@@ -30,21 +30,6 @@ extension RXCDiffArray where ElementContainer.Element: RDADiffableSectionElement
         batch()
         let current = self.container
         return Difference.differences_2D(between: origin, and: current)
-
-//        let originData = self.map { (section) -> ArraySection<RDADiffableSectionElementWrapper, RDADiffableRowElementWrapper> in
-//            let sectionWrapper = RDADiffableSectionElementWrapper(element: section)
-//            let rowWrappers = section.rda_diffableElements.map({RDADiffableRowElementWrapper(element: $0)})
-//            return ArraySection.init(model: sectionWrapper, elements: rowWrappers)
-//        }
-//        batch()
-//        let currentData = self.map { (section) -> ArraySection<RDADiffableSectionElementWrapper, RDADiffableRowElementWrapper> in
-//            let sectionWrapper = RDADiffableSectionElementWrapper(element: section)
-//            let rowWrappers = section.rda_diffableElements.map({RDADiffableRowElementWrapper(element: $0)})
-//            return ArraySection.init(model: sectionWrapper, elements: rowWrappers)
-//        }
-//        let changeset = StagedChangeset(source: originData, target: currentData)
-//        let differences:[Difference] = changeset.rda_toDifference()
-//        return differences
     }
 
 }

@@ -32,12 +32,12 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
     public struct Key {
         ///if we do not want to notify delegates, pass false in the userInfo
         public static var notify:String {return "RXCDiffArray_notify"}
-        ///if we are already in the barrier flag, pass true to avoid dead lock
+        ///if we are already in the barrier flag, pass true to avoid dead lock, internal use
         internal static var avoid_barrier:String {return "RXCDiffArray_avoid_barrier"}
     }
 
-    ///the queue to implement read write lock
-    internal lazy var readWriteQueue:DispatchQueue = DispatchQueue.init(label: "multiReadSingleWriteQueue", qos: .default, attributes: .concurrent)
+    ///the queue to implement multi read single write
+    internal lazy var readWriteQueue:DispatchQueue = DispatchQueue.init(label: "RXCDiffArrayReadWriteQueue", qos: .default, attributes: .concurrent)
 
     internal fileprivate(set) var container:ElementContainer = ElementContainer.init()
 
@@ -67,17 +67,55 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
 
     //MARK: - Collection Property
 
-    public var count: Int {return self.container.count}
-    public var underestimatedCount: Int {return self.container.underestimatedCount}
-    public var isEmpty: Bool {return self.container.isEmpty}
-    public func index(after i: ElementContainer.Index) -> ElementContainer.Index {
-        return self.container.index(after: i)
+    public var count: Int {
+        var result:Int!
+        self.safeReadExecute {
+            result = self.container.count
+        }
+        return result
     }
-    public var startIndex: ElementContainer.Index {return self.container.startIndex}
-    public var endIndex: ElementContainer.Index {return self.container.endIndex}
+    public var underestimatedCount: Int {
+        var result:Int!
+        self.safeReadExecute {
+            result = self.container.underestimatedCount
+        }
+        return result
+    }
+    public var isEmpty: Bool {
+        var result:Bool!
+        self.safeReadExecute {
+            result = self.container.isEmpty
+        }
+        return result
+    }
+    public func index(after i: ElementContainer.Index) -> ElementContainer.Index {
+        var result:ElementContainer.Index!
+        self.safeReadExecute {
+            result = self.container.index(after: i)
+        }
+        return result
+    }
+    public var startIndex: ElementContainer.Index {
+        var result:ElementContainer.Index!
+        self.safeReadExecute {
+            result = self.container.startIndex
+        }
+        return result
+    }
+    public var endIndex: ElementContainer.Index {
+        var result:ElementContainer.Index!
+        self.safeReadExecute {
+            result = self.container.endIndex
+        }
+        return result
+    }
 
     public subscript(position: ElementContainer.Index) -> ElementContainer.Element {
-        return self.container[position]
+        var result:ElementContainer.Element!
+        self.safeReadExecute {
+            result = self.container[position]
+        }
+        return result
     }
 
     //MARK: - Tool
@@ -100,7 +138,11 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
 
     ///convert to a swift array
     public func toArray()->[Element] {
-        return self.container.map({$0})
+        var result:[Element]!
+        self.safeReadExecute {
+            result = self.container.map({$0})
+        }
+        return result
     }
 
     //MARK: - Delegate
@@ -138,7 +180,13 @@ extension RXCDiffArray where Index==Int {
 
     @discardableResult
     public func add(_ newElement: __owned Element, userInfo:[AnyHashable:Any]?=nil)->Difference {
-        return self.add(contentsOf: CollectionOfOne(newElement), userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.add(contentsOf: CollectionOfOne(newElement), userInfo: _userInfo)
+        }
+        return diff
     }
 
     @discardableResult
@@ -146,21 +194,33 @@ extension RXCDiffArray where Index==Int {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
             let array = [S.Element].init(newElements)
-            var userInfo = userInfo ?? [:]
-            userInfo[Key.avoid_barrier] = true
-            diff = self.replace(self.container.endIndex..<self.container.endIndex, with: array, userInfo: userInfo)
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.replace(self.container.endIndex..<self.container.endIndex, with: array, userInfo: _userInfo)
         }
         return diff
     }
 
     @discardableResult
     public func insert(_ newElement: __owned Element, at i: Index, userInfo:[AnyHashable:Any]?=nil)->Difference {
-        return self.insert(contentsOf: CollectionOfOne(newElement), at: i, userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.insert(contentsOf: CollectionOfOne(newElement), at: i, userInfo: _userInfo)
+        }
+        return diff
     }
 
     @discardableResult
     public func insert<C>(contentsOf newElements: __owned C, at i: Index, userInfo:[AnyHashable:Any]?=nil)->Difference where C : Collection, C.Element==Element {
-        return self.replace(i..<i, with: newElements, userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.replace(i..<i, with: newElements, userInfo: _userInfo)
+        }
+        return diff
     }
 
     //MARK: - Section 修改
@@ -169,9 +229,9 @@ extension RXCDiffArray where Index==Int {
     public func replace(at position: Index, with newElement: Element, userInfo:[AnyHashable:Any]?=nil)->Difference {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
-            var userInfo = userInfo ?? [:]
-            userInfo[Key.avoid_barrier] = true
-            diff = self.replace(position..<self.container.index(after: position), with: CollectionOfOne(newElement), userInfo: userInfo)
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.replace(position..<self.container.index(after: position), with: CollectionOfOne(newElement), userInfo: _userInfo)
         }
         return diff
     }
@@ -251,16 +311,22 @@ extension RXCDiffArray where Index==Int {
     public func remove(at position: Index, userInfo:[AnyHashable:Any]?=nil) -> Difference {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
-            var userInfo = userInfo ?? [:]
-            userInfo[Key.avoid_barrier] = true
-            diff = self.replace(position..<self.container.index(after: position), with: EmptyCollection(), userInfo: userInfo)
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.replace(position..<self.container.index(after: position), with: EmptyCollection(), userInfo: _userInfo)
         }
         return diff
     }
 
     @discardableResult
     public func remove(_ bounds: Range<Index>, userInfo:[AnyHashable:Any]?=nil)->Difference {
-        return self.replace(bounds, with: EmptyCollection(), userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.replace(bounds, with: EmptyCollection(), userInfo: _userInfo)
+        }
+        return diff
     }
 
     @discardableResult
@@ -323,29 +389,47 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
 
     @discardableResult
     public func addRow(_ newElement: __owned RowElement, in s:Index, userInfo:[AnyHashable:Any]?=nil)->Difference {
-        return self.addRow(contentsOf: CollectionOfOne(newElement), in: s, userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.addRow(contentsOf: CollectionOfOne(newElement), in: s, userInfo: _userInfo)
+        }
+        return diff
     }
 
     @discardableResult
     public func addRow<S>(contentsOf newElements: __owned S, in s:Index, userInfo:[AnyHashable:Any]?=nil)->Difference where S : Collection, S.Element==RowElement {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
-            var userInfo = userInfo ?? [:]
-            userInfo[Key.avoid_barrier] = true
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
             let elements = self.container[s].rda_elements
-            diff = self.replaceRow(elements.endIndex..<elements.endIndex, with: newElements, in: s, userInfo: userInfo)
+            diff = self.replaceRow(elements.endIndex..<elements.endIndex, with: newElements, in: s, userInfo: _userInfo)
         }
         return diff
     }
 
     @discardableResult
     public func insertRow(_ newElement: __owned RowElement, at i: RowIndex, in s:Index, userInfo:[AnyHashable:Any]?=nil)->Difference {
-        return self.insertRow(contentsOf: CollectionOfOne(newElement), at: i, in: s, userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.insertRow(contentsOf: CollectionOfOne(newElement), at: i, in: s, userInfo: _userInfo)
+        }
+        return diff
     }
 
     @discardableResult
     public func insertRow<C>(contentsOf newElements: __owned C, at i: RowIndex, in s:Index, userInfo:[AnyHashable:Any]?=nil)->Difference where C : Collection,C.Element==RowElement {
-        return self.replaceRow(i..<i, with: newElements, in: s, userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.replaceRow(i..<i, with: newElements, in: s, userInfo: _userInfo)
+        }
+        return diff
     }
 
     //MARK: - 二维 更新
@@ -354,10 +438,10 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
     public func replaceRow(at position: RowIndex, in s:Index, with newElement: RowElement, userInfo:[AnyHashable:Any]?=nil)->Difference {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
-            var userInfo = userInfo ?? [:]
-            userInfo[Key.avoid_barrier] = true
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
             let elements = self.container[s].rda_elements
-            diff = self.replaceRow(position..<elements.index(after: position), with: CollectionOfOne(newElement), in: s, userInfo: userInfo)
+            diff = self.replaceRow(position..<elements.index(after: position), with: CollectionOfOne(newElement), in: s, userInfo: _userInfo)
         }
         return diff
     }
@@ -439,26 +523,32 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
     public func removeRow(at position: RowIndex, in s:Index,userInfo:[AnyHashable:Any]?=nil) -> Difference {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
-            var userInfo = userInfo ?? [:]
-            userInfo[Key.avoid_barrier] = true
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
             let elements = self.container[s].rda_elements
-            diff = self.replaceRow(position..<elements.index(after: position), with: EmptyCollection(), in: s, userInfo: userInfo)
+            diff = self.replaceRow(position..<elements.index(after: position), with: EmptyCollection(), in: s, userInfo: _userInfo)
         }
         return diff
     }
 
     @discardableResult
     public func removeRow<R:RangeExpression>(_ bounds: R, in s:Index, userInfo:[AnyHashable:Any]?=nil)->Difference where R.Bound==RowIndex {
-        return self.replaceRow(bounds, with: EmptyCollection(), in: s, userInfo: userInfo)
+        var diff:Difference!
+        self.safeWriteExecute(userInfo: userInfo) {
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.replaceRow(bounds, with: EmptyCollection(), in: s, userInfo: _userInfo)
+        }
+        return diff
     }
 
     @discardableResult
     public func removeAllRow(userInfo:[AnyHashable:Any]?=nil, where shouldBeRemoved:@escaping (RowElement) -> Bool)->Difference {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
-            var userInfo = userInfo ?? [:]
-            userInfo[Key.avoid_barrier] = true
-            diff = self.removeAllRow(in: self.container.startIndex..<self.container.endIndex, userInfo: userInfo, where: shouldBeRemoved)
+            var _userInfo = userInfo ?? [:]
+            _userInfo[Key.avoid_barrier] = true
+            diff = self.removeAllRow(in: self.container.startIndex..<self.container.endIndex, userInfo: _userInfo, where: shouldBeRemoved)
         }
         return diff
     }
