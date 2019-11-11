@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RDADifference<ElementContainer:Swift.Collection> {
+public struct RDADifference<ElementContainer:Swift.RangeReplaceableCollection> {
 
     //should we store the object change:
 //    public struct ElementChange {

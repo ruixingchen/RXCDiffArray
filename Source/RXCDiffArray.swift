@@ -94,9 +94,7 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
         if (userInfo?[Key.avoid_barrier] as? Bool ?? false) == true {
             closure()
         }else {
-            let g = DispatchGroup()
-            self.readWriteQueue.async(group: g, qos: .default, flags: .barrier, execute: closure)
-            g.wait()
+            self.readWriteQueue.async(group: nil, qos: .default, flags: .barrier, execute: closure)
         }
     }
 
