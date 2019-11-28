@@ -38,6 +38,7 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
 
     ///the queue to implement multi read single write
     internal lazy var readWriteQueue:DispatchQueue = DispatchQueue.init(label: "RXCDiffArrayReadWriteQueue", qos: .default, attributes: .concurrent)
+    internal lazy var readWriteQueueGroup:DispatchGroup = DispatchGroup()
 
     internal fileprivate(set) var container:ElementContainer = ElementContainer.init()
 
@@ -128,11 +129,14 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
     }
 
     //will wait the closure to finish, do not do heavy tasks
-    internal func safeWriteExecute(userInfo:[AnyHashable:Any]?, closure:@escaping ()->Void) {
+    internal func safeWriteExecute(wait:Bool=true, userInfo:[AnyHashable:Any]?, closure:@escaping ()->Void) {
         if (userInfo?[Key.avoid_barrier] as? Bool ?? false) == true {
             closure()
         }else {
-            self.readWriteQueue.async(group: nil, qos: .default, flags: .barrier, execute: closure)
+            self.readWriteQueue.async(group: self.readWriteQueueGroup, qos: .default, flags: .barrier, execute: closure)
+            if wait {
+                self.readWriteQueueGroup.wait()
+            }
         }
     }
 
@@ -163,9 +167,11 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
     internal func notifyDelegate(diff:[Difference], userInfo:[AnyHashable:Any]?) {
         if (userInfo?["notify"] as? Bool ?? true) {
             self.safeWriteExecute(userInfo: userInfo) {
-                for i in self.delegates.allObjects {
-                    if let delegate = i as? RXCDiffArrayDelegate {
-                        delegate.diffArray(diffArray: self, didModifiedWith: diff)
+                DispatchQueue.main.async {
+                    for i in self.delegates.allObjects {
+                        if let delegate = i as? RXCDiffArrayDelegate {
+                            delegate.diffArray(diffArray: self, didModifiedWith: diff)
+                        }
                     }
                 }
                 //print("通知完成")
