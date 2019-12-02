@@ -3,10 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14D90D4078D0A3512D4AD097 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80AC9CC800B2471D453DD479 /* Pods_Example.framework */; };
+		8048918E23950AED0046EA51 /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918323950AED0046EA51 /* UITableView+RDAExtension.swift */; };
+		8048918F23950AED0046EA51 /* UICollectionView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918423950AED0046EA51 /* UICollectionView+RDAExtension.swift */; };
+		8048919023950AED0046EA51 /* ASCollectionNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918623950AED0046EA51 /* ASCollectionNode+RDAExtension.swift */; };
+		8048919123950AED0046EA51 /* ASTableNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918723950AED0046EA51 /* ASTableNode+RDAExtension.swift */; };
+		8048919223950AED0046EA51 /* RDADifference+DifferenceKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918923950AED0046EA51 /* RDADifference+DifferenceKit.swift */; };
+		8048919323950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918A23950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift */; };
+		8048919423950AED0046EA51 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918B23950AED0046EA51 /* RDADifference.swift */; };
+		8048919523950AED0046EA51 /* RDATableViewAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918C23950AED0046EA51 /* RDATableViewAnimations.swift */; };
+		8048919623950AED0046EA51 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918D23950AED0046EA51 /* RXCDiffArray.swift */; };
 		804CE808236ABD540049B06C /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE807236ABD540049B06C /* Entity.swift */; };
 		804CE80A236ABDF50049B06C /* SimpleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE809236ABDF50049B06C /* SimpleCard.swift */; };
 		804CE80C236ABE050049B06C /* EntityWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE80B236ABE050049B06C /* EntityWrapper.swift */; };
@@ -16,10 +26,18 @@
 		807927482369777500E05148 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 807927462369777500E05148 /* Main.storyboard */; };
 		8079274A2369777600E05148 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 807927492369777600E05148 /* Assets.xcassets */; };
 		8079274D2369777600E05148 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8079274B2369777600E05148 /* LaunchScreen.storyboard */; };
-		8195404CBD41416787C31697 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2EAC012A0A770C44FF2A4F7 /* Pods_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8048918323950AED0046EA51 /* UITableView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+RDAExtension.swift"; sourceTree = "<group>"; };
+		8048918423950AED0046EA51 /* UICollectionView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RDAExtension.swift"; sourceTree = "<group>"; };
+		8048918623950AED0046EA51 /* ASCollectionNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASCollectionNode+RDAExtension.swift"; sourceTree = "<group>"; };
+		8048918723950AED0046EA51 /* ASTableNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASTableNode+RDAExtension.swift"; sourceTree = "<group>"; };
+		8048918923950AED0046EA51 /* RDADifference+DifferenceKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RDADifference+DifferenceKit.swift"; sourceTree = "<group>"; };
+		8048918A23950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+DifferenceKit.swift"; sourceTree = "<group>"; };
+		8048918B23950AED0046EA51 /* RDADifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
+		8048918C23950AED0046EA51 /* RDATableViewAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewAnimations.swift; sourceTree = "<group>"; };
+		8048918D23950AED0046EA51 /* RXCDiffArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXCDiffArray.swift; sourceTree = "<group>"; };
 		804CE807236ABD540049B06C /* Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		804CE809236ABDF50049B06C /* SimpleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCard.swift; sourceTree = "<group>"; };
 		804CE80B236ABE050049B06C /* EntityWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityWrapper.swift; sourceTree = "<group>"; };
@@ -31,9 +49,9 @@
 		807927492369777600E05148 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8079274C2369777600E05148 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8079274E2369777600E05148 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A2EAC012A0A770C44FF2A4F7 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3F4E7CB0380EB5614E0DDD5 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
-		C579E3E6DD4C64A9136D36EA /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		80AC9CC800B2471D453DD479 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1C5A0FF816AAF24742BDF5B /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		ED5D282FE41794053525DC52 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,28 +59,78 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8195404CBD41416787C31697 /* Pods_Example.framework in Frameworks */,
+				14D90D4078D0A3512D4AD097 /* Pods_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5F3F7A1C8CB08A1782B467A6 /* Frameworks */ = {
+		4365E4DD66296FF8EF7E0FB5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A2EAC012A0A770C44FF2A4F7 /* Pods_Example.framework */,
+				80AC9CC800B2471D453DD479 /* Pods_Example.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8048918023950AED0046EA51 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				8048918123950AED0046EA51 /* Extension */,
+				8048918823950AED0046EA51 /* DifferenceKit */,
+				8048918B23950AED0046EA51 /* RDADifference.swift */,
+				8048918C23950AED0046EA51 /* RDATableViewAnimations.swift */,
+				8048918D23950AED0046EA51 /* RXCDiffArray.swift */,
+			);
+			name = Source;
+			path = ../Source;
+			sourceTree = "<group>";
+		};
+		8048918123950AED0046EA51 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				8048918223950AED0046EA51 /* UIKit */,
+				8048918523950AED0046EA51 /* ASDK */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		8048918223950AED0046EA51 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				8048918323950AED0046EA51 /* UITableView+RDAExtension.swift */,
+				8048918423950AED0046EA51 /* UICollectionView+RDAExtension.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		8048918523950AED0046EA51 /* ASDK */ = {
+			isa = PBXGroup;
+			children = (
+				8048918623950AED0046EA51 /* ASCollectionNode+RDAExtension.swift */,
+				8048918723950AED0046EA51 /* ASTableNode+RDAExtension.swift */,
+			);
+			path = ASDK;
+			sourceTree = "<group>";
+		};
+		8048918823950AED0046EA51 /* DifferenceKit */ = {
+			isa = PBXGroup;
+			children = (
+				8048918923950AED0046EA51 /* RDADifference+DifferenceKit.swift */,
+				8048918A23950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift */,
+			);
+			path = DifferenceKit;
 			sourceTree = "<group>";
 		};
 		807927342369777500E05148 = {
 			isa = PBXGroup;
 			children = (
+				8048918023950AED0046EA51 /* Source */,
 				8079273F2369777500E05148 /* Example */,
 				8079273E2369777500E05148 /* Products */,
 				827E7AB973C392A6E4C3D641 /* Pods */,
-				5F3F7A1C8CB08A1782B467A6 /* Frameworks */,
+				4365E4DD66296FF8EF7E0FB5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,8 +162,8 @@
 		827E7AB973C392A6E4C3D641 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C579E3E6DD4C64A9136D36EA /* Pods-Example.debug.xcconfig */,
-				B3F4E7CB0380EB5614E0DDD5 /* Pods-Example.release.xcconfig */,
+				C1C5A0FF816AAF24742BDF5B /* Pods-Example.debug.xcconfig */,
+				ED5D282FE41794053525DC52 /* Pods-Example.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -107,11 +175,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 807927512369777600E05148 /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
-				CEF9459CF9F0A1A1429ADDE4 /* [CP] Check Pods Manifest.lock */,
+				C5BE10916B795E4EB4B5DA88 /* [CP] Check Pods Manifest.lock */,
 				807927392369777500E05148 /* Sources */,
 				8079273A2369777500E05148 /* Frameworks */,
 				8079273B2369777500E05148 /* Resources */,
-				20737A476348548E956084F3 /* [CP] Embed Pods Frameworks */,
+				7FF0C319E6E370C5B0ECAF9D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -169,7 +237,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		20737A476348548E956084F3 /* [CP] Embed Pods Frameworks */ = {
+		7FF0C319E6E370C5B0ECAF9D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -186,7 +254,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CEF9459CF9F0A1A1429ADDE4 /* [CP] Check Pods Manifest.lock */ = {
+		C5BE10916B795E4EB4B5DA88 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -217,9 +285,18 @@
 			files = (
 				804CE808236ABD540049B06C /* Entity.swift in Sources */,
 				804CE80C236ABE050049B06C /* EntityWrapper.swift in Sources */,
+				8048919523950AED0046EA51 /* RDATableViewAnimations.swift in Sources */,
+				8048919023950AED0046EA51 /* ASCollectionNode+RDAExtension.swift in Sources */,
+				8048919223950AED0046EA51 /* RDADifference+DifferenceKit.swift in Sources */,
+				8048918F23950AED0046EA51 /* UICollectionView+RDAExtension.swift in Sources */,
 				807927452369777500E05148 /* ViewController.swift in Sources */,
 				807927412369777500E05148 /* AppDelegate.swift in Sources */,
+				8048919423950AED0046EA51 /* RDADifference.swift in Sources */,
+				8048919123950AED0046EA51 /* ASTableNode+RDAExtension.swift in Sources */,
+				8048919323950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift in Sources */,
 				804CE80E236ABE150049B06C /* SimpleEntity.swift in Sources */,
+				8048918E23950AED0046EA51 /* UITableView+RDAExtension.swift in Sources */,
+				8048919623950AED0046EA51 /* RXCDiffArray.swift in Sources */,
 				804CE80A236ABDF50049B06C /* SimpleCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,7 +439,7 @@
 		};
 		807927522369777600E05148 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C579E3E6DD4C64A9136D36EA /* Pods-Example.debug.xcconfig */;
+			baseConfigurationReference = C1C5A0FF816AAF24742BDF5B /* Pods-Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -382,7 +459,7 @@
 		};
 		807927532369777600E05148 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B3F4E7CB0380EB5614E0DDD5 /* Pods-Example.release.xcconfig */;
+			baseConfigurationReference = ED5D282FE41794053525DC52 /* Pods-Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

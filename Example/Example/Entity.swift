@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import RXCDiffArray
 
 protocol Entity: RDADiffableRowElementProtocol {
     var entityType:String {get}

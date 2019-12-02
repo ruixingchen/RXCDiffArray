@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import RXCDiffArray
 
 class SimpleCard: Card {
 

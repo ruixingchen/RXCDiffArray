@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RXCDiffArray
+
 
 class EntityWrapper: Entity {
     var rda_diffIdentifier: AnyHashable {return self.entity.rda_diffIdentifier}

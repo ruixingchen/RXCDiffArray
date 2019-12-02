@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import RXCDiffArray
 import DifferenceKit
 
 extension String: Differentiable {}
@@ -128,7 +127,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     @IBAction func didTapMoveSection(_ sender: Any) {
-
+        
     }
 
     @IBAction func didTapAddRow(_ sender: Any) {
