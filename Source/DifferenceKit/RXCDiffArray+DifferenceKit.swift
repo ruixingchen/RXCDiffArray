@@ -18,7 +18,7 @@ extension RXCDiffArray where ElementContainer.Element: RDADiffableRowElementProt
         batch()
         let currentProxies = self.map({RDARowDiffProxy(element: $0)})
         let changeset = StagedChangeset(source: originProxies, target: currentProxies, section: section)
-        let differences:[RDADifference<ElementContainer>] = changeset.rda_toDifference()
+        let differences:[RDADifference<ElementContainer>] = changeset.rda_toRDADifference()
         return differences
     }
 }
@@ -38,7 +38,7 @@ extension RXCDiffArray where ElementContainer.Element: RDADiffableSectionElement
             return RDASectionDiffProxy(sectionElement: section)
         }
         let changeset = StagedChangeset(source: originProxies, target: currentProxies)
-        let differences:[RDADifference<ElementContainer>] = changeset.rda_toDifference()
+        let differences:[RDADifference<ElementContainer>] = changeset.rda_toRDADifference()
         return differences
     }
 
