@@ -9,6 +9,70 @@ import Foundation
 #if canImport(DifferenceKit)
 import DifferenceKit
 
+///描述一个可以进行Diff的Row
+public protocol RDADiffableRowElementProtocol {
+
+    ///表示当前对象唯一性的对象, 一般来说返回一个唯一字符串即可, 如果两个identifier相等则在对比的时候认为是相同的元素
+    var rda_diffIdentifier:AnyHashable {get}
+
+}
+
+///描述一个可以进行Diff的Section
+public protocol RDADiffableSectionElementProtocol: RDASectionElementProtocol {
+    ///表示当前对象唯一性的对象, 一般来说返回一个唯一字符串即可, 如果两个identifier相等则在对比的时候认为是相同的元素
+    var rda_diffIdentifier:AnyHashable {get}
+    ///表示某个Section含有的可以进行计较的Row, 虽然只需要对rda_elements做一个cast即可, 但是我们仍然定义一个属性来强制要求这个属性
+    var rda_diffableElements:[RDADiffableRowElementProtocol] {get}
+
+}
+
+///Row的diff代理, 主要作用是将RowElement包装后传入DifferenceKit进行diff
+public class RDARowDiffProxy: Differentiable {
+
+    public typealias DifferenceIdentifier = AnyHashable
+
+    public let element:RDADiffableRowElementProtocol
+
+    public init(element:RDADiffableRowElementProtocol) {
+        self.element = element
+    }
+
+    public var differenceIdentifier: AnyHashable {return self.element.rda_diffIdentifier}
+
+    public func isContentEqual(to source: RDARowDiffProxy) -> Bool {
+        return self.element.rda_diffIdentifier == source.element.rda_diffIdentifier
+    }
+
+}
+
+///Section的Diff代理, 主要作用是将SectionElement包装后传入DifferenceKit
+public class RDASectionDiffProxy: DifferentiableSection {
+
+    public typealias DifferenceIdentifier = AnyHashable
+    public typealias Collection = Array<RDARowDiffProxy>
+
+    public var sectionElement:RDADiffableSectionElementProtocol
+    ///element是主要的存储row的地方, 用于对比的row不可以和数据源产生关联, 否则可能会由于引用类型共用指针而导致对比结果为空
+    public var elements: Array<RDARowDiffProxy>
+
+    public init(sectionElement:RDADiffableSectionElementProtocol) {
+        self.sectionElement = sectionElement
+        self.elements = sectionElement.rda_diffableElements.map({RDARowDiffProxy(element: $0)})
+    }
+
+    public required init<C: Swift.Collection>(source: RDASectionDiffProxy, elements: C) where C.Element == RDARowDiffProxy {
+        self.sectionElement = source.sectionElement
+        self.elements = elements.map({$0})
+    }
+
+    public var differenceIdentifier: AnyHashable {return self.sectionElement.rda_diffIdentifier}
+
+    public func isContentEqual(to source: RDASectionDiffProxy) -> Bool {
+        return self.differenceIdentifier == source.differenceIdentifier
+    }
+
+}
+
 extension RXCDiffArray {
 
     ///强制进行一维对比
