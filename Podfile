@@ -6,6 +6,7 @@ target 'RXCDiffArray' do
   use_frameworks!
 
   pod 'DifferenceKit'
+  pod 'Texture'
 
   # Pods for RXCDiffArray
 

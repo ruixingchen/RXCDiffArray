@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		802A281E2369218A00AF1248 /* RXCDiffArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 802A281C2369218A00AF1248 /* RXCDiffArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8031B94F2396511400E895EB /* RXCDiffArray+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B94E2396511400E895EB /* RXCDiffArray+Delegate.swift */; };
+		8031B9512396513B00E895EB /* RXCDiffArray+Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B9502396513B00E895EB /* RXCDiffArray+Section.swift */; };
+		8031B953239651B600E895EB /* RXCDiffArray+Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B952239651B600E895EB /* RXCDiffArray+Row.swift */; };
 		8079272A2369770500E05148 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8079271C2369770500E05148 /* RXCDiffArray.swift */; };
 		8079272B2369770500E05148 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8079271D2369770500E05148 /* RDADifference.swift */; };
 		8079272C2369770500E05148 /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807927202369770500E05148 /* UITableView+RDAExtension.swift */; };
@@ -25,6 +28,9 @@
 		802A28192369218A00AF1248 /* RXCDiffArray.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RXCDiffArray.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		802A281C2369218A00AF1248 /* RXCDiffArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RXCDiffArray.h; sourceTree = "<group>"; };
 		802A281D2369218A00AF1248 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8031B94E2396511400E895EB /* RXCDiffArray+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+Delegate.swift"; sourceTree = "<group>"; };
+		8031B9502396513B00E895EB /* RXCDiffArray+Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+Section.swift"; sourceTree = "<group>"; };
+		8031B952239651B600E895EB /* RXCDiffArray+Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+Row.swift"; sourceTree = "<group>"; };
 		8079271C2369770500E05148 /* RXCDiffArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXCDiffArray.swift; sourceTree = "<group>"; };
 		8079271D2369770500E05148 /* RDADifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
 		807927202369770500E05148 /* UITableView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+RDAExtension.swift"; sourceTree = "<group>"; };
@@ -33,6 +39,7 @@
 		807927242369770500E05148 /* ASTableNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASTableNode+RDAExtension.swift"; sourceTree = "<group>"; };
 		807927262369770500E05148 /* RXCDiffArray+DifferenceKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+DifferenceKit.swift"; sourceTree = "<group>"; };
 		807927282369770500E05148 /* RDATableViewAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewAnimations.swift; sourceTree = "<group>"; };
+		80EA571F2398B38E004AAE78 /* RXCDiffArray.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = RXCDiffArray.podspec; sourceTree = "<group>"; };
 		80F8157B23702F0D001030D9 /* RDADifference+DifferenceKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RDADifference+DifferenceKit.swift"; sourceTree = "<group>"; };
 		E8D6287D9AB2FA31C22C477D /* Pods-RXCDiffArray.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RXCDiffArray.release.xcconfig"; path = "Target Support Files/Pods-RXCDiffArray/Pods-RXCDiffArray.release.xcconfig"; sourceTree = "<group>"; };
 		F7B942462ED8341A43D756B6 /* Pods-RXCDiffArray.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RXCDiffArray.debug.xcconfig"; path = "Target Support Files/Pods-RXCDiffArray/Pods-RXCDiffArray.debug.xcconfig"; sourceTree = "<group>"; };
@@ -61,6 +68,7 @@
 		802A280F2369218900AF1248 = {
 			isa = PBXGroup;
 			children = (
+				80EA571F2398B38E004AAE78 /* RXCDiffArray.podspec */,
 				8079271B2369770500E05148 /* Source */,
 				802A281B2369218A00AF1248 /* RXCDiffArray */,
 				802A281A2369218A00AF1248 /* Products */,
@@ -86,14 +94,25 @@
 			path = RXCDiffArray;
 			sourceTree = "<group>";
 		};
-		8079271B2369770500E05148 /* Source */ = {
+		8031B94D239650B600E895EB /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				8079271E2369770500E05148 /* Extension */,
-				807927252369770500E05148 /* DifferenceKit */,
 				8079271C2369770500E05148 /* RXCDiffArray.swift */,
 				8079271D2369770500E05148 /* RDADifference.swift */,
 				807927282369770500E05148 /* RDATableViewAnimations.swift */,
+				8031B94E2396511400E895EB /* RXCDiffArray+Delegate.swift */,
+				8031B9502396513B00E895EB /* RXCDiffArray+Section.swift */,
+				8031B952239651B600E895EB /* RXCDiffArray+Row.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		8079271B2369770500E05148 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				8031B94D239650B600E895EB /* Core */,
+				8079271E2369770500E05148 /* Extension */,
+				807927252369770500E05148 /* DifferenceKit */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -119,8 +138,8 @@
 		807927222369770500E05148 /* ASDK */ = {
 			isa = PBXGroup;
 			children = (
-				807927232369770500E05148 /* ASCollectionNode+RDAExtension.swift */,
 				807927242369770500E05148 /* ASTableNode+RDAExtension.swift */,
+				807927232369770500E05148 /* ASCollectionNode+RDAExtension.swift */,
 			);
 			path = ASDK;
 			sourceTree = "<group>";
@@ -140,7 +159,6 @@
 				F7B942462ED8341A43D756B6 /* Pods-RXCDiffArray.debug.xcconfig */,
 				E8D6287D9AB2FA31C22C477D /* Pods-RXCDiffArray.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -249,9 +267,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8031B9512396513B00E895EB /* RXCDiffArray+Section.swift in Sources */,
 				8079272A2369770500E05148 /* RXCDiffArray.swift in Sources */,
 				8079272B2369770500E05148 /* RDADifference.swift in Sources */,
 				8079272D2369770500E05148 /* UICollectionView+RDAExtension.swift in Sources */,
+				8031B94F2396511400E895EB /* RXCDiffArray+Delegate.swift in Sources */,
+				8031B953239651B600E895EB /* RXCDiffArray+Row.swift in Sources */,
 				807927322369770500E05148 /* RDATableViewAnimations.swift in Sources */,
 				8079272C2369770500E05148 /* UITableView+RDAExtension.swift in Sources */,
 				8079272F2369770500E05148 /* ASTableNode+RDAExtension.swift in Sources */,

@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "RXCDiffArray"
-  spec.version      = "1.1"
+  spec.version      = "1.2"
 
   spec.author       = { "ruixingchen" => "rxc@ruixingchen.com" }
 
@@ -14,7 +14,7 @@ Pod::Spec.new do |spec|
   #spec.source_files  = "Source/*.swift"
 
   spec.requires_arc = true
-  spec.swift_versions = "5.0"
+  spec.swift_versions = "5.1"
   spec.ios.deployment_target = '9.0'
 
   spec.default_subspecs = 'Core', 'UIKitExtension'
