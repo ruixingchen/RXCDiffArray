@@ -3,24 +3,23 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		14D90D4078D0A3512D4AD097 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80AC9CC800B2471D453DD479 /* Pods_Example.framework */; };
-		8048918E23950AED0046EA51 /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918323950AED0046EA51 /* UITableView+RDAExtension.swift */; };
-		8048918F23950AED0046EA51 /* UICollectionView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918423950AED0046EA51 /* UICollectionView+RDAExtension.swift */; };
-		8048919023950AED0046EA51 /* ASCollectionNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918623950AED0046EA51 /* ASCollectionNode+RDAExtension.swift */; };
-		8048919123950AED0046EA51 /* ASTableNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918723950AED0046EA51 /* ASTableNode+RDAExtension.swift */; };
-		8048919223950AED0046EA51 /* RDADifference+DifferenceKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918923950AED0046EA51 /* RDADifference+DifferenceKit.swift */; };
-		8048919323950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918A23950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift */; };
-		8048919423950AED0046EA51 /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918B23950AED0046EA51 /* RDADifference.swift */; };
-		8048919523950AED0046EA51 /* RDATableViewAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918C23950AED0046EA51 /* RDATableViewAnimations.swift */; };
-		8048919623950AED0046EA51 /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8048918D23950AED0046EA51 /* RXCDiffArray.swift */; };
-		804CE808236ABD540049B06C /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE807236ABD540049B06C /* Entity.swift */; };
-		804CE80A236ABDF50049B06C /* SimpleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE809236ABDF50049B06C /* SimpleCard.swift */; };
-		804CE80C236ABE050049B06C /* EntityWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE80B236ABE050049B06C /* EntityWrapper.swift */; };
-		804CE80E236ABE150049B06C /* SimpleEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804CE80D236ABE150049B06C /* SimpleEntity.swift */; };
+		8031B96723966C3000E895EB /* RXCDiffArray+Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B95723966C3000E895EB /* RXCDiffArray+Row.swift */; };
+		8031B96823966C3000E895EB /* RDADifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B95823966C3000E895EB /* RDADifference.swift */; };
+		8031B96923966C3000E895EB /* RXCDiffArray+Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B95923966C3000E895EB /* RXCDiffArray+Section.swift */; };
+		8031B96A23966C3000E895EB /* RDATableViewAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B95A23966C3000E895EB /* RDATableViewAnimations.swift */; };
+		8031B96B23966C3000E895EB /* RXCDiffArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B95B23966C3000E895EB /* RXCDiffArray.swift */; };
+		8031B96C23966C3000E895EB /* RXCDiffArray+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B95C23966C3000E895EB /* RXCDiffArray+Delegate.swift */; };
+		8031B96D23966C3000E895EB /* UITableView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B95F23966C3000E895EB /* UITableView+RDAExtension.swift */; };
+		8031B96E23966C3000E895EB /* UICollectionView+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B96023966C3000E895EB /* UICollectionView+RDAExtension.swift */; };
+		8031B96F23966C3000E895EB /* ASCollectionNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B96223966C3000E895EB /* ASCollectionNode+RDAExtension.swift */; };
+		8031B97023966C3000E895EB /* ASTableNode+RDAExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B96323966C3000E895EB /* ASTableNode+RDAExtension.swift */; };
+		8031B97123966C3000E895EB /* RDADifference+DifferenceKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B96523966C3000E895EB /* RDADifference+DifferenceKit.swift */; };
+		8031B97223966C3000E895EB /* RXCDiffArray+DifferenceKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8031B96623966C3000E895EB /* RXCDiffArray+DifferenceKit.swift */; };
 		807927412369777500E05148 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807927402369777500E05148 /* AppDelegate.swift */; };
 		807927452369777500E05148 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807927442369777500E05148 /* ViewController.swift */; };
 		807927482369777500E05148 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 807927462369777500E05148 /* Main.storyboard */; };
@@ -29,19 +28,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8048918323950AED0046EA51 /* UITableView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+RDAExtension.swift"; sourceTree = "<group>"; };
-		8048918423950AED0046EA51 /* UICollectionView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RDAExtension.swift"; sourceTree = "<group>"; };
-		8048918623950AED0046EA51 /* ASCollectionNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASCollectionNode+RDAExtension.swift"; sourceTree = "<group>"; };
-		8048918723950AED0046EA51 /* ASTableNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASTableNode+RDAExtension.swift"; sourceTree = "<group>"; };
-		8048918923950AED0046EA51 /* RDADifference+DifferenceKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RDADifference+DifferenceKit.swift"; sourceTree = "<group>"; };
-		8048918A23950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+DifferenceKit.swift"; sourceTree = "<group>"; };
-		8048918B23950AED0046EA51 /* RDADifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
-		8048918C23950AED0046EA51 /* RDATableViewAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewAnimations.swift; sourceTree = "<group>"; };
-		8048918D23950AED0046EA51 /* RXCDiffArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXCDiffArray.swift; sourceTree = "<group>"; };
-		804CE807236ABD540049B06C /* Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
-		804CE809236ABDF50049B06C /* SimpleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCard.swift; sourceTree = "<group>"; };
-		804CE80B236ABE050049B06C /* EntityWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityWrapper.swift; sourceTree = "<group>"; };
-		804CE80D236ABE150049B06C /* SimpleEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleEntity.swift; sourceTree = "<group>"; };
+		8031B95723966C3000E895EB /* RXCDiffArray+Row.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+Row.swift"; sourceTree = "<group>"; };
+		8031B95823966C3000E895EB /* RDADifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDADifference.swift; sourceTree = "<group>"; };
+		8031B95923966C3000E895EB /* RXCDiffArray+Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+Section.swift"; sourceTree = "<group>"; };
+		8031B95A23966C3000E895EB /* RDATableViewAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDATableViewAnimations.swift; sourceTree = "<group>"; };
+		8031B95B23966C3000E895EB /* RXCDiffArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXCDiffArray.swift; sourceTree = "<group>"; };
+		8031B95C23966C3000E895EB /* RXCDiffArray+Delegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+Delegate.swift"; sourceTree = "<group>"; };
+		8031B95F23966C3000E895EB /* UITableView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+RDAExtension.swift"; sourceTree = "<group>"; };
+		8031B96023966C3000E895EB /* UICollectionView+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RDAExtension.swift"; sourceTree = "<group>"; };
+		8031B96223966C3000E895EB /* ASCollectionNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASCollectionNode+RDAExtension.swift"; sourceTree = "<group>"; };
+		8031B96323966C3000E895EB /* ASTableNode+RDAExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ASTableNode+RDAExtension.swift"; sourceTree = "<group>"; };
+		8031B96523966C3000E895EB /* RDADifference+DifferenceKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RDADifference+DifferenceKit.swift"; sourceTree = "<group>"; };
+		8031B96623966C3000E895EB /* RXCDiffArray+DifferenceKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RXCDiffArray+DifferenceKit.swift"; sourceTree = "<group>"; };
 		8079273D2369777500E05148 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		807927402369777500E05148 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		807927442369777500E05148 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -74,51 +72,62 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		8048918023950AED0046EA51 /* Source */ = {
+		8031B95523966C3000E895EB /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				8048918123950AED0046EA51 /* Extension */,
-				8048918823950AED0046EA51 /* DifferenceKit */,
-				8048918B23950AED0046EA51 /* RDADifference.swift */,
-				8048918C23950AED0046EA51 /* RDATableViewAnimations.swift */,
-				8048918D23950AED0046EA51 /* RXCDiffArray.swift */,
+				8031B95623966C3000E895EB /* Core */,
+				8031B95D23966C3000E895EB /* Extension */,
+				8031B96423966C3000E895EB /* DifferenceKit */,
 			);
 			name = Source;
 			path = ../Source;
 			sourceTree = "<group>";
 		};
-		8048918123950AED0046EA51 /* Extension */ = {
+		8031B95623966C3000E895EB /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				8048918223950AED0046EA51 /* UIKit */,
-				8048918523950AED0046EA51 /* ASDK */,
+				8031B95B23966C3000E895EB /* RXCDiffArray.swift */,
+				8031B95C23966C3000E895EB /* RXCDiffArray+Delegate.swift */,
+				8031B95923966C3000E895EB /* RXCDiffArray+Section.swift */,
+				8031B95723966C3000E895EB /* RXCDiffArray+Row.swift */,
+				8031B95823966C3000E895EB /* RDADifference.swift */,
+				8031B95A23966C3000E895EB /* RDATableViewAnimations.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		8031B95D23966C3000E895EB /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				8031B95E23966C3000E895EB /* UIKit */,
+				8031B96123966C3000E895EB /* ASDK */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		8048918223950AED0046EA51 /* UIKit */ = {
+		8031B95E23966C3000E895EB /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
-				8048918323950AED0046EA51 /* UITableView+RDAExtension.swift */,
-				8048918423950AED0046EA51 /* UICollectionView+RDAExtension.swift */,
+				8031B95F23966C3000E895EB /* UITableView+RDAExtension.swift */,
+				8031B96023966C3000E895EB /* UICollectionView+RDAExtension.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
 		};
-		8048918523950AED0046EA51 /* ASDK */ = {
+		8031B96123966C3000E895EB /* ASDK */ = {
 			isa = PBXGroup;
 			children = (
-				8048918623950AED0046EA51 /* ASCollectionNode+RDAExtension.swift */,
-				8048918723950AED0046EA51 /* ASTableNode+RDAExtension.swift */,
+				8031B96223966C3000E895EB /* ASCollectionNode+RDAExtension.swift */,
+				8031B96323966C3000E895EB /* ASTableNode+RDAExtension.swift */,
 			);
 			path = ASDK;
 			sourceTree = "<group>";
 		};
-		8048918823950AED0046EA51 /* DifferenceKit */ = {
+		8031B96423966C3000E895EB /* DifferenceKit */ = {
 			isa = PBXGroup;
 			children = (
-				8048918923950AED0046EA51 /* RDADifference+DifferenceKit.swift */,
-				8048918A23950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift */,
+				8031B96523966C3000E895EB /* RDADifference+DifferenceKit.swift */,
+				8031B96623966C3000E895EB /* RXCDiffArray+DifferenceKit.swift */,
 			);
 			path = DifferenceKit;
 			sourceTree = "<group>";
@@ -126,7 +135,7 @@
 		807927342369777500E05148 = {
 			isa = PBXGroup;
 			children = (
-				8048918023950AED0046EA51 /* Source */,
+				8031B95523966C3000E895EB /* Source */,
 				8079273F2369777500E05148 /* Example */,
 				8079273E2369777500E05148 /* Products */,
 				827E7AB973C392A6E4C3D641 /* Pods */,
@@ -146,10 +155,6 @@
 			isa = PBXGroup;
 			children = (
 				807927402369777500E05148 /* AppDelegate.swift */,
-				804CE807236ABD540049B06C /* Entity.swift */,
-				804CE80B236ABE050049B06C /* EntityWrapper.swift */,
-				804CE80D236ABE150049B06C /* SimpleEntity.swift */,
-				804CE809236ABDF50049B06C /* SimpleCard.swift */,
 				807927442369777500E05148 /* ViewController.swift */,
 				807927462369777500E05148 /* Main.storyboard */,
 				807927492369777600E05148 /* Assets.xcassets */,
@@ -283,21 +288,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				804CE808236ABD540049B06C /* Entity.swift in Sources */,
-				804CE80C236ABE050049B06C /* EntityWrapper.swift in Sources */,
-				8048919523950AED0046EA51 /* RDATableViewAnimations.swift in Sources */,
-				8048919023950AED0046EA51 /* ASCollectionNode+RDAExtension.swift in Sources */,
-				8048919223950AED0046EA51 /* RDADifference+DifferenceKit.swift in Sources */,
-				8048918F23950AED0046EA51 /* UICollectionView+RDAExtension.swift in Sources */,
+				8031B96823966C3000E895EB /* RDADifference.swift in Sources */,
+				8031B96E23966C3000E895EB /* UICollectionView+RDAExtension.swift in Sources */,
 				807927452369777500E05148 /* ViewController.swift in Sources */,
+				8031B97123966C3000E895EB /* RDADifference+DifferenceKit.swift in Sources */,
+				8031B96B23966C3000E895EB /* RXCDiffArray.swift in Sources */,
 				807927412369777500E05148 /* AppDelegate.swift in Sources */,
-				8048919423950AED0046EA51 /* RDADifference.swift in Sources */,
-				8048919123950AED0046EA51 /* ASTableNode+RDAExtension.swift in Sources */,
-				8048919323950AED0046EA51 /* RXCDiffArray+DifferenceKit.swift in Sources */,
-				804CE80E236ABE150049B06C /* SimpleEntity.swift in Sources */,
-				8048918E23950AED0046EA51 /* UITableView+RDAExtension.swift in Sources */,
-				8048919623950AED0046EA51 /* RXCDiffArray.swift in Sources */,
-				804CE80A236ABDF50049B06C /* SimpleCard.swift in Sources */,
+				8031B96D23966C3000E895EB /* UITableView+RDAExtension.swift in Sources */,
+				8031B97023966C3000E895EB /* ASTableNode+RDAExtension.swift in Sources */,
+				8031B96923966C3000E895EB /* RXCDiffArray+Section.swift in Sources */,
+				8031B96C23966C3000E895EB /* RXCDiffArray+Delegate.swift in Sources */,
+				8031B97223966C3000E895EB /* RXCDiffArray+DifferenceKit.swift in Sources */,
+				8031B96A23966C3000E895EB /* RDATableViewAnimations.swift in Sources */,
+				8031B96723966C3000E895EB /* RXCDiffArray+Row.swift in Sources */,
+				8031B96F23966C3000E895EB /* ASCollectionNode+RDAExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

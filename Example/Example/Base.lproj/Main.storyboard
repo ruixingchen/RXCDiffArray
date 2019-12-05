@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="URF-Ii-jGo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="URF-Ii-jGo">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -47,6 +47,11 @@
                                     <barButtonItem title="Move" id="nvE-Hi-gkS">
                                         <connections>
                                             <action selector="didTapMoveRow:" destination="ULp-wj-Paw" id="xMm-sj-mMc"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="Rebuild" id="Ryj-K3-mER">
+                                        <connections>
+                                            <action selector="didTapReBuild:" destination="ULp-wj-Paw" id="kjf-nS-IgG"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>

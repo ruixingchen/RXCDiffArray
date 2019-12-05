@@ -8,21 +8,19 @@
 
 import UIKit
 
+extension String : RDADiffableRowElementProtocol {
+    public var rda_diffIdentifier: AnyHashable {return self}
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let data = RXCDiffArray<[Int]>()
-        let diff = data.batchWithDifferenceKit_1D(section: 2) {
-            data.add(0)
-            data.add(1)
-        }
-        print(diff)
+
         return true
     }
-
 
 }
 

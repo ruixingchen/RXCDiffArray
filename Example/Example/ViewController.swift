@@ -31,25 +31,45 @@ func measureTime(identifier:String, closure:()->Void) {
     print("\(identifier)结束, 耗时: \(String.init(format: "%.4f", time))")
 }
 
+class SimpleSection: RDASectionElementProtocol, RDADiffableSectionElementProtocol {
+
+    let title:String
+
+    init(title:String) {
+        self.title = title
+    }
+
+    var rowElements:[SimpleRow] = []
+
+    var rda_elements: [Any] {
+        get {return self.rowElements}
+        set {self.rowElements = newValue as! [SimpleRow]}
+    }
+
+    var rda_diffableElements: [RDADiffableRowElementProtocol] {return self.rda_elements as! [RDADiffableRowElementProtocol]}
+
+    var rda_diffIdentifier: AnyHashable {return self.title}
+}
+
+class SimpleRow: RDADiffableRowElementProtocol {
+
+    let title:String
+
+    init(title:String) {
+        self.title = title
+    }
+
+    var rda_diffIdentifier: AnyHashable {return self.title}
+}
+
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, RXCDiffArrayDelegate {
 
     @IBOutlet weak var tableView: UITableView!
 
-    let dataSource:RXCDiffArray<[Entity]> = RXCDiffArray()
+    let dataSource:RXCDiffArray<[SimpleSection]> = RXCDiffArray()
 
     deinit {
         print("deinit")
-    }
-
-    override func loadView() {
-        super.loadView()
-        let arr = RXCDiffArray<[Int]>()
-        for _ in 0..<100 {
-            let toAdd = (0..<100).map({$0})
-            arr.add(contentsOf: toAdd)
-            print("added")
-        }
-        print(arr.toArray())
     }
 
     override func viewDidLoad() {
@@ -57,138 +77,126 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.dataSource.addDelegate(self)
-
-        for _ in 0..<10 {
-            //check weak reference
-            let vc = ViewController()
-            self.dataSource.addDelegate(vc)
-        }
-
-        measureTime(identifier: "添加数据") {
-            for _ in (1..<4) {
-                let entities = generateRandomNum(numRange: 0..<10, quantityRange: 3..<10).map({ (num) -> SimpleEntity in
-                    let entity = SimpleEntity()
-                    entity.entityType = num.description
-                    return entity
-                })
-                self.dataSource.add(contentsOf: entities)
-            }
-        }
-
+        self.dataSource.add(SimpleSection(title: "0"), userInfo: [RXCDiffArrayKey.notify: false])
+        self.dataSource.addRow(contentsOf: [SimpleRow(title: "0"),SimpleRow(title: "1"),SimpleRow(title: "2")], in: 0, userInfo: [RXCDiffArrayKey.notify: false])
+        self.tableView.reloadData()
     }
 
-    func diffArray<ElementContainer>(diffArray: RXCDiffArray<ElementContainer>, didModifiedWith differences: [RDADifference<ElementContainer>]) where ElementContainer : RangeReplaceableCollection {
-        print(differences)
+    func diffArray<ElementContainer>(diffArray: RXCDiffArray<ElementContainer>, didModifiedWith differences: [RDADifference<ElementContainer.Element>]) where ElementContainer : RangeReplaceableCollection, ElementContainer.Index == Int {
+        self.tableView.reload(with: differences, animations: RDATableViewAnimations.none(), reloadDataSource: { (newDataSource) in
+            self.dataSource.removeAll(userInfo: [RXCDiffArrayKey.notify: false], where: {_ in true})
+            self.dataSource.add(contentsOf: newDataSource as! [SimpleSection],userInfo: [RXCDiffArrayKey.notify: false])
+        }, completion: nil)
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return self.dataSource.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataSource.count
+        return self.dataSource[section].rowElements.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = self.dataSource[indexPath.row].entityType
+        cell.textLabel?.text = self.dataSource[indexPath.section].rowElements[indexPath.row].title
         return cell
     }
 
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return self.dataSource[section].title
+    }
+
     @IBAction func didTapAddSection(_ sender: Any) {
-        let card = SimpleCard()
-        card.entities = generateRandomNum(numRange: 0..<100000, quantityRange: 1..<10).map({let e=SimpleEntity();e.entityType=$0.description;return e})
-        
-        let ds:RXCDiffArray<[EntityWrapper]> = RXCDiffArray(elements: self.dataSource.map({EntityWrapper(entity: $0)}))
-
-        let diff = ds.batchWithDifferenceKit_1D(section: 0) {
-            ds.add(contentsOf: card.entities.map({$0.wrappedEntity()}))
-        }
-
-        for i in diff {
-            self.tableView.reload(withDifference_1D_toRow: i, section: 0, animations: .automatic(), reloadDataSource: { (newData) in
-                self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
-                let newDataUnwrapped = newData.map({$0.unwrappedEntity()})
-                self.dataSource.add(contentsOf: newDataUnwrapped, userInfo: ["notify": false])
-            }, completion: nil)
-        }
+        let section = SimpleSection(title: self.dataSource.count.description)
+        section.rowElements = generateRandomNum(numRange: 0..<100, quantityRange: 1..<6).map({SimpleRow(title: $0.description)})
+        self.dataSource.add(section)
     }
 
     @IBAction func didTapRemoveSection(_ sender: Any) {
-
+        if let section = (0..<self.dataSource.count).randomElement() {
+            self.dataSource.remove(at: section)
+        }
     }
 
     @IBAction func didTapInsertSection(_ sender: Any) {
-        
+        let index = (0..<self.dataSource.count).randomElement() ?? 0
+        self.dataSource.insert(self.makeSection(), at: index)
     }
 
     @IBAction func didTapUpdateSection(_ sender: Any) {
-
+        guard let index = (0..<self.dataSource.count).randomElement() else {return}
+        self.dataSource.replace(at: index, with: self.makeSection())
     }
 
     @IBAction func didTapMoveSection(_ sender: Any) {
-        
+        guard let index1 = (0..<self.dataSource.count).randomElement() else {return}
+        guard let index2 = (0..<self.dataSource.count).randomElement() else {return}
+        self.dataSource.move(from: index1, to: index2)
     }
 
     @IBAction func didTapAddRow(_ sender: Any) {
-        let elements = generateRandomNum(numRange: 0..<10, quantityRange: 3..<10)
-//        let diff = self.dataSource.batchWithDifferenceKit_2D {
-//            self.dataSource.addRow(contentsOf: elements, in: 1, userInfo: ["notify":false])
-//        }
-//        for i in diff {
-//            self.tableView!.reload(with: i, animations: .automatic(), reloadDataSource: { (newData) in
-//                self.dataSource.removeAll(userInfo: ["notify": false], where: {_ in true})
-//                self.dataSource.add(contentsOf: newData, userInfo: ["notify": false])
-//            }, completion: nil)
-//        }
+        if let section = self.randomSectionIndex() {
+            self.dataSource.addRow(SimpleRow(title: (0..<100).randomElement()!.description), in: section)
+        }
     }
 
     @IBAction func didTapRemoveRow(_ sender: Any) {
-
+        if let section = self.randomSectionIndex(), let row = self.randomRowIndex(in: section) {
+            self.dataSource.removeRow(at: row, in: section)
+        }
     }
 
     @IBAction func didTapInsertRow(_ sender: Any) {
-
+        if let section = self.randomSectionIndex() {
+            let row = self.randomRowIndex(in: section) ?? 0
+            self.dataSource.insertRow(SimpleRow(title: (0..<100).randomElement()!.description), at: row, in: section)
+        }
     }
 
     @IBAction func didTapUpdateRow(_ sender: Any) {
-
+        if let section = self.randomSectionIndex(), let row = self.randomRowIndex(in: section) {
+            self.dataSource.replaceRow(at: row, in: section, with: SimpleRow(title: (0..<100).randomElement()!.description))
+        }
     }
 
     @IBAction func didTapMoveRow(_ sender: Any) {
-
+        if let section1 = self.randomSectionIndex(), let row1 = self.randomRowIndex(in: section1),let section2 = self.randomSectionIndex(), let row2 = self.randomRowIndex(in: section2) {
+            self.dataSource.moveRow(fromRow: row1, fromSection: section1, toRow: row2, toSection: section2)
+        }
     }
 
-}
-
-protocol RootProtocol {
-
-}
-
-protocol SubProtocol: RootProtocol {
-
-}
-
-extension Array where Element == RootProtocol {
-    func printRoot() {
-        print("root")
+    @IBAction func didTapReBuild(_ sender: Any) {
+        let diff = self.dataSource.batchWithDifferenceKit_2D {
+            self.dataSource.removeAll(userInfo: [RXCDiffArrayKey.notify: false], where: {_ in true})
+            let section = self.makeSection()
+            self.dataSource.add(section, userInfo: [RXCDiffArrayKey.notify: false])
+        }
+        print(diff.count)
+        self.diffArray(diffArray: self.dataSource, didModifiedWith: diff)
     }
+
+
 }
 
-extension Array where Element: RootProtocol {
-    func printRoot2() {
-        print("root2")
-    }
-}
+extension ViewController {
 
-extension Array where Element == SubProtocol {
-    func printSub() {
-        print("sub")
+    func makeSection()->SimpleSection {
+        let section = SimpleSection(title: self.dataSource.count.description)
+        section.rowElements = generateRandomNum(numRange: 0..<100, quantityRange: 1..<6).map({SimpleRow(title: $0.description)})
+        return section
     }
-}
 
-extension Array where Element: SubProtocol {
-    func printSub2() {
-        print("sub2")
+    func makeRows()->[SimpleRow] {
+        return generateRandomNum(numRange: 0..<100, quantityRange: 1..<6).map({SimpleRow(title: $0.description)})
     }
+
+    func randomSectionIndex()->Int? {
+        return (0..<self.dataSource.count).randomElement()
+    }
+
+    func randomRowIndex(in section:Int)->Int? {
+        return (0..<self.dataSource[section].rowElements.count).randomElement()
+    }
+
 }
