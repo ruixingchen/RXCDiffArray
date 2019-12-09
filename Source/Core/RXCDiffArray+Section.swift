@@ -174,7 +174,7 @@ extension RXCDiffArray where Index==Int {
             var removeIndexs:[ElementContainer.Index] = []
 
             //先遍历找出需要删除的index
-            for i in self.enumerated() {
+            for i in self.container.enumerated() {
                 if shouldBeRemoved(i.element) {
                     removeIndexs.append(i.offset)
                     removeElements.append(self.container[i.offset])

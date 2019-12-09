@@ -83,26 +83,92 @@ public final class RXCDiffArray<ElementContainer: RangeReplaceableCollection>: C
     //MARK: - Collection Property
 
     public var count: Int {
-        return self.container.count
+        var result:Int!
+        self.safeReadExecute {
+            result = self.container.count
+        }
+        return result
     }
     public var underestimatedCount: Int {
-        return self.container.underestimatedCount
+        var result:Int!
+        self.safeReadExecute {
+            result = self.container.underestimatedCount
+        }
+        return result
     }
     public var isEmpty: Bool {
-        return self.container.isEmpty
+        var result:Bool!
+        self.safeReadExecute {
+            result = self.container.isEmpty
+        }
+        return result
     }
     public func index(after i: ElementContainer.Index) -> ElementContainer.Index {
-        return self.container.index(after: i)
+        var result:ElementContainer.Index!
+        self.safeReadExecute {
+            result = self.container.index(after: i)
+        }
+        return result
     }
     public var startIndex: ElementContainer.Index {
-        return self.container.startIndex
+        var result:ElementContainer.Index!
+        self.safeReadExecute {
+            result = self.container.startIndex
+        }
+        return result
     }
     public var endIndex: ElementContainer.Index {
-        return self.container.endIndex
+        var result:ElementContainer.Index!
+        self.safeReadExecute {
+            result = self.container.endIndex
+        }
+        return result
     }
 
     public subscript(position: ElementContainer.Index) -> ElementContainer.Element {
-        return self.container[position]
+        var result:ElementContainer.Element!
+        self.safeReadExecute {
+            result = self.container[position]
+        }
+        return result
+    }
+
+    //MARK: - Convenience
+
+    public var last:Element? {
+        var result:Element?
+        self.safeReadExecute {
+            if self.container.isEmpty {
+                return
+            }else {
+                result = self.container[self.container.count-1]
+            }
+        }
+        return result
+    }
+
+    public func last(where predicate: (Element) -> Bool) -> Element? {
+        var result:Element?
+        self.safeReadExecute {
+            for i in self.container.reversed() {
+                if predicate(i) {
+                    result = i
+                }
+            }
+        }
+        return result
+    }
+
+    public func lastIndex(where predicate: (Element) -> Bool) -> Index? {
+        var result:Index?
+        self.safeReadExecute {
+            for i in self.container.enumerated().reversed() {
+                if predicate(i.element) {
+                    result = i.offset
+                }
+            }
+        }
+        return result
     }
 
     //MARK: - Tool

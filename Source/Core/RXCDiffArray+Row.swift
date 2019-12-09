@@ -17,7 +17,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
     public func addRow(_ newElement: __owned RowElement, in s:Index, userInfo:[AnyHashable:Any]?=nil)->Difference {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
-            var sectionElement = self[s]
+            var sectionElement = self.container[s]
             let count = sectionElement.rda_elements.count
             diff = Difference(changes: CollectionOfOne(Difference.Change.elementInsert(offset: count, section: s)))
             sectionElement.rda_elements.append(newElement)
@@ -31,7 +31,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
     public func addRow<S>(contentsOf newElements: __owned S, in s:Index, userInfo:[AnyHashable:Any]?=nil)->Difference where S : Collection, S.Element==RowElement {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
-            var sectionElement = self[s]
+            var sectionElement = self.container[s]
             let count = sectionElement.rda_elements.count
             diff = Difference(changes: newElements.enumerated().map({Difference.Change.elementInsert(offset: count+$0.offset, section: s)}))
             sectionElement.rda_elements.append(contentsOf: newElements)
@@ -46,7 +46,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
             diff = Difference(changes: CollectionOfOne(Difference.Change.elementInsert(offset: i, section: s)))
-            var sectionElement = self[s]
+            var sectionElement = self.container[s]
             sectionElement.rda_elements.insert(newElement, at: i)
             self.container.replaceSubrange(s..<s+1, with: CollectionOfOne(sectionElement))
         }
@@ -59,7 +59,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
             diff = Difference(changes: newElements.enumerated().map({Difference.Change.elementInsert(offset: i+$0.offset, section: s)}))
-            var sectionElement = self[s]
+            var sectionElement = self.container[s]
             sectionElement.rda_elements.insert(contentsOf: newElements, at: i)
             self.container.replaceSubrange(s..<s+1, with: CollectionOfOne(sectionElement))
         }
@@ -74,7 +74,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
             diff = Difference(changes: CollectionOfOne(Difference.Change.elementUpdate(offset: position, section: s)))
-            var sectionElement = self[s]
+            var sectionElement = self.container[s]
             sectionElement.rda_elements.replaceSubrange(position..<position+1, with: CollectionOfOne(newElement))
             self.container.replaceSubrange(s..<s+1, with: CollectionOfOne(sectionElement))
         }
@@ -163,7 +163,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
             diff = Difference(changes: CollectionOfOne(Difference.Change.elementRemove(offset: position, section: s)))
-            var sectionElement = self[s]
+            var sectionElement = self.container[s]
             sectionElement.rda_elements.remove(at: position)
             self.container.replaceSubrange(s..<s+1, with: CollectionOfOne(sectionElement))
         }
@@ -175,7 +175,7 @@ extension RXCDiffArray where Element: RDASectionElementProtocol, Index==Int {
     public func removeRow<R:RangeExpression>(_ bounds: R, in s:Index, userInfo:[AnyHashable:Any]?=nil)->Difference where R.Bound==RowIndex {
         var diff:Difference!
         self.safeWriteExecute(userInfo: userInfo) {
-            var sectionElement = self[s]
+            var sectionElement = self.container[s]
             let realBounds = bounds.relative(to: sectionElement.rda_elements)
             diff = Difference(changes: realBounds.map({Difference.Change.elementRemove(offset: $0, section: s)}))
             sectionElement.rda_elements.removeSubrange(realBounds)
